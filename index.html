@@ -5,28 +5,52 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050712">
 <meta name="description" content="VORTEX — Connect. Create. Discover.">
+<title>VORTEX V15</title>
+
 <link rel="manifest" href="manifest.json">
-<title>VORTEX V9</title>
 
 <style>
+:root{
+  --bg:#050712;
+  --card:#0c1020;
+  --card2:#11172a;
+  --line:rgba(90,220,255,.18);
+  --text:#f5f8ff;
+  --muted:#9ba8c0;
+  --cyan:#00d9ff;
+  --blue:#3478ff;
+  --purple:#8b4dff;
+  --pink:#e14cff;
+  --danger:#ff4d6d;
+  --success:#35e59a;
+  --shadow:0 15px 45px rgba(0,0,0,.35);
+}
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
-  margin:0;
-  min-height:100%;
-  background:#050712;
-  color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
+html{
+  scroll-behavior:smooth;
 }
 
 body{
-  padding-bottom:75px;
+  margin:0;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(0,217,255,.08),transparent 28%),
+    radial-gradient(circle at 90% 10%,rgba(139,77,255,.10),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-button,input,textarea{
+button,
+input,
+textarea,
+select{
   font:inherit;
 }
 
@@ -34,18 +58,601 @@ button{
   cursor:pointer;
 }
 
-:root{
-  --bg:#050712;
-  --card:#0c1020;
-  --card2:#11172a;
-  --line:rgba(90,220,255,.18);
-  --cyan:#00d9ff;
-  --blue:#3478ff;
-  --purple:#8b4dff;
-  --pink:#e14cff;
-  --text:#fff;
-  --muted:#8e9ab3;
+button:active{
+  transform:scale(.97);
 }
+
+.app{
+  min-height:100vh;
+  padding-bottom:82px;
+}
+
+/* ================= HEADER ================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 15px;
+  background:rgba(5,7,18,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:1px;
+  color:white;
+  text-shadow:
+    0 0 8px var(--cyan),
+    0 0 20px rgba(0,217,255,.45);
+}
+
+.vortexLogo{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:3px solid var(--cyan);
+  position:relative;
+  box-shadow:
+    0 0 10px var(--cyan),
+    inset 0 0 12px rgba(0,217,255,.35);
+  animation:spin 7s linear infinite;
+}
+
+.vortexLogo:before,
+.vortexLogo:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  border:2px solid var(--purple);
+}
+
+.vortexLogo:before{
+  inset:5px;
+}
+
+.vortexLogo:after{
+  inset:10px;
+  border-color:var(--pink);
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.headerActions{
+  display:flex;
+  gap:8px;
+}
+
+.iconBtn{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+}
+
+.iconBtn:hover{
+  border-color:var(--cyan);
+  box-shadow:0 0 16px rgba(0,217,255,.2);
+}
+
+/* ================= PAGES ================= */
+
+.page{
+  display:none;
+  max-width:850px;
+  margin:auto;
+  padding:16px;
+}
+
+.page.active{
+  display:block;
+}
+
+h1,h2,h3{
+  margin-top:0;
+}
+
+.sectionTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:8px 0 14px;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+/* ================= CARDS ================= */
+
+.card{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,.008)),
+    var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+
+.glow{
+  box-shadow:
+    0 0 0 1px rgba(0,217,255,.08),
+    0 0 30px rgba(0,217,255,.08);
+}
+
+.primary{
+  border:0;
+  color:white;
+  background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
+  box-shadow:0 8px 24px rgba(0,120,255,.25);
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:white;
+  border-radius:13px;
+  padding:10px 14px;
+  min-height:42px;
+}
+
+.btn:hover{
+  border-color:var(--cyan);
+}
+
+.btn.small{
+  padding:7px 11px;
+  min-height:34px;
+  font-size:13px;
+}
+
+.btn.danger{
+  border-color:rgba(255,77,109,.3);
+  color:#ff8ca1;
+}
+
+.btn.success{
+  border-color:rgba(53,229,154,.3);
+  color:#6ff2ba;
+}
+
+.row{
+  display:flex;
+  gap:9px;
+  align-items:center;
+}
+
+.wrap{
+  flex-wrap:wrap;
+}
+
+.grow{
+  flex:1;
+}
+
+/* ================= STORIES ================= */
+
+.stories{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:4px 0 12px;
+  scrollbar-width:none;
+}
+
+.story{
+  min-width:72px;
+  text-align:center;
+}
+
+.storyCircle{
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    linear-gradient(var(--card),var(--card)) padding-box,
+    linear-gradient(135deg,var(--cyan),var(--purple),var(--pink)) border-box;
+  border:3px solid transparent;
+  font-size:25px;
+  box-shadow:0 0 15px rgba(0,217,255,.14);
+}
+
+.story small{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+/* ================= AVATARS ================= */
+
+.avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#12233d,#39205e);
+  border:2px solid rgba(0,217,255,.45);
+  font-weight:800;
+  flex:none;
+}
+
+.avatar.large{
+  width:86px;
+  height:86px;
+  font-size:28px;
+}
+
+/* ================= FEED ================= */
+
+.postHeader{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.postMeta{
+  flex:1;
+}
+
+.postMeta strong{
+  display:block;
+}
+
+.postMeta small{
+  color:var(--muted);
+}
+
+.postText{
+  line-height:1.55;
+  white-space:pre-wrap;
+  margin:14px 0;
+}
+
+.postImage{
+  width:100%;
+  min-height:160px;
+  border-radius:15px;
+  background:
+    linear-gradient(135deg,rgba(0,217,255,.16),rgba(139,77,255,.15)),
+    #0a0d19;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  margin:10px 0;
+}
+
+.postActions{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
+  border-top:1px solid var(--line);
+  padding-top:10px;
+}
+
+.postAction{
+  background:none;
+  border:0;
+  color:var(--muted);
+  padding:8px 2px;
+  border-radius:10px;
+}
+
+.postAction:hover{
+  color:var(--cyan);
+  background:rgba(0,217,255,.06);
+}
+
+.postAction.liked{
+  color:#ff4d88;
+}
+
+.postAction.saved{
+  color:#ffd45a;
+}
+
+/* ================= SEARCH ================= */
+
+.searchBox{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  background:#080c18;
+  border:1px solid var(--line);
+  border-radius:13px;
+  color:white;
+  outline:none;
+  padding:12px;
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(0,217,255,.06);
+}
+
+/* ================= GRID ================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+.feature{
+  min-height:120px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,var(--card),var(--card2));
+  padding:15px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.featureIcon{
+  font-size:29px;
+}
+
+.feature strong{
+  font-size:15px;
+}
+
+.feature small{
+  color:var(--muted);
+}
+
+/* ================= PROFILE ================= */
+
+.cover{
+  height:155px;
+  border-radius:20px 20px 0 0;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(0,217,255,.55),transparent 30%),
+    radial-gradient(circle at 80% 50%,rgba(139,77,255,.5),transparent 30%),
+    linear-gradient(135deg,#09172c,#180d31);
+  border:1px solid var(--line);
+}
+
+.profileCard{
+  margin-top:-1px;
+  border-radius:0 0 20px 20px;
+}
+
+.profileTop{
+  display:flex;
+  align-items:flex-end;
+  gap:14px;
+  margin-top:-44px;
+  position:relative;
+}
+
+.profileStats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+  margin-top:15px;
+  text-align:center;
+}
+
+.profileStats strong{
+  display:block;
+}
+
+.profileStats span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.bottomNav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  z-index:80;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  background:rgba(5,7,18,.94);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+
+.navBtn{
+  border:0;
+  background:none;
+  color:#77839a;
+  font-size:11px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+}
+
+.navBtn span:first-child{
+  font-size:21px;
+}
+
+.navBtn.active{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,217,255,.45);
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(9px);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:10px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalBox{
+  width:min(680px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#090d1b;
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modalHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* ================= TOAST ================= */
+
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:85px;
+  transform:translateX(-50%) translateY(20px);
+  background:#10172a;
+  border:1px solid var(--cyan);
+  color:white;
+  padding:12px 17px;
+  border-radius:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:300;
+  max-width:90%;
+  text-align:center;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ================= AI ================= */
+
+.aiOrb{
+  width:100px;
+  height:100px;
+  margin:10px auto 20px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  background:radial-gradient(circle,#192d58,#0b1020 65%);
+  border:2px solid var(--cyan);
+  box-shadow:
+    0 0 20px var(--cyan),
+    0 0 60px rgba(139,77,255,.35);
+  animation:pulse 2.5s infinite;
+}
+
+@keyframes pulse{
+  50%{
+    transform:scale(1.04);
+    box-shadow:
+      0 0 35px var(--cyan),
+      0 0 80px rgba(139,77,255,.45);
+  }
+}
+
+.aiMessage{
+  background:#10182b;
+  border:1px solid var(--line);
+  padding:14px;
+  border-radius:16px;
+  line-height:1.5;
+}
+
+.aiTools{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+  margin:12px 0;
+}
+
+.aiTools button{
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:white;
+  border-radius:13px;
+  padding:12px;
+}
+
+/* ================= PROGRESS ================= */
+
+.progress{
+  height:9px;
+  background:#070a14;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progressBar{
+  height:100%;
+  background:linear-gradient(90deg,var(--cyan),var(--purple));
+  border-radius:20px;
+}
+
+/* ================= DARK THEMES ================= */
 
 body.ocean{
   --cyan:#00f0d0;
@@ -65,612 +672,52 @@ body.sunset{
   --purple:#a43dff;
 }
 
-/* APP */
-
-#app{
-  max-width:900px;
-  margin:auto;
-}
-
-header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  padding:12px 15px;
-  background:rgba(5,7,18,.88);
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--line);
-}
-
-.top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.logoMark{
-  width:35px;
-  height:35px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  font-size:20px;
-  font-weight:900;
-  background:linear-gradient(135deg,var(--cyan),var(--purple));
-  box-shadow:0 0 22px rgba(0,217,255,.3);
-}
-
-.logoText{
-  font-weight:900;
-  letter-spacing:2px;
-  font-size:21px;
-}
-
-.logoText span{
-  display:block;
-  font-size:8px;
-  letter-spacing:4px;
-  color:var(--cyan);
-}
-
-.topActions{
-  display:flex;
-  gap:8px;
-}
-
-.iconBtn{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  border:1px solid var(--line);
-  color:#fff;
-  background:var(--card);
-}
-
-/* PAGES */
-
-.page{
-  display:none;
-  padding:15px;
-}
-
-.page.active{
-  display:block;
-}
-
-/* SEARCH */
-
-.search{
-  display:flex;
-  gap:8px;
-  margin-bottom:15px;
-}
-
-.search input{
-  flex:1;
-  padding:13px 15px;
-  border-radius:25px;
-  border:1px solid var(--line);
-  background:var(--card);
-  color:white;
-  outline:none;
-}
-
-/* STORIES */
-
-.stories{
-  display:flex;
-  gap:12px;
-  overflow-x:auto;
-  padding:4px 0 15px;
-}
-
-.story{
-  min-width:68px;
-  text-align:center;
-  font-size:10px;
-  color:var(--muted);
-}
-
-.storyAvatar{
-  width:56px;
-  height:56px;
-  margin:auto;
-  border-radius:50%;
-  padding:3px;
-  background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));
-}
-
-.storyAvatar div{
-  width:100%;
-  height:100%;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:#151b30;
-  font-size:21px;
-}
-
-/* CARDS */
-
-.card{
-  background:linear-gradient(145deg,var(--card),var(--card2));
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:15px;
-  margin-bottom:14px;
-  box-shadow:0 8px 30px rgba(0,0,0,.15);
-}
-
-.userRow{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.avatar{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,#182c56,#702b91);
-  border:1px solid rgba(255,255,255,.15);
-  font-weight:bold;
-}
-
-.userInfo{
-  flex:1;
-}
-
-.userInfo strong{
-  display:block;
-  font-size:14px;
-}
-
-.userInfo small{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.postText{
-  line-height:1.5;
-  color:#e8ecf7;
-}
-
-.postImage{
-  width:100%;
-  min-height:170px;
-  border-radius:16px;
-  margin-top:12px;
-  display:grid;
-  place-items:center;
-  background:
-    radial-gradient(circle at 25% 30%,#1868a9,transparent 25%),
-    radial-gradient(circle at 70% 60%,#7135b6,transparent 30%),
-    linear-gradient(135deg,#07142b,#190a2c);
-  font-size:45px;
-}
-
-.postActions{
-  display:flex;
-  justify-content:space-between;
-  gap:6px;
-  margin-top:12px;
-}
-
-.action{
-  flex:1;
-  border:0;
-  border-radius:12px;
-  padding:9px 5px;
-  background:#151b2e;
-  color:#b9c4d9;
-}
-
-.action:hover{
-  color:white;
-  background:#202944;
-}
-
-/* CREATE */
-
-textarea{
-  width:100%;
-  min-height:120px;
-  resize:vertical;
-  background:#070a15;
-  color:white;
-  border:1px solid var(--line);
-  border-radius:15px;
-  padding:13px;
-  outline:none;
-}
-
-.primary{
-  width:100%;
-  border:0;
-  padding:13px;
-  border-radius:14px;
-  margin-top:10px;
-  color:#fff;
-  font-weight:bold;
-  background:linear-gradient(90deg,var(--cyan),var(--purple));
-}
-
-/* TABS */
-
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  margin-bottom:15px;
-}
-
-.tab{
-  white-space:nowrap;
-  border:1px solid var(--line);
-  background:var(--card);
-  color:#aab5ca;
-  padding:9px 14px;
-  border-radius:20px;
-}
-
-.tab.active{
-  color:white;
-  background:linear-gradient(90deg,#075d82,#472276);
-}
-
-/* EXPLORE */
-
-.sectionTitle{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:20px 0 10px;
-}
-
-.sectionTitle h2{
-  font-size:17px;
-  margin:0;
-}
-
-.sectionTitle span{
-  color:var(--cyan);
-  font-size:11px;
-}
-
-.creatorGrid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.creator{
-  text-align:center;
-  padding:15px;
-  border-radius:18px;
-  background:var(--card);
-  border:1px solid var(--line);
-}
-
-.creator .avatar{
-  margin:auto auto 8px;
-}
-
-/* AI */
-
-.aiBox{
-  background:
-    radial-gradient(circle at top,#162c58,#0a0d1b 60%);
-  border:1px solid rgba(125,100,255,.35);
-  border-radius:22px;
-  padding:18px;
-}
-
-.aiOrb{
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  font-size:30px;
-  background:radial-gradient(circle,#a66cff,#236bff,#00d9ff);
-  box-shadow:0 0 45px rgba(80,130,255,.5);
-}
-
-.aiMessage{
-  margin-top:15px;
-  padding:13px;
-  border-radius:15px;
-  background:#121a31;
-  color:#dce6fa;
-  line-height:1.5;
-}
-
-.aiTools{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:12px;
-}
-
-.aiTools button{
-  padding:11px;
-  border-radius:13px;
-  border:1px solid var(--line);
-  background:#10172a;
-  color:white;
-}
-
-/* GAMES */
-
-.gameGrid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.game{
-  min-height:150px;
-  padding:14px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:linear-gradient(145deg,#10172b,#17102d);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.gameIcon{
-  font-size:38px;
-}
-
-.game button{
-  border:0;
-  padding:9px;
-  border-radius:12px;
-  background:linear-gradient(90deg,var(--cyan),var(--purple));
-  color:white;
-}
-
-/* CHALLENGES */
-
-.challenge{
-  padding:15px;
-  border-radius:17px;
-  border:1px solid var(--line);
-  background:var(--card);
-  margin-bottom:10px;
-}
-
-.progress{
-  height:7px;
-  background:#1a2032;
-  border-radius:20px;
-  overflow:hidden;
-  margin:10px 0;
-}
-
-.progress div{
-  height:100%;
-  width:65%;
-  background:linear-gradient(90deg,var(--cyan),var(--purple));
-}
-
-/* PROFILE */
-
-.profileHero{
-  text-align:center;
-  padding:20px 10px;
-}
-
-.bigAvatar{
-  width:90px;
-  height:90px;
-  margin:auto;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:35px;
-  background:linear-gradient(135deg,#00d9ff,#873fff,#ef42ff);
-  border:4px solid #11182c;
-  box-shadow:0 0 30px rgba(0,217,255,.25);
-}
-
-.profileStats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:18px;
-}
-
-.stat{
-  padding:12px;
-  border-radius:15px;
-  background:var(--card);
-  border:1px solid var(--line);
-}
-
-.stat strong{
-  display:block;
-  font-size:17px;
-}
-
-.stat small{
-  color:var(--muted);
+body.neon{
+  --cyan:#35ffca;
+  --blue:#00eaff;
+  --purple:#ff2cff;
 }
 
-/* MESSAGES */
-
-.chat{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:13px 4px;
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-.chatInfo{
-  flex:1;
-}
-
-.chatInfo strong{
-  display:block;
-}
-
-.chatInfo small{
-  color:var(--muted);
-}
-
-/* SETTINGS */
-
-.setting{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:15px 5px;
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-.settingInfo{
-  flex:1;
-}
-
-.settingInfo strong{
-  display:block;
-}
-
-.settingInfo small{
-  color:var(--muted);
-}
-
-.toggle{
-  width:48px;
-  height:27px;
-  border-radius:20px;
-  border:0;
-  background:#263047;
-  position:relative;
-}
-
-.toggle.on{
-  background:linear-gradient(90deg,var(--cyan),var(--purple));
-}
-
-.toggle:after{
-  content:"";
-  position:absolute;
-  width:21px;
-  height:21px;
-  top:3px;
-  left:4px;
-  border-radius:50%;
-  background:#fff;
-  transition:.2s;
-}
-
-.toggle.on:after{
-  left:23px;
-}
-
-/* PREMIUM */
-
-.premium{
-  text-align:center;
-  padding:25px 15px;
-  border-radius:22px;
-  background:
-    radial-gradient(circle at top,#36206d,transparent 55%),
-    #0b0e1d;
-  border:1px solid #7d4dff55;
-}
-
-.premiumIcon{
-  font-size:50px;
-}
-
-/* BOTTOM NAV */
-
-nav{
-  position:fixed;
-  z-index:200;
-  left:0;
-  right:0;
-  bottom:0;
-  height:68px;
-  display:flex;
-  justify-content:center;
-  background:rgba(5,7,18,.94);
-  backdrop-filter:blur(18px);
-  border-top:1px solid var(--line);
-}
-
-.navInner{
-  width:min(900px,100%);
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-}
-
-.navBtn{
-  border:0;
-  background:transparent;
-  color:#748098;
-  font-size:10px;
+body.midnight{
+  --cyan:#72a8ff;
+  --blue:#536dfe;
+  --purple:#8e7dff;
 }
 
-.navBtn b{
-  display:block;
-  font-size:21px;
-  margin-bottom:2px;
-}
-
-.navBtn.active{
-  color:var(--cyan);
-}
+/* ================= DESKTOP ================= */
 
-/* TOAST */
+@media(min-width:800px){
+  .bottomNav{
+    left:50%;
+    transform:translateX(-50%);
+    width:700px;
+    border-radius:20px 20px 0 0;
+  }
 
-#toast{
-  position:fixed;
-  z-index:500;
-  left:50%;
-  bottom:85px;
-  transform:translate(-50%,20px);
-  opacity:0;
-  pointer-events:none;
-  background:#11192c;
-  border:1px solid var(--line);
-  padding:11px 15px;
-  border-radius:14px;
-  transition:.25s;
-  white-space:nowrap;
-}
-
-#toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
-}
+  .page{
+    padding-top:25px;
+  }
 
-/* RESPONSIVE */
+  .modal{
+    align-items:center;
+  }
 
-@media(max-width:600px){
-  .creatorGrid,
-  .gameGrid{
-    grid-template-columns:1fr 1fr;
+  .grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
   }
 }
 
-@media(min-width:700px){
+@media(max-width:430px){
   .page{
-    padding:25px;
+    padding:12px;
+  }
+
+  .grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .postActions{
+    font-size:11px;
   }
 }
 </style>
@@ -678,357 +725,374 @@ nav{
 
 <body>
 
-<div id="app">
+<div class="app">
+
+<!-- ================= HEADER ================= -->
 
 <header>
-  <div class="top">
-    <div class="logo">
-      <div class="logoMark">V</div>
-      <div class="logoText">
-        VORTEX
-        <span>CONNECT. CREATE. DISCOVER.</span>
-      </div>
-    </div>
+  <div class="logo">
+    <div class="vortexLogo"></div>
+    VORTEX
+  </div>
 
-    <div class="topActions">
-      <button class="iconBtn" onclick="openPage('notifications')">🔔</button>
-      <button class="iconBtn" onclick="openPage('messages')">💬</button>
-    </div>
+  <div class="headerActions">
+    <button class="iconBtn" onclick="openPage('search')">⌕</button>
+    <button class="iconBtn" onclick="openPage('notifications')">🔔</button>
+    <button class="iconBtn" onclick="openPage('messages')">💬</button>
   </div>
 </header>
 
 
-<!-- HOME -->
+<!-- =========================================================
+     HOME
+========================================================= -->
 
 <section id="home" class="page active">
 
-  <div class="stories">
-
-    <div class="story">
-      <div class="storyAvatar"><div>+</div></div>
-      Your story
-    </div>
-
-    <div class="story">
-      <div class="storyAvatar"><div>🌌</div></div>
-      Galaxy
-    </div>
-
-    <div class="story">
-      <div class="storyAvatar"><div>🔥</div></div>
-      Nova
-    </div>
-
-    <div class="story">
-      <div class="storyAvatar"><div>🎮</div></div>
-      Gamer
-    </div>
-
-    <div class="story">
-      <div class="storyAvatar"><div>✨</div></div>
-      Skyler
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <div class="userRow">
-      <div class="avatar">V</div>
-
-      <div class="userInfo">
-        <strong>Vortex AI</strong>
-        <small>Always here for you</small>
+  <div class="card glow">
+    <div class="row">
+      <div class="avatar">TB</div>
+      <div class="grow">
+        <strong id="homeGreeting">Hello Tumelo 👋</strong>
+        <div class="muted">What's happening in your VORTEX?</div>
       </div>
+      <button class="btn primary" onclick="openCreate()">＋</button>
     </div>
-
-    <p class="postText">
-      Welcome to the new VORTEX. Connect with people,
-      discover creators, play games and create something amazing.
-    </p>
-
-    <div class="postActions">
-      <button class="action" onclick="openPage('create')">📷 Photo</button>
-      <button class="action" onclick="openPage('create')">🎥 Video</button>
-      <button class="action" onclick="openPage('ai')">🤖 AI</button>
-    </div>
-
   </div>
 
+  <div class="sectionTitle">
+    <h3>Stories</h3>
+    <button class="btn small" onclick="openPage('stories')">See all</button>
+  </div>
+
+  <div class="stories" id="storiesRow"></div>
+
+  <div class="card glow" onclick="openPage('ai')">
+    <div class="row">
+      <div class="aiOrb" style="width:55px;height:55px;margin:0;font-size:25px">✦</div>
+      <div class="grow">
+        <strong>Vortex AI</strong>
+        <div class="muted">Ask me anything about VORTEX.</div>
+      </div>
+      <span>›</span>
+    </div>
+  </div>
+
+  <div class="sectionTitle">
+    <h3>VORTEX Feed</h3>
+    <button class="btn small" onclick="openPage('explore')">Explore</button>
+  </div>
 
   <div id="feed"></div>
 
 </section>
 
 
-<!-- EXPLORE -->
+<!-- =========================================================
+     EXPLORE
+========================================================= -->
 
 <section id="explore" class="page">
 
-  <div class="search">
-    <input id="searchBox" placeholder="Search users, posts, creators..." oninput="searchContent()">
-    <button class="iconBtn">🔎</button>
-  </div>
-
-  <div class="tabs">
-    <button class="tab active">For You</button>
-    <button class="tab">Trending</button>
-    <button class="tab">Creators</button>
-    <button class="tab">Games</button>
-    <button class="tab">Events</button>
-  </div>
-
   <div class="sectionTitle">
-    <h2>🔥 Trending on VORTEX</h2>
-    <span>See all</span>
+    <h2>Explore</h2>
+    <button class="btn small" onclick="openPage('search')">Search</button>
   </div>
 
-  <div class="card">
-    <strong>#VortexFuture</strong>
-    <p class="postText">People are sharing their vision for the future.</p>
-    <small>12.4K posts</small>
+  <div class="searchBox">
+    <input id="exploreSearch" placeholder="Search VORTEX..." oninput="filterExplore()">
   </div>
 
-  <div class="card">
-    <strong>#NeonCity</strong>
-    <p class="postText">Explore the world beyond ordinary.</p>
-    <small>8.7K posts</small>
-  </div>
+  <div class="grid" id="exploreGrid">
 
-  <div class="sectionTitle">
-    <h2>⭐ Popular Creators</h2>
-    <span>See all</span>
-  </div>
-
-  <div class="creatorGrid">
-
-    <div class="creator">
-      <div class="avatar">N</div>
-      <strong>Nova</strong>
-      <small>1.2M followers</small>
-      <button class="primary" onclick="follow(this)">Follow</button>
+    <div class="feature" data-search="reels videos">
+      <span class="featureIcon">🎬</span>
+      <strong>Reels</strong>
+      <small>Short videos</small>
+      <button class="btn small" onclick="openPage('reels')">Open</button>
     </div>
 
-    <div class="creator">
-      <div class="avatar">S</div>
-      <strong>Skyler</strong>
-      <small>850K followers</small>
-      <button class="primary" onclick="follow(this)">Follow</button>
+    <div class="feature" data-search="watch video">
+      <span class="featureIcon">▶️</span>
+      <strong>Watch</strong>
+      <small>Discover videos</small>
+      <button class="btn small" onclick="openPage('watch')">Open</button>
     </div>
 
-    <div class="creator">
-      <div class="avatar">Z</div>
-      <strong>Zara</strong>
-      <small>780K followers</small>
-      <button class="primary" onclick="follow(this)">Follow</button>
+    <div class="feature" data-search="groups communities">
+      <span class="featureIcon">👥</span>
+      <strong>Groups</strong>
+      <small>Join communities</small>
+      <button class="btn small" onclick="openPage('groups')">Open</button>
     </div>
 
-    <div class="creator">
-      <div class="avatar">R</div>
-      <strong>Rex</strong>
-      <small>740K followers</small>
-      <button class="primary" onclick="follow(this)">Follow</button>
+    <div class="feature" data-search="pages creators">
+      <span class="featureIcon">📄</span>
+      <strong>Pages</strong>
+      <small>Creators & brands</small>
+      <button class="btn small" onclick="openPage('pages')">Open</button>
+    </div>
+
+    <div class="feature" data-search="marketplace shopping">
+      <span class="featureIcon">🛍️</span>
+      <strong>Marketplace</strong>
+      <small>Buy & sell</small>
+      <button class="btn small" onclick="openPage('marketplace')">Open</button>
+    </div>
+
+    <div class="feature" data-search="events">
+      <span class="featureIcon">📅</span>
+      <strong>Events</strong>
+      <small>Discover events</small>
+      <button class="btn small" onclick="openPage('events')">Open</button>
+    </div>
+
+    <div class="feature" data-search="jobs">
+      <span class="featureIcon">💼</span>
+      <strong>Jobs</strong>
+      <small>Find opportunities</small>
+      <button class="btn small" onclick="openPage('jobs')">Open</button>
+    </div>
+
+    <div class="feature" data-search="games">
+      <span class="featureIcon">🎮</span>
+      <strong>Games</strong>
+      <small>Play & compete</small>
+      <button class="btn small" onclick="openPage('games')">Open</button>
+    </div>
+
+    <div class="feature" data-search="dating">
+      <span class="featureIcon">❤️</span>
+      <strong>Dating</strong>
+      <small>Meet people</small>
+      <button class="btn small" onclick="openPage('dating')">Open</button>
+    </div>
+
+    <div class="feature" data-search="fundraisers">
+      <span class="featureIcon">🤝</span>
+      <strong>Fundraisers</strong>
+      <small>Support causes</small>
+      <button class="btn small" onclick="openPage('fundraisers')">Open</button>
+    </div>
+
+    <div class="feature" data-search="weather">
+      <span class="featureIcon">☀️</span>
+      <strong>Weather</strong>
+      <small>Local weather</small>
+      <button class="btn small" onclick="openPage('weather')">Open</button>
+    </div>
+
+    <div class="feature" data-search="memories">
+      <span class="featureIcon">🕰️</span>
+      <strong>Memories</strong>
+      <small>On This Day</small>
+      <button class="btn small" onclick="openPage('memories')">Open</button>
     </div>
 
   </div>
-
 </section>
 
 
-<!-- CREATE -->
+<!-- =========================================================
+     CREATE
+========================================================= -->
 
 <section id="create" class="page">
 
-  <h2>Create on VORTEX</h2>
-
-  <div class="tabs">
-    <button class="tab active">Post</button>
-    <button class="tab">Photo</button>
-    <button class="tab">Video</button>
-    <button class="tab">Poll</button>
-    <button class="tab">AI</button>
-  </div>
+  <h2>Create</h2>
 
   <div class="card">
 
-    <div class="userRow">
-      <div class="avatar">B</div>
-
-      <div class="userInfo">
-        <strong>Tumelo Brilliant</strong>
-        <small>@tumelo_brilliant</small>
-      </div>
+    <div class="row">
+      <div class="avatar">TB</div>
+      <strong>Create on VORTEX</strong>
     </div>
 
     <br>
 
-    <textarea id="postInput"
-      placeholder="What's happening in your Vortex?"></textarea>
+    <textarea id="postText" placeholder="What's on your mind?"></textarea>
 
-    <div class="postActions">
-      <button class="action">📷 Photo</button>
-      <button class="action">🎥 Video</button>
-      <button class="action" onclick="openPage('ai')">🤖 AI</button>
-      <button class="action">📊 Poll</button>
+    <div class="grid" style="margin-top:10px">
+
+      <button class="btn" onclick="insertCreate('📷 Photo')">
+        📷 Photo
+      </button>
+
+      <button class="btn" onclick="insertCreate('🎥 Video')">
+        🎥 Video
+      </button>
+
+      <button class="btn" onclick="insertCreate('📊 Poll')">
+        📊 Poll
+      </button>
+
+      <button class="btn" onclick="insertCreate('❓ Question')">
+        ❓ Question
+      </button>
+
+      <button class="btn" onclick="insertCreate('📍 Location')">
+        📍 Check-in
+      </button>
+
+      <button class="btn" onclick="insertCreate('#VORTEX')">
+        # Hashtag
+      </button>
+
     </div>
 
-    <button class="primary" onclick="createPost()">
-      🚀 Publish to VORTEX
+    <br>
+
+    <div class="row">
+      <button class="btn primary grow" onclick="createPost()">
+        🚀 Publish
+      </button>
+
+      <button class="btn" onclick="openPage('ai')">
+        ✦ AI
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     SEARCH
+========================================================= -->
+
+<section id="search" class="page">
+
+  <h2>Search VORTEX</h2>
+
+  <div class="searchBox">
+    <input id="globalSearch" placeholder="People, posts, groups, games..." oninput="globalSearch()">
+  </div>
+
+  <div id="searchResults"></div>
+
+</section>
+
+
+<!-- =========================================================
+     MESSAGES
+========================================================= -->
+
+<section id="messages" class="page">
+
+  <div class="sectionTitle">
+    <h2>Messages</h2>
+    <button class="btn small" onclick="newChat()">＋ Chat</button>
+  </div>
+
+  <input placeholder="Search messages..." oninput="searchChats(this.value)">
+
+  <br><br>
+
+  <div id="chatList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     NOTIFICATIONS
+========================================================= -->
+
+<section id="notifications" class="page">
+
+  <div class="sectionTitle">
+    <h2>Notifications</h2>
+    <button class="btn small" onclick="markAllRead()">Mark all read</button>
+  </div>
+
+  <div id="notificationList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     PROFILE
+========================================================= -->
+
+<section id="profile" class="page">
+
+  <div class="cover"></div>
+
+  <div class="card profileCard">
+
+    <div class="profileTop">
+
+      <div class="avatar large">TB</div>
+
+      <div class="grow">
+        <h2 id="profileName">Tumelo Brilliant</h2>
+        <div class="muted">@tumelo</div>
+      </div>
+
+      <button class="btn small" onclick="editProfile()">
+        Edit
+      </button>
+
+    </div>
+
+    <p id="profileBio" class="muted">
+      Building VORTEX. Connect. Create. Discover. 🚀
+    </p>
+
+    <div class="profileStats">
+      <div>
+        <strong id="postCount">0</strong>
+        <span>Posts</span>
+      </div>
+
+      <div>
+        <strong>1.2K</strong>
+        <span>Followers</span>
+      </div>
+
+      <div>
+        <strong>438</strong>
+        <span>Following</span>
+      </div>
+
+      <div>
+        <strong>86</strong>
+        <span>Friends</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <button class="feature" onclick="openPage('saved')">
+      <span class="featureIcon">🔖</span>
+      <strong>Saved</strong>
+      <small>Your saved posts</small>
+    </button>
+
+    <button class="feature" onclick="openPage('memories')">
+      <span class="featureIcon">🕰️</span>
+      <strong>Memories</strong>
+      <small>On This Day</small>
+    </button>
+
+    <button class="feature" onclick="openPage('creator')">
+      <span class="featureIcon">📈</span>
+      <strong>Creator Center</strong>
+      <small>Analytics & earnings</small>
+    </button>
+
+    <button class="feature" onclick="openPage('premium')">
+      <span class="featureIcon">💎</span>
+      <strong>Premium</strong>
+      <small>VORTEX Premium</small>
     </button>
 
   </div>
 
-</section>
-
-
-<!-- MESSAGES -->
-
-<section id="messages" class="page">
-
-  <h2>Messages</h2>
-
-  <div class="search">
-    <input placeholder="Search chats...">
-  </div>
-
-  <div class="card">
-
-    <div class="chat">
-      <div class="avatar">Z</div>
-      <div class="chatInfo">
-        <strong>Zara</strong>
-        <small>Hey! Nice post 👋</small>
-      </div>
-      <small>2m</small>
-    </div>
-
-    <div class="chat">
-      <div class="avatar">G</div>
-      <div class="chatInfo">
-        <strong>GalaxyDreamer</strong>
-        <small>Sent a voice message</small>
-      </div>
-      <small>8m</small>
-    </div>
-
-    <div class="chat">
-      <div class="avatar">V</div>
-      <div class="chatInfo">
-        <strong>Vortex AI</strong>
-        <small>Here's a suggestion for you</small>
-      </div>
-      <small>12m</small>
-    </div>
-
-    <div class="chat">
-      <div class="avatar">R</div>
-      <div class="chatInfo">
-        <strong>Rex</strong>
-        <small>Ready for the game?</small>
-      </div>
-      <small>18m</small>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- NOTIFICATIONS -->
-
-<section id="notifications" class="page">
-
-  <h2>Notifications</h2>
-
-  <div class="tabs">
-    <button class="tab active">All</button>
-    <button class="tab">Likes</button>
-    <button class="tab">Comments</button>
-    <button class="tab">Follows</button>
-  </div>
-
-  <div class="card">
-
-    <div class="chat">
-      <div class="avatar">Z</div>
-      <div class="chatInfo">
-        <strong>Zara liked your post</strong>
-        <small>2 minutes ago</small>
-      </div>
-    </div>
-
-    <div class="chat">
-      <div class="avatar">R</div>
-      <div class="chatInfo">
-        <strong>Rex commented on your post</strong>
-        <small>5 minutes ago</small>
-      </div>
-    </div>
-
-    <div class="chat">
-      <div class="avatar">L</div>
-      <div class="chatInfo">
-        <strong>Luna followed you</strong>
-        <small>12 minutes ago</small>
-      </div>
-    </div>
-
-    <div class="chat">
-      <div class="avatar">V</div>
-      <div class="chatInfo">
-        <strong>Vortex AI mentioned you</strong>
-        <small>30 minutes ago</small>
-      </div>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- PROFILE -->
-
-<section id="profile" class="page">
-
-  <div class="profileHero">
-
-    <div class="bigAvatar">V</div>
-
-    <h2>Tumelo Brilliant ✓</h2>
-
-    <small>@tumelo_brilliant</small>
-
-    <p class="postText">
-      Building the future with VORTEX 🚀
-    </p>
-
-    <button class="primary">Edit Profile</button>
-
-    <div class="profileStats">
-      <div class="stat">
-        <strong id="postCount">0</strong>
-        <small>Posts</small>
-      </div>
-
-      <div class="stat">
-        <strong>245</strong>
-        <small>Following</small>
-      </div>
-
-      <div class="stat">
-        <strong>12.4K</strong>
-        <small>Followers</small>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="tabs">
-    <button class="tab active">Posts</button>
-    <button class="tab">Replies</button>
-    <button class="tab">Media</button>
-    <button class="tab">Likes</button>
+  <div class="sectionTitle">
+    <h3>Your Posts</h3>
   </div>
 
   <div id="profilePosts"></div>
@@ -1036,24 +1100,26 @@ nav{
 </section>
 
 
-<!-- AI -->
+<!-- =========================================================
+     AI
+========================================================= -->
 
 <section id="ai" class="page">
 
-  <div class="aiBox">
+  <div class="card glow">
 
     <div class="aiOrb">✦</div>
 
     <h2 style="text-align:center">Vortex AI</h2>
 
-    <p style="text-align:center;color:#9ba8c0">
+    <p style="text-align:center;color:var(--muted)">
       Your intelligent VORTEX assistant
     </p>
 
     <div class="aiMessage" id="aiResponse">
-      Hello Tumelo 👋 I'm Vortex AI.
+      Hello Tumelo 👋 I'm Vortex AI.<br>
       I can help you create posts, improve ideas,
-      search your VORTEX content and help you use the app.
+      search VORTEX content and help you use the app.
     </div>
 
     <div class="aiTools">
@@ -1063,7 +1129,7 @@ nav{
       </button>
 
       <button onclick="aiReply('post')">
-        ✍️ Create a post
+        📝 Create a post
       </button>
 
       <button onclick="aiReply('image')">
@@ -1076,12 +1142,367 @@ nav{
 
     </div>
 
-    <textarea id="aiInput"
-      style="margin-top:12px"
-      placeholder="Ask Vortex AI anything..."></textarea>
+    <textarea
+      id="aiInput"
+      placeholder="Ask Vortex AI anything..."
+    ></textarea>
 
-    <button class="primary" onclick="askAI()">
-      ✦ Ask Vortex AI
+    <div class="row" style="margin-top:10px">
+
+      <button class="btn" onclick="voiceInput()">
+        🎙️
+      </button>
+
+      <button class="btn" onclick="speakAI()">
+        🔊
+      </button>
+
+      <button class="btn primary grow" onclick="askAI()">
+        ✦ Ask Vortex AI
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     REELS
+========================================================= -->
+
+<section id="reels" class="page">
+
+  <div class="sectionTitle">
+    <h2>Reels</h2>
+    <button class="btn small" onclick="openCreate()">Create</button>
+  </div>
+
+  <div id="reelsList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     WATCH
+========================================================= -->
+
+<section id="watch" class="page">
+
+  <h2>Watch</h2>
+
+  <div class="grid">
+
+    <div class="feature">
+      <span class="featureIcon">🔥</span>
+      <strong>Trending</strong>
+      <small>Popular VORTEX videos</small>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🎬</span>
+      <strong>Following</strong>
+      <small>Videos from creators</small>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🧠</span>
+      <strong>Learning</strong>
+      <small>Educational videos</small>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🎮</span>
+      <strong>Gaming</strong>
+      <small>Gaming content</small>
+    </div>
+
+  </div>
+
+  <div id="watchList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     LIVE
+========================================================= -->
+
+<section id="live" class="page">
+
+  <h2>VORTEX Live</h2>
+
+  <div class="card glow" style="text-align:center">
+
+    <div style="font-size:60px">🔴</div>
+
+    <h3>Go Live</h3>
+
+    <p class="muted">
+      Start a live video experience for your audience.
+    </p>
+
+    <button class="btn primary" onclick="startLive()">
+      Start Live
+    </button>
+
+  </div>
+
+  <div id="liveRooms"></div>
+
+</section>
+
+
+<!-- =========================================================
+     GROUPS
+========================================================= -->
+
+<section id="groups" class="page">
+
+  <div class="sectionTitle">
+    <h2>Groups</h2>
+    <button class="btn small" onclick="createGroup()">＋ Create</button>
+  </div>
+
+  <input placeholder="Search groups..." oninput="filterCards('group',this.value)">
+
+  <br><br>
+
+  <div id="groupList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     PAGES
+========================================================= -->
+
+<section id="pages" class="page">
+
+  <div class="sectionTitle">
+    <h2>VORTEX Pages</h2>
+    <button class="btn small" onclick="createPage()">＋ Create</button>
+  </div>
+
+  <div id="pageList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     MARKETPLACE
+========================================================= -->
+
+<section id="marketplace" class="page">
+
+  <div class="sectionTitle">
+    <h2>Marketplace</h2>
+    <button class="btn small" onclick="createListing()">＋ Sell</button>
+  </div>
+
+  <input placeholder="Search marketplace..." oninput="filterCards('market',this.value)">
+
+  <br><br>
+
+  <div id="marketList" class="grid"></div>
+
+</section>
+
+
+<!-- =========================================================
+     EVENTS
+========================================================= -->
+
+<section id="events" class="page">
+
+  <div class="sectionTitle">
+    <h2>Events</h2>
+    <button class="btn small" onclick="createEvent()">＋ Create</button>
+  </div>
+
+  <div id="eventList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     GAMES
+========================================================= -->
+
+<section id="games" class="page">
+
+  <div class="sectionTitle">
+    <h2>VORTEX Games</h2>
+    <span class="muted">XP • Scores • Badges</span>
+  </div>
+
+  <div class="grid">
+
+    <div class="feature">
+      <span class="featureIcon">♟️</span>
+      <strong>Chess</strong>
+      <small>Strategy</small>
+      <button class="btn small" onclick="launchGame('Chess')">Play</button>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🎱</span>
+      <strong>Snooker</strong>
+      <small>Precision</small>
+      <button class="btn small" onclick="launchGame('Snooker')">Play</button>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🏎️</span>
+      <strong>Vortex Racing</strong>
+      <small>Speed</small>
+      <button class="btn small" onclick="launchGame('Racing')">Play</button>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🎯</span>
+      <strong>Target</strong>
+      <small>Arcade</small>
+      <button class="btn small" onclick="launchGame('Target')">Play</button>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🧩</span>
+      <strong>Puzzle</strong>
+      <small>Brain</small>
+      <button class="btn small" onclick="launchGame('Puzzle')">Play</button>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">🎲</span>
+      <strong>Board Games</strong>
+      <small>Play together</small>
+      <button class="btn small" onclick="launchGame('Board Games')">Play</button>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h3>Your Gaming Progress</h3>
+    <p>XP: <strong id="xpValue">0</strong></p>
+
+    <div class="progress">
+      <div class="progressBar" id="xpBar" style="width:10%"></div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CHALLENGES
+========================================================= -->
+
+<section id="challenges" class="page">
+
+  <h2>Challenges</h2>
+
+  <div id="challengeList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     CREATOR
+========================================================= -->
+
+<section id="creator" class="page">
+
+  <h2>Creator Center</h2>
+
+  <div class="grid">
+
+    <div class="feature">
+      <span class="featureIcon">👀</span>
+      <strong>Views</strong>
+      <small>24.8K</small>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">❤️</span>
+      <strong>Engagement</strong>
+      <small>8.7%</small>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">👥</span>
+      <strong>Followers</strong>
+      <small>1.2K</small>
+    </div>
+
+    <div class="feature">
+      <span class="featureIcon">💰</span>
+      <strong>Earnings</strong>
+      <small>Integration ready</small>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h3>Monetization</h3>
+    <p class="muted">
+      Creator support, premium content and advertising
+      can be connected to real payment/ad services.
+    </p>
+
+    <button class="btn primary" onclick="toast('Creator monetization setup opened')">
+      Monetization Settings
+    </button>
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     PREMIUM
+========================================================= -->
+
+<section id="premium" class="page">
+
+  <div class="card glow" style="text-align:center">
+
+    <div style="font-size:60px">💎</div>
+
+    <h2>VORTEX Premium</h2>
+
+    <p class="muted">
+      Unlock additional VORTEX features.
+    </p>
+
+    <div class="grid">
+
+      <div class="feature">
+        <strong>💎 Premium Badge</strong>
+        <small>Stand out</small>
+      </div>
+
+      <div class="feature">
+        <strong>✨ Premium Profile</strong>
+        <small>Extra customization</small>
+      </div>
+
+      <div class="feature">
+        <strong>🚀 Creator Tools</strong>
+        <small>More tools</small>
+      </div>
+
+      <div class="feature">
+        <strong>🎨 Premium Themes</strong>
+        <small>More personalization</small>
+      </div>
+
+    </div>
+
+    <br>
+
+    <button class="btn primary" onclick="premiumAction()">
+      Explore Premium
     </button>
 
   </div>
@@ -1089,6 +1510,2545 @@ nav{
 </section>
 
 
-<!-- GAMES -->
+<!-- =========================================================
+     THEMES
+========================================================= -->
 
-<section id="games" class
+<section id="themes" class="page">
+
+  <h2>Themes</h2>
+
+  <div class="grid">
+
+    <button class="feature" onclick="theme('default')">
+      <span class="featureIcon">🌌</span>
+      <strong>VORTEX</strong>
+      <small>Default</small>
+    </button>
+
+    <button class="feature" onclick="theme('ocean')">
+      <span class="featureIcon">🌊</span>
+      <strong>Ocean</strong>
+      <small>Blue ocean</small>
+    </button>
+
+    <button class="feature" onclick="theme('space')">
+      <span class="featureIcon">🚀</span>
+      <strong>Space</strong>
+      <small>Cosmic purple</small>
+    </button>
+
+    <button class="feature" onclick="theme('sunset')">
+      <span class="featureIcon">🌅</span>
+      <strong>Sunset</strong>
+      <small>Warm glow</small>
+    </button>
+
+    <button class="feature" onclick="theme('neon')">
+      <span class="featureIcon">💚</span>
+      <strong>Neon</strong>
+      <small>Electric</small>
+    </button>
+
+    <button class="feature" onclick="theme('midnight')">
+      <span class="featureIcon">🌙</span>
+      <strong>Midnight</strong>
+      <small>Deep blue</small>
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     SAVED
+========================================================= -->
+
+<section id="saved" class="page">
+
+  <h2>Saved Posts</h2>
+
+  <div id="savedList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     MEMORIES
+========================================================= -->
+
+<section id="memories" class="page">
+
+  <h2>Memories</h2>
+
+  <div class="card glow">
+
+    <h3>🕰️ On This Day</h3>
+
+    <p class="muted">
+      Your VORTEX memories will appear here as your activity grows.
+    </p>
+
+    <button class="btn" onclick="showMemory()">
+      View Memory
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     FUNDRAISERS
+========================================================= -->
+
+<section id="fundraisers" class="page">
+
+  <div class="sectionTitle">
+    <h2>Fundraisers</h2>
+    <button class="btn small" onclick="createFundraiser()">＋ Create</button>
+  </div>
+
+  <div id="fundraiserList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     JOBS
+========================================================= -->
+
+<section id="jobs" class="page">
+
+  <div class="sectionTitle">
+    <h2>Jobs</h2>
+    <button class="btn small" onclick="createJob()">＋ Post Job</button>
+  </div>
+
+  <input placeholder="Search jobs..." oninput="filterCards('job',this.value)">
+
+  <br><br>
+
+  <div id="jobList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     DATING
+========================================================= -->
+
+<section id="dating" class="page">
+
+  <div class="card glow">
+
+    <h2>❤️ VORTEX Dating</h2>
+
+    <p class="muted">
+      Discover people with shared interests.
+    </p>
+
+  </div>
+
+  <div id="datingList"></div>
+
+</section>
+
+
+<!-- =========================================================
+     WEATHER
+========================================================= -->
+
+<section id="weather" class="page">
+
+  <h2>Weather</h2>
+
+  <div class="card glow">
+
+    <div style="font-size:60px;text-align:center">☀️</div>
+
+    <h2 style="text-align:center">VORTEX Weather</h2>
+
+    <p style="text-align:center" class="muted">
+      Weather API integration can be connected here.
+    </p>
+
+    <button class="btn primary" onclick="toast('Weather service ready for API connection')">
+      Refresh Weather
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     MORE
+========================================================= -->
+
+<section id="more" class="page">
+
+  <h2>More VORTEX</h2>
+
+  <div class="grid">
+
+    <button class="feature" onclick="openPage('challenges')">
+      🏆
+      <strong>Challenges</strong>
+      <small>Compete</small>
+    </button>
+
+    <button class="feature" onclick="openPage('themes')">
+      🎨
+      <strong>Themes</strong>
+      <small>Customize</small>
+    </button>
+
+    <button class="feature" onclick="openPage('live')">
+      🔴
+      <strong>Live</strong>
+      <small>Go live</small>
+    </button>
+
+    <button class="feature" onclick="openPage('fundraisers')">
+      🤝
+      <strong>Fundraisers</strong>
+      <small>Support</small>
+    </button>
+
+    <button class="feature" onclick="openPage('jobs')">
+      💼
+      <strong>Jobs</strong>
+      <small>Opportunities</small>
+    </button>
+
+    <button class="feature" onclick="openPage('dating')">
+      ❤️
+      <strong>Dating</strong>
+      <small>Discover</small>
+    </button>
+
+    <button class="feature" onclick="openPage('weather')">
+      ☀️
+      <strong>Weather</strong>
+      <small>Forecast</small>
+    </button>
+
+    <button class="feature" onclick="openPage('settings')">
+      ⚙️
+      <strong>Settings</strong>
+      <small>Control VORTEX</small>
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     SETTINGS
+========================================================= -->
+
+<section id="settings" class="page">
+
+  <h2>Settings</h2>
+
+  <div class="card">
+
+    <h3>Account</h3>
+
+    <button class="btn grow" onclick="editProfile()">
+      👤 Edit Profile
+    </button>
+
+    <br><br>
+
+    <button class="btn grow" onclick="toast('Security settings opened')">
+      🔐 Security
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Notifications</h3>
+
+    <label class="row">
+      <input id="notifToggle" type="checkbox" checked onchange="settingChanged('Notifications',this.checked)">
+      Notifications
+    </label>
+
+    <br>
+
+    <label class="row">
+      <input id="messageToggle" type="checkbox" checked onchange="settingChanged('Messages',this.checked)">
+      Message notifications
+    </label>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Vortex AI</h3>
+
+    <label class="row">
+      <input type="checkbox" checked onchange="settingChanged('Vortex AI',this.checked)">
+      Enable Vortex AI
+    </label>
+
+    <br>
+
+    <label class="row">
+      <input type="checkbox" checked onchange="settingChanged('Voice responses',this.checked)">
+      Voice responses
+    </label>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Privacy</h3>
+
+    <button class="btn" onclick="toast('Privacy controls opened')">
+      🔒 Privacy Controls
+    </button>
+
+    <br><br>
+
+    <button class="btn danger" onclick="toast('Report and safety center opened')">
+      🛡️ Safety Center
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Appearance</h3>
+
+    <button class="btn primary" onclick="openPage('themes')">
+      🎨 Change Theme
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <h3>About VORTEX</h3>
+
+    <p class="muted">
+      VORTEX V15<br>
+      Connect. Create. Discover.
+    </p>
+
+    <small class="muted">
+      Created by Brilliant t mere
+    </small>
+
+  </div>
+
+</section>
+
+</div>
+
+
+<!-- =========================================================
+     BOTTOM NAV
+========================================================= -->
+
+<nav class="bottomNav">
+
+  <button class="navBtn active" data-page="home" onclick="openPage('home')">
+    <span>⌂</span>
+    Home
+  </button>
+
+  <button class="navBtn" data-page="explore" onclick="openPage('explore')">
+    <span>◉</span>
+    Explore
+  </button>
+
+  <button class="navBtn" data-page="create" onclick="openPage('create')">
+    <span>＋</span>
+    Create
+  </button>
+
+  <button class="navBtn" data-page="messages" onclick="openPage('messages')">
+    <span>💬</span>
+    Messages
+  </button>
+
+  <button class="navBtn" data-page="profile" onclick="openPage('profile')">
+    <span>●</span>
+    Profile
+  </button>
+
+</nav>
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div id="modal" class="modal" onclick="closeModal(event)">
+
+  <div class="modalBox" onclick="event.stopPropagation()">
+
+    <div class="modalHead">
+
+      <h2 id="modalTitle">VORTEX</h2>
+
+      <button class="iconBtn" onclick="hideModal()">×</button>
+
+    </div>
+
+    <div id="modalContent"></div>
+
+  </div>
+
+</div>
+
+
+<div id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   VORTEX V15 ENGINE
+========================================================= */
+
+const STORE = {
+  posts:"vortex_v9_posts",
+  likes:"vortex_v15_likes",
+  saved:"vortex_v15_saved",
+  follows:"vortex_v15_follows",
+  friends:"vortex_v15_friends",
+  messages:"vortex_v15_messages",
+  notifications:"vortex_v15_notifications",
+  xp:"vortex_v15_xp",
+  theme:"vortex_v15_theme",
+  profile:"vortex_v15_profile",
+  groups:"vortex_v15_groups",
+  marketplace:"vortex_v15_marketplace",
+  events:"vortex_v15_events",
+  jobs:"vortex_v15_jobs",
+  fundraisers:"vortex_v15_fundraisers",
+  settings:"vortex_v15_settings"
+};
+
+const get = (key, fallback) => {
+  try{
+    const value = localStorage.getItem(key);
+    return value === null ? fallback : JSON.parse(value);
+  }catch{
+    return fallback;
+  }
+};
+
+const set = (key,value) => {
+  localStorage.setItem(key,JSON.stringify(value));
+};
+
+function escapeHTML(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function openPage(id){
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  const page=document.getElementById(id);
+
+  if(!page){
+    toast("Page is being prepared.");
+    return;
+  }
+
+  page.classList.add("active");
+
+  document.querySelectorAll(".navBtn").forEach(btn=>{
+    btn.classList.toggle(
+      "active",
+      btn.dataset.page===id
+    );
+  });
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+  if(id==="home") renderPosts();
+  if(id==="profile") renderProfilePosts();
+  if(id==="saved") renderSaved();
+  if(id==="messages") renderChats();
+  if(id==="notifications") renderNotifications();
+}
+
+function openCreate(){
+  openPage("create");
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function toast(message){
+
+  const el=document.getElementById("toast");
+
+  el.textContent=message;
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },2300);
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function showModal(title,html){
+
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalContent").innerHTML=html;
+  document.getElementById("modal").classList.add("show");
+}
+
+function hideModal(){
+  document.getElementById("modal").classList.remove("show");
+}
+
+function closeModal(e){
+  if(e.target.id==="modal") hideModal();
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+let profile=get(STORE.profile,{
+  name:"Tumelo Brilliant",
+  username:"tumelo",
+  bio:"Building VORTEX. Connect. Create. Discover. 🚀"
+});
+
+function updateProfileUI(){
+
+  document.getElementById("profileName").textContent=profile.name;
+  document.getElementById("profileBio").textContent=profile.bio;
+
+  document.getElementById("homeGreeting").textContent=
+    "Hello "+profile.name.split(" ")[0]+" 👋";
+}
+
+function editProfile(){
+
+  showModal("Edit Profile",`
+
+    <input id="editName" value="${escapeHTML(profile.name)}"
+      placeholder="Name">
+
+    <br><br>
+
+    <input id="editUsername" value="${escapeHTML(profile.username)}"
+      placeholder="Username">
+
+    <br><br>
+
+    <textarea id="editBio"
+      placeholder="Bio">${escapeHTML(profile.bio)}</textarea>
+
+    <br>
+
+    <button class="btn primary" onclick="saveProfile()">
+      Save Profile
+    </button>
+
+  `);
+}
+
+function saveProfile(){
+
+  profile.name=document.getElementById("editName").value.trim() || profile.name;
+  profile.username=document.getElementById("editUsername").value.trim() || profile.username;
+  profile.bio=document.getElementById("editBio").value.trim() || profile.bio;
+
+  set(STORE.profile,profile);
+
+  updateProfileUI();
+
+  hideModal();
+
+  toast("Profile updated ✓");
+}
+
+
+/* =========================================================
+   POSTS
+========================================================= */
+
+function getPosts(){
+
+  let posts=get(STORE.posts,[]);
+
+  if(!Array.isArray(posts)) posts=[];
+
+  return posts;
+}
+
+function createPost(){
+
+  const input=document.getElementById("postText");
+
+  const text=input.value.trim();
+
+  if(!text){
+    toast("Write something first.");
+    return;
+  }
+
+  const posts=getPosts();
+
+  posts.unshift({
+    id:Date.now(),
+    text,
+    date:new Date().toLocaleString(),
+    author:profile.name,
+    username:profile.username
+  });
+
+  set(STORE.posts,posts);
+
+  input.value="";
+
+  addNotification("You published a new post.");
+
+  renderPosts();
+  renderProfilePosts();
+
+  openPage("home");
+
+  toast("Post published 🚀");
+}
+
+function insertCreate(text){
+
+  const input=document.getElementById("postText");
+
+  input.value += (input.value ? "\n" : "") + text;
+
+  input.focus();
+}
+
+function renderPosts(){
+
+  const container=document.getElementById("feed");
+
+  if(!container)return;
+
+  const posts=getPosts();
+
+  document.getElementById("postCount").textContent=posts.length;
+
+  if(!posts.length){
+
+    container.innerHTML=`
+
+      <div class="card">
+
+        <h3>Welcome to VORTEX 🚀</h3>
+
+        <p class="muted">
+          Your feed is ready. Create the first post.
+        </p>
+
+        <button class="btn primary" onclick="openCreate()">
+          Create Post
+        </button>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+  container.innerHTML=posts.map(postCard).join("");
+}
+
+function postCard(post){
+
+  const likes=get(STORE.likes,{});
+
+  const saved=get(STORE.saved,[]);
+
+  const liked=!!likes[post.id];
+
+  const isSaved=saved.includes(post.id);
+
+  return `
+
+  <article class="card">
+
+    <div class="postHeader">
+
+      <div class="avatar">
+        ${escapeHTML(
+          profile.name.split(" ").map(x=>x[0]).join("").slice(0,2)
+        )}
+      </div>
+
+      <div class="postMeta">
+
+        <strong>${escapeHTML(post.author || profile.name)}</strong>
+
+        <small>
+          @${escapeHTML(post.username || profile.username)}
+          · ${escapeHTML(post.date)}
+        </small>
+
+      </div>
+
+      <button class="iconBtn"
+        onclick="postMenu(${post.id})">⋮</button>
+
+    </div>
+
+    <div class="postText">
+      ${escapeHTML(post.text)}
+    </div>
+
+    <div class="postActions">
+
+      <button
+        class="postAction ${liked?"liked":""}"
+        onclick="likePost(${post.id})">
+        ❤️ ${liked?"Liked":"Like"}
+      </button>
+
+      <button
+        class="postAction"
+        onclick="commentPost(${post.id})">
+        💬 Comment
+      </button>
+
+      <button
+        class="postAction"
+        onclick="sharePost(${post.id})">
+        ↗ Share
+      </button>
+
+      <button
+        class="postAction"
+        onclick="repost(${post.id})">
+        🔁 Repost
+      </button>
+
+      <button
+        class="postAction ${isSaved?"saved":""}"
+        onclick="savePost(${post.id})">
+        🔖 ${isSaved?"Saved":"Save"}
+      </button>
+
+    </div>
+
+  </article>
+
+  `;
+}
+
+function likePost(id){
+
+  const likes=get(STORE.likes,{});
+
+  likes[id]=!likes[id];
+
+  set(STORE.likes,likes);
+
+  renderPosts();
+
+  toast(likes[id]?"Liked ❤️":"Like removed");
+}
+
+function savePost(id){
+
+  let saved=get(STORE.saved,[]);
+
+  if(saved.includes(id)){
+    saved=saved.filter(x=>x!==id);
+    toast("Removed from saved");
+  }else{
+    saved.push(id);
+    toast("Post saved 🔖");
+  }
+
+  set(STORE.saved,saved);
+
+  renderPosts();
+  renderSaved();
+}
+
+function renderSaved(){
+
+  const box=document.getElementById("savedList");
+
+  if(!box)return;
+
+  const saved=get(STORE.saved,[]);
+  const posts=getPosts().filter(p=>saved.includes(p.id));
+
+  box.innerHTML=posts.length
+    ?posts.map(postCard).join("")
+    :`<div class="card">
+        <h3>No saved posts</h3>
+        <p class="muted">Save posts to see them here.</p>
+      </div>`;
+}
+
+function commentPost(id){
+
+  showModal("Comment",`
+
+    <textarea id="commentText"
+      placeholder="Write a comment..."></textarea>
+
+    <br>
+
+    <button class="btn primary"
+      onclick="submitComment(${id})">
+      Comment
+    </button>
+
+  `);
+}
+
+function submitComment(id){
+
+  const text=document.getElementById("commentText").value.trim();
+
+  if(!text){
+    toast("Write a comment.");
+    return;
+  }
+
+  hideModal();
+
+  addNotification(
+    profile.name+" commented on a post."
+  );
+
+  toast("Comment added 💬");
+}
+
+function sharePost(id){
+
+  const post=getPosts().find(p=>p.id===id);
+
+  if(navigator.share){
+
+    navigator.share({
+      title:"VORTEX",
+      text:post?.text || "VORTEX post"
+    }).catch(()=>{});
+
+  }else{
+
+    navigator.clipboard?.writeText(
+      location.href+"#post-"+id
+    );
+
+    toast("Post link copied");
+  }
+}
+
+function repost(id){
+
+  const post=getPosts().find(p=>p.id===id);
+
+  if(!post)return;
+
+  const posts=getPosts();
+
+  posts.unshift({
+    ...post,
+    id:Date.now(),
+    text:"🔁 Reposted\n\n"+post.text,
+    date:new Date().toLocaleString()
+  });
+
+  set(STORE.posts,posts);
+
+  renderPosts();
+
+  toast("Reposted 🔁");
+}
+
+function postMenu(id){
+
+  showModal("Post Options",`
+
+    <button class="btn" style="width:100%"
+      onclick="sharePost(${id});hideModal()">
+      ↗ Share
+    </button>
+
+    <br><br>
+
+    <button class="btn" style="width:100%"
+      onclick="copyPost(${id})">
+      📋 Copy text
+    </button>
+
+    <br><br>
+
+    <button class="btn danger" style="width:100%"
+      onclick="reportPost(${id})">
+      🚩 Report
+    </button>
+
+  `);
+}
+
+function copyPost(id){
+
+  const post=getPosts().find(p=>p.id===id);
+
+  if(post){
+
+    navigator.clipboard?.writeText(post.text);
+
+    toast("Text copied");
+  }
+
+  hideModal();
+}
+
+function reportPost(id){
+
+  hideModal();
+
+  addNotification("Report submitted for review.");
+
+  toast("Report submitted");
+}
+
+
+/* =========================================================
+   PROFILE POSTS
+========================================================= */
+
+function renderProfilePosts(){
+
+  const box=document.getElementById("profilePosts");
+
+  if(!box)return;
+
+  const posts=getPosts();
+
+  box.innerHTML=posts.length
+    ?posts.map(postCard).join("")
+    :`<div class="card">
+       <p class="muted">You have no posts yet.</p>
+     </div>`;
+}
+
+
+/* =========================================================
+   STORIES
+========================================================= */
+
+const storyData=[
+  ["＋","Your Story"],
+  ["🔥","Trending"],
+  ["🎮","Gaming"],
+  ["🎵","Music"],
+  ["📚","Learning"],
+  ["🚀","VORTEX"]
+];
+
+function renderStories(){
+
+  document.getElementById("storiesRow").innerHTML=
+    storyData.map((s,i)=>`
+
+      <div class="story" onclick="openStory('${escapeHTML(s[1])}')">
+
+        <div class="storyCircle">${s[0]}</div>
+
+        <small>${escapeHTML(s[1])}</small>
+
+      </div>
+
+    `).join("");
+}
+
+function openStory(name){
+
+  showModal(name,`
+
+    <div style="text-align:center;padding:40px 10px">
+
+      <div style="font-size:70px">✨</div>
+
+      <h2>${escapeHTML(name)}</h2>
+
+      <p class="muted">
+        Story viewer ready.
+      </p>
+
+      <button class="btn primary"
+        onclick="hideModal()">
+        Close
+      </button>
+
+    </div>
+
+  `);
+}
+
+
+/* =========================================================
+   AI
+========================================================= */
+
+function aiReply(type){
+
+  const replies={
+    idea:
+      "💡 Try a VORTEX challenge: ask users to post one creative idea in 24 hours.",
+    post:
+      "📝 Post idea: \"VORTEX isn't just an app — it's a place to connect, create and discover.\"",
+    image:
+      "🖼️ Image generation interface ready. Connect an image-generation API for real generation.",
+    help:
+      "❓ I can help with posts, profiles, messages, games, settings, themes and other VORTEX features."
+  };
+
+  document.getElementById("aiResponse").innerHTML=
+    replies[type] || "I'm ready to help.";
+
+  speakText(replies[type] || "I'm ready to help.");
+
+}
+
+function askAI(){
+
+  const input=document.getElementById("aiInput");
+
+  const text=input.value.trim();
+
+  if(!text){
+    toast("Ask Vortex AI something.");
+    return;
+  }
+
+  let response;
+
+  const q=text.toLowerCase();
+
+  if(q.includes("post")){
+    response="I can help you create a strong VORTEX post. Tell me the topic and style you want.";
+  }else if(q.includes("game")){
+    response="You can open VORTEX Games from Explore and choose Chess, Snooker, Racing, Puzzle and more.";
+  }else if(q.includes("theme")){
+    response="Open Settings → Themes to choose Ocean, Space, Sunset, Neon, Midnight or the default VORTEX theme.";
+  }else if(q.includes("hello")||q.includes("hi")){
+    response="Hello! 👋 I'm Vortex AI. What would you like to create today?";
+  }else{
+    response="I understand your question. This VORTEX MVP currently uses a local AI fallback. Connect a real AI backend to enable full AI answers.";
+  }
+
+  document.getElementById("aiResponse").textContent=response;
+
+  speakText(response);
+
+  input.value="";
+}
+
+function speakText(text){
+
+  if("speechSynthesis" in window){
+
+    speechSynthesis.cancel();
+
+    const u=new SpeechSynthesisUtterance(text);
+
+    speechSynthesis.speak(u);
+  }
+}
+
+function speakAI(){
+
+  const text=document.getElementById("aiResponse").textContent;
+
+  speakText(text);
+}
+
+function voiceInput(){
+
+  const SpeechRecognition=
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+
+    toast("Voice input isn't supported by this browser.");
+    return;
+  }
+
+  const recognition=new SpeechRecognition();
+
+  recognition.lang="en-US";
+  recognition.interimResults=false;
+
+  recognition.onstart=()=>{
+    toast("Listening 🎙️");
+  };
+
+  recognition.onresult=e=>{
+
+    document.getElementById("aiInput").value=
+      e.results[0][0].transcript;
+
+    toast("Voice captured");
+  };
+
+  recognition.onerror=()=>{
+    toast("Voice input stopped");
+  };
+
+  recognition.start();
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function filterExplore(){
+
+  const q=document.getElementById("exploreSearch").value.toLowerCase();
+
+  document.querySelectorAll("#exploreGrid .feature").forEach(card=>{
+
+    card.style.display=
+      !q || card.dataset.search.includes(q)
+      ?"flex"
+      :"none";
+  });
+}
+
+function globalSearch(){
+
+  const q=document.getElementById("globalSearch").value.toLowerCase().trim();
+
+  const box=document.getElementById("searchResults");
+
+  if(!q){
+
+    box.innerHTML=`
+      <div class="card">
+        <p class="muted">
+          Search people, posts, groups, games, events and more.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  const results=[];
+
+  getPosts().forEach(p=>{
+
+    if(
+      p.text.toLowerCase().includes(q) ||
+      p.author.toLowerCase().includes(q)
+    ){
+
+      results.push(`
+        <div class="card">
+          <strong>📝 Post</strong>
+          <p>${escapeHTML(p.text)}</p>
+        </div>
+      `);
+    }
+  });
+
+  [
+    ["👥","VORTEX Groups","groups"],
+    ["🎮","VORTEX Games","games"],
+    ["📅","VORTEX Events","events"],
+    ["🛍️","Marketplace","marketplace"],
+    ["🤖","Vortex AI","ai"],
+    ["💼","Jobs","jobs"]
+  ].forEach(item=>{
+
+    if(
+      item[1].toLowerCase().includes(q) ||
+      item[2].includes(q)
+    ){
+
+      results.push(`
+        <div class="card row">
+
+          <span style="font-size:28px">${item[0]}</span>
+
+          <div class="grow">
+            <strong>${item[1]}</strong>
+          </div>
+
+          <button class="btn small"
+            onclick="openPage('${item[2]}')">
+            Open
+          </button>
+
+        </div>
+      `);
+    }
+
+  });
+
+  box.innerHTML=results.length
+    ?results.join("")
+    :`<div class="card">
+       <h3>No results</h3>
+       <p class="muted">Try another search.</p>
+     </div>`;
+}
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+function defaultChats(){
+
+  const chats=get(STORE.messages,null);
+
+  if(chats)return chats;
+
+  const data=[
+    {
+      id:1,
+      name:"VORTEX Team",
+      message:"Welcome to VORTEX 🚀",
+      unread:1
+    },
+    {
+      id:2,
+      name:"Creative Hub",
+      message:"Let's create something.",
+      unread:0
+    },
+    {
+      id:3,
+      name:"Gaming",
+      message:"New challenge available.",
+      unread:2
+    }
+  ];
+
+  set(STORE.messages,data);
+
+  return data;
+}
+
+function renderChats(filter=""){
+
+  const box=document.getElementById("chatList");
+
+  if(!box)return;
+
+  let chats=defaultChats();
+
+  if(filter){
+
+    chats=chats.filter(c=>
+      c.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }
+
+  box.innerHTML=chats.map(chat=>`
+
+    <div class="card row"
+      onclick="openChat(${chat.id})">
+
+      <div class="avatar">
+        ${escapeHTML(chat.name.slice(0,2))}
+      </div>
+
+      <div class="grow">
+
+        <strong>${escapeHTML(chat.name)}</strong>
+
+        <div class="muted">
+          ${escapeHTML(chat.message)}
+        </div>
+
+      </div>
+
+      ${chat.unread
+        ?`<span style="color:var(--cyan)">●</span>`
+        :""}
+
+    </div>
+
+  `).join("");
+}
+
+function searchChats(value){
+  renderChats(value);
+}
+
+function openChat(id){
+
+  const chats=defaultChats();
+
+  const chat=chats.find(c=>c.id===id);
+
+  if(!chat)return;
+
+  showModal(chat.name,`
+
+    <div id="chatMessages"
+      class="card"
+      style="max-height:280px;overflow:auto">
+
+      <div class="aiMessage">
+        ${escapeHTML(chat.message)}
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <input id="chatInput"
+        placeholder="Write a message...">
+
+      <button class="btn primary"
+        onclick="sendChat(${id})">
+        Send
+      </button>
+
+    </div>
+
+  `);
+}
+
+function sendChat(id){
+
+  const input=document.getElementById("chatInput");
+
+  const text=input.value.trim();
+
+  if(!text)return;
+
+  const chats=defaultChats();
+
+  const chat=chats.find(c=>c.id===id);
+
+  if(chat){
+
+    chat.message=text;
+    chat.unread=0;
+
+    set(STORE.messages,chats);
+  }
+
+  hideModal();
+
+  renderChats();
+
+  toast("Message sent 💬");
+}
+
+function newChat(){
+
+  showModal("New Chat",`
+
+    <input id="newChatName"
+      placeholder="Username or name">
+
+    <br><br>
+
+    <button class="btn primary"
+      onclick="createChat()">
+      Start Chat
+    </button>
+
+  `);
+}
+
+function createChat(){
+
+  const name=document.getElementById("newChatName").value.trim();
+
+  if(!name){
+    toast("Enter a name.");
+    return;
+  }
+
+  const chats=defaultChats();
+
+  chats.unshift({
+    id:Date.now(),
+    name,
+    message:"New conversation",
+    unread:0
+  });
+
+  set(STORE.messages,chats);
+
+  hideModal();
+
+  renderChats();
+
+  toast("Chat created");
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+function addNotification(text){
+
+  const notifications=get(STORE.notifications,[]);
+
+  notifications.unshift({
+    id:Date.now(),
+    text,
+    read:false,
+    date:new Date().toLocaleTimeString()
+  });
+
+  set(
+    STORE.notifications,
+    notifications.slice(0,50)
+  );
+
+  renderNotifications();
+}
+
+function renderNotifications(){
+
+  const box=document.getElementById("notificationList");
+
+  if(!box)return;
+
+  const notifications=get(STORE.notifications,[]);
+
+  if(!notifications.length){
+
+    box.innerHTML=`
+      <div class="card">
+        <h3>No notifications</h3>
+        <p class="muted">You're all caught up.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML=notifications.map(n=>`
+
+    <div class="card row"
+      style="opacity:${n.read?.6:1}">
+
+      <div class="avatar">🔔</div>
+
+      <div class="grow">
+
+        <strong>${escapeHTML(n.text)}</strong>
+
+        <small class="muted">
+          ${escapeHTML(n.date)}
+        </small>
+
+      </div>
+
+    </div>
+
+  `).join("");
+}
+
+function markAllRead(){
+
+  const notifications=get(STORE.notifications,[]);
+
+  notifications.forEach(n=>n.read=true);
+
+  set(STORE.notifications,notifications);
+
+  renderNotifications();
+
+  toast("Notifications marked as read");
+}
+
+
+/* =========================================================
+   GROUPS
+========================================================= */
+
+function getGroups(){
+
+  let groups=get(STORE.groups,null);
+
+  if(groups)return groups;
+
+  groups=[
+    {
+      id:1,
+      name:"VORTEX Creators",
+      members:1240,
+      joined:false,
+      description:"Creators building together."
+    },
+    {
+      id:2,
+      name:"Gaming Zone",
+      members:870,
+      joined:false,
+      description:"Games, challenges and competitions."
+    },
+    {
+      id:3,
+      name:"Students Hub",
+      members:530,
+      joined:false,
+      description:"Learning and revision."
+    }
+  ];
+
+  set(STORE.groups,groups);
+
+  return groups;
+}
+
+function renderGroups(){
+
+  const box=document.getElementById("groupList");
+
+  if(!box)return;
+
+  box.innerHTML=getGroups().map(g=>`
+
+    <div class="card groupCard">
+
+      <div class="row">
+
+        <div class="avatar">👥</div>
+
+        <div class="grow">
+
+          <strong>${escapeHTML(g.name)}</strong>
+
+          <div class="muted">
+            ${g.members} members
+          </div>
+
+        </div>
+
+        <button class="btn small"
+          onclick="toggleGroup(${g.id})">
+
+          ${g.joined?"Leave":"Join"}
+
+        </button>
+
+      </div>
+
+      <p class="muted">
+        ${escapeHTML(g.description)}
+      </p>
+
+    </div>
+
+  `).join("");
+}
+
+function toggleGroup(id){
+
+  const groups=getGroups();
+
+  const group=groups.find(g=>g.id===id);
+
+  if(!group)return;
+
+  group.joined=!group.joined;
+
+  group.members+=group.joined?1:-1;
+
+  set(STORE.groups,groups);
+
+  renderGroups();
+
+  toast(group.joined?"Joined group":"Left group");
+}
+
+function createGroup(){
+
+  showModal("Create Group",`
+
+    <input id="groupName" placeholder="Group name">
+
+    <br><br>
+
+    <textarea id="groupDesc"
+      placeholder="Description"></textarea>
+
+    <br>
+
+    <button class="btn primary"
+      onclick="saveGroup()">
+      Create Group
+    </button>
+
+  `);
+}
+
+function saveGroup(){
+
+  const name=document.getElementById("groupName").value.trim();
+
+  const desc=document.getElementById("groupDesc").value.trim();
+
+  if(!name){
+    toast("Enter a group name.");
+    return;
+  }
+
+  const groups=getGroups();
+
+  groups.unshift({
+    id:Date.now(),
+    name,
+    members:1,
+    joined:true,
+    description:desc || "New VORTEX group."
+  });
+
+  set(STORE.groups,groups);
+
+  hideModal();
+
+  renderGroups();
+
+  toast("Group created 👥");
+}
+
+
+/* =========================================================
+   PAGES
+========================================================= */
+
+function renderPages(){
+
+  const box=document.getElementById("pageList");
+
+  if(!box)return;
+
+  const pages=[
+    ["🚀","VORTEX Official","Technology & community"],
+    ["🎮","VORTEX Gaming","Games & competitions"],
+    ["🎨","VORTEX Creators","Creative community"],
+    ["📚","VORTEX Learning","Education"]
+  ];
+
+  box.innerHTML=pages.map(p=>`
+
+    <div class="card row">
+
+      <div class="avatar">${p[0]}</div>
+
+      <div class="grow">
+
+        <strong>${escapeHTML(p[1])}</strong>
+
+        <div class="muted">${escapeHTML(p[2])}</div>
+
+      </div>
+
+      <button class="btn small"
+        onclick="toast('Page followed ✓')">
+        Follow
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+function createPage(){
+
+  showModal("Create Page",`
+
+    <input id="pageName" placeholder="Page name">
+
+    <br><br>
+
+    <textarea id="pageDesc"
+      placeholder="Page description"></textarea>
+
+    <br>
+
+    <button class="btn primary"
+      onclick="savePage()">
+      Create Page
+    </button>
+
+  `);
+}
+
+function savePage(){
+
+  const name=document.getElementById("pageName").value.trim();
+
+  if(!name){
+    toast("Enter a page name.");
+    return;
+  }
+
+  hideModal();
+
+  toast("Page created 📄");
+}
+
+
+/* =========================================================
+   MARKETPLACE
+========================================================= */
+
+function getMarketplace(){
+
+  let items=get(STORE.marketplace,null);
+
+  if(items)return items;
+
+  items=[
+    {
+      id:1,
+      name:"Samsung Phone",
+      price:"P2,500",
+      category:"Electronics",
+      location:"Gaborone"
+    },
+    {
+      id:2,
+      name:"Gaming Chair",
+      price:"P1,200",
+      category:"Furniture",
+      location:"Gaborone"
+    },
+    {
+      id:3,
+      name:"Laptop",
+      price:"P4,500",
+      category:"Computers",
+      location:"Botswana"
+    }
+  ];
+
+  set(STORE.marketplace,items);
+
+  return items;
+}
+
+function renderMarketplace(){
+
+  const box=document.getElementById("marketList");
+
+  if(!box)return;
+
+  box.innerHTML=getMarketplace().map(item=>`
+
+    <div class="feature marketCard">
+
+      <span class="featureIcon">🛍️</span>
+
+      <strong>${escapeHTML(item.name)}</strong>
+
+      <b>${escapeHTML(item.price)}</b>
+
+      <small>
+        ${escapeHTML(item.category)}
+        · ${escapeHTML(item.location)}
+      </small>
+
+      <button class="btn small"
+        onclick="contactSeller('${escapeHTML(item.name)}')">
+        Contact Seller
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+function contactSeller(name){
+
+  toast("Seller contact opened for "+name);
+}
+
+function createListing(){
+
+  showModal("Create Listing",`
+
+    <input id="listingName"
+      placeholder="Product name">
+
+    <br><br>
+
+    <input id="listingPrice"
+      placeholder="Price">
+
+    <br><br>
+
+    <input id="listingCategory"
+      placeholder="Category">
+
+    <br><br>
+
+    <input id="listingLocation"
+      placeholder="Location">
+
+    <br><br>
+
+    <button class="btn primary"
+      onclick="saveListing()">
+      Publish Listing
+    </button>
+
+  `);
+}
+
+function saveListing(){
+
+  const name=document.getElementById("listingName").value.trim();
+
+  if(!name){
+    toast("Enter product name.");
+    return;
+  }
+
+  const items=getMarketplace();
+
+  items.unshift({
+    id:Date.now(),
+    name,
+    price:document.getElementById("listingPrice").value || "Contact seller",
+    category:document.getElementById("listingCategory").value || "Other",
+    location:document.getElementById("listingLocation").value || "Botswana"
+  });
+
+  set(STORE.marketplace,items);
+
+  hideModal();
+
+  renderMarketplace();
+
+  toast("Listing published 🛍️");
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+function renderEvents(){
+
+  const box=document.getElementById("eventList");
+
+  if(!box)return;
+
+  const events=[
+    {
+      id:1,
+      name:"VORTEX Creator Meetup",
+      date:"Saturday",
+      location:"Gaborone",
+      going:false
+    },
+    {
+      id:2,
+      name:"VORTEX Gaming Challenge",
+      date:"Sunday",
+      location:"Online",
+      going:false
+    }
+  ];
+
+  box.innerHTML=events.map(e=>`
+
+    <div class="card">
+
+      <h3>📅 ${escapeHTML(e.name)}</h3>
+
+      <p class="muted">
+        ${escapeHTML(e.date)} · ${escapeHTML(e.location)}
+      </p>
+
+      <button class="btn primary"
+        onclick="joinEvent('${escapeHTML(e.name)}')">
+        Interested
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+function joinEvent(name){
+
+  addNotification("You are interested in "+name);
+
+  toast("Event saved 📅");
+}
+
+function createEvent(){
+
+  showModal("Create Event",`
+
+    <input id="eventName" placeholder="Event name">
+
+    <br><br>
+
+    <input id="eventDate" placeholder="Date">
+
+    <br><br>
+
+    <input id="eventLocation" placeholder="Location">
+
+    <br><br>
+
+    <textarea id="eventDescription"
+      placeholder="Description"></textarea>
+
+    <br>
+
+    <button class="btn primary"
+      onclick="saveEvent()">
+      Create Event
+    </button>
+
+  `);
+}
+
+function saveEvent(){
+
+  const name=document.getElementById("eventName").value.trim();
+
+  if(!name){
+    toast("Enter an event name.");
+    return;
+  }
+
+  hideModal();
+
+  toast("Event created 📅");
+}
+
+
+/* =========================================================
+   JOBS
+========================================================= */
+
+function renderJobs(){
+
+  const box=document.getElementById("jobList");
+
+  if(!box)return;
+
+  const jobs=[
+    ["Frontend Developer","Technology","Gaborone"],
+    ["Graphic Designer","Creative","Remote"],
+    ["Social Media Manager","Marketing","Botswana"],
+    ["Game Developer","Gaming","Remote"]
+  ];
+
+  box.innerHTML=jobs.map(j=>`
+
+    <div class="card jobCard">
+
+      <h3>💼 ${j[0]}</h3>
+
+      <p class="muted">
+        ${j[1]} · ${j[2]}
+      </p>
+
+      <button class="btn primary"
+        onclick="applyJob('${escapeHTML(j[0])}')">
+        Apply
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+function applyJob(name){
+
+  toast("Application interface opened for "+name);
+}
+
+function createJob(){
+
+  showModal("Post a Job",`
+
+    <input id="jobName" placeholder="Job title">
+
+    <br><br>
+
+    <input placeholder="Company">
+
+    <br><br>
+
+    <textarea placeholder="Job description"></textarea>
+
+    <br>
+
+    <button class="btn primary"
+      onclick="hideModal();toast('Job posted 💼')">
+      Post Job
+    </button>
+
+  `);
+}
+
+
+/* =========================================================
+   FUNDRAISERS
+========================================================= */
+
+function renderFundraisers(){
+
+  const box=document.getElementById("fundraiserList");
+
+  if(!box)return;
+
+  const data=[
+    {
+      title:"Help a Community Project",
+      goal:10000,
+      raised:3200
+    },
+    {
+      title:"Education Support",
+      goal:5000,
+      raised:2100
+    }
+  ];
+
+  box.innerHTML=data.map(f=>{
+
+    const percent=Math.min(
+      100,
+      Math.round((f.raised/f.goal)*100)
+    );
+
+    return `
+
+      <div class="card">
+
+        <h3>🤝 ${f.title}</h3>
+
+        <p>
+          P${f.raised.toLocaleString()}
+          raised of
+          P${f.goal.toLocaleString()}
+        </p>
+
+        <div class="progress">
+          <div class="progressBar"
+            style="width:${percent}%">
+          </div>
+        </div>
+
+        <br>
+
+        <button class="btn primary"
+          onclick="toast('Support flow opened')">
+          Support
+        </button>
+
+      </div>
+
+    `;
+
+  }).join("");
+}
+
+function createFundraiser(){
+
+  showModal("Create Fundraiser",`
+
+    <input placeholder="Fundraiser title">
+
+    <br><br>
+
+    <input placeholder="Goal amount">
+
+    <br><br>
+
+    <textarea placeholder="Explain the cause"></textarea>
+
+    <br>
+
+    <button class="btn primary"
+      onclick="hideModal();toast('Fundraiser created 🤝')">
+      Create
+    </button>
+
+  `);
+}
+
+
+/* =========================================================
+   DATING
+========================================================= */
+
+function renderDating(){
+
+  const box=document.getElementById("datingList");
+
+  if(!box)return;
+
+  const people=[
+    ["Alex","🎨","Photography • Music"],
+    ["Jordan","🎮","Gaming • Technology"],
+    ["Sam","📚","Learning • Travel"]
+  ];
+
+  box.innerHTML=people.map(p=>`
+
+    <div class="card row">
+
+      <div class="avatar large">${p[1]}</div>
+
+      <div class="grow">
+
+        <h3>${p[0]}</h3>
+
+        <p class="muted">${p[2]}</p>
+
+      </div>
+
+      <button class="btn small"
+        onclick="datingAction('Like')">
+        ❤️
+      </button>
+
+      <button class="btn small"
+        onclick="datingAction('Pass')">
+        ✕
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+function datingAction(action){
+
+  toast(action+" recorded");
+}
+
+
+/* =========================================================
+   GAMES
+========================================================= */
+
+function launchGame(name){
+
+  showModal(name,`
+
+    <div style="text-align:center;padding:20px">
+
+      <div style="font-size:70px">🎮</div>
+
+      <h2>${escapeHTML(name)}</h2>
+
+      <p class="muted">
+        VORTEX ${escapeHTML(name)} game interface.
+      </p>
+
+      <button class="btn primary"
+        onclick="gamePlay('${escapeHTML(name)}')">
+        Start Game
+      </button>
+
+    </div>
+
+  `);
+}
+
+function gamePlay(name){
+
+  let xp=Number(localStorage.getItem(STORE.xp)||0);
+
+  xp+=10;
+
+  localStorage.setItem(STORE.xp,xp);
+
+  updateXP();
+
+  hideModal();
+
+  toast(name+" played! +10 XP 🎮");
+}
+
+function updateXP(){
+
+  const xp=Number(localStorage.getItem(STORE.xp)||0);
+
+  const value=document.getElementById("xpValue");
+
+  const bar=document.getElementById("xpBar");
+
+  if(value)value.textContent=xp;
+
+  if(bar)bar.style.width=Math.min(100,10+(xp%100))+"%";
+}
+
+
+/* =========================================================
+   CHALLENGES
+========================================================= */
+
+function renderChallenges(){
+
+  const box=document.getElementById("challengeList");
+
+  if(!box)return;
+
+  const challenges=[
+    ["24 Hour Creator Challenge","Post something creative today.",24],
+    ["3 Day VORTEX Challenge","Create for three days.",45],
+    ["7 Day Community Challenge","Connect with the community.",70]
+  ];
+
+  box.innerHTML=challenges.map(c=>`
+
+    <div class="card">
+
+      <h3>🏆 ${c[0]}</h3>
+
+      <p class="muted">${c[1]}</p>
+
+      <div class="progress">
+        <div class="progressBar"
+          style="width:${c[2]}%">
+        </div>
+      </div>
+
+      <br>
+
+      <button class="btn primary"
+        onclick="joinChallenge('${escapeHTML(c[0])}')">
+        Join Challenge
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+function joinChallenge(name){
+
+  addNotification("You joined "+name);
+
+  toast("Challenge joined 🏆");
+}
+
+
+/* =========================================================
+   REELS + WATCH
+========================================================= */
+
+function renderVideos(){
+
+  const reels=document.getElementById("reelsList");
+  const watch=document.getElementById("watchList");
+
+  const data=[
+    ["🚀","Building something amazing on VORTEX"],
+    ["🎮","VORTEX Gaming"],
+    ["🌍","Discover Botswana"],
+    ["💡","Creator tips"]
+  ];
+
+  const html=data.map(v=>`
+
+    <div class="card">
+
+      <div class="postImage">${v[0]}</div>
+
+      <h3>${v[1]}</h3>
+
+      <div class="postActions">
+
+        <button class="postAction"
+          onclick="toast('Liked ❤️')">
+          ❤️ Like
+        </button>
+
+        <button class="postAction"
+          onclick="toast('Comment opened')">
+          💬 Comment
+        </button>
+
+        <button class="postAction"
+          onclick="toast('Shared')">
+          ↗ Share
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+  if(reels)reels.innerHTML=html;
+
+  if(watch)watch.innerHTML=html;
+}
+
+
+/* =========================================================
+   LIVE
+========================================================= */
+
+function startLive(){
+
+  showModal("VORTEX Live",`
+
+    <div style="text-align:center">
+
+      <div style="font-size:70px">🔴</div>
+
+      <h2>Live setup</h2>
+
+      <p class="muted">
+        Camera and streaming backend integration is required
+        for a real live broadcast.
+      </p>
+
+      <button class="btn primary"
+        onclick="hideModal();toast('Live room created')">
+        Create Live Room
+      </button>
+
+    </div>
+
+  `);
+}
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function theme(name){
+
+  document.body.className="";
+
+  if(name!=="default"){
+    document.body.classList.add(name);
+  }
+
+  localStorage.setItem(STORE.theme,name);
+
+  toast("Theme changed ✨");
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function settingChanged(name,value){
+
+  const settings=get(STORE.settings,{});
+
+  settings[name]=value;
+
+  set(STORE.settings,settings);
+
+  toast(
+    name+" "+(value?"enabled":"disabled")
+  );
+}
+
+
+/* =========================================================
+   PREMIUM
+========================================================= */
+
+function premiumAction(){
+
+  showModal("VORTEX Premium",`
+
+    <h3>💎 Premium is integration-ready</h3>
+
+    <p class="muted">
+      Connect your real payment provider here when
+      you're ready to launch premium purchases.
+    </p>
+
+    <button class="btn primary"
+      onclick="hideModal();toast('Premium setup opened')">
+      Continue
+    </button>
+
+  `);
+}
+
+
+/* =========================================================
+   MEMORY
+========================================================= */
+
+function showMemory(){
+
+  const posts=getPosts();
+
+  if(!posts.length){
+
+    toast("Create posts to build memories.");
+
+    return;
+  }
+
+  showModal("Your VORTEX Memory",`
+
+    <div class="card">
+
+      <h3>🕰️ A VORTEX memory</h3>
+
+      <p>${escapeHTML(posts[posts.length-1].text)}</p>
+
+    </div>
+
+  `);
+}
+
+
+/* =========================================================
+   GENERIC FILTER
+========================================================= */
+
+function filterCards(type,value){
+
+  const selector=
+    type==="group"?".groupCard":
+    type==="market"?".marketCard":
+    ".jobCard";
+
+  document.querySelectorAll(selector).forEach(card=>{
+
+    card.style.display=
+      !value ||
+      card.textContent.toLowerCase().includes(value.toLowerCase())
+      ?"block"
+      :"none";
+
+  });
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+function initialize(){
+
+  const savedTheme=
+    localStorage.getItem(STORE.theme);
+
+  if(savedTheme){
+    theme(savedTheme);
+  }
+
+  updateProfileUI();
+
+  renderStories();
+
+  renderPosts();
+
+  renderProfilePosts();
+
+  renderChats();
+
+  renderNotifications();
+
+  renderGroups();
+
+  renderPages();
+
+  renderMarketplace();
+
+  renderEvents();
+
+  renderJobs();
+
+  renderFundraisers();
+
+  renderDating();
+
+  renderChallenges();
+
+  renderVideos();
+
+  updateXP();
+
+  /* Initial notification */
+  if(!localStorage.getItem("vortex_welcome_notification")){
+
+    addNotification(
+      "Welcome to VORTEX V15 🚀"
+    );
+
+    localStorage.setItem(
+      "vortex_welcome_notification",
+      "1"
+    );
+  }
+
+  if("serviceWorker" in navigator){
+
+    navigator.serviceWorker
+      .register("sw.js")
+      .catch(()=>{});
+
+  }
+}
+
+initialize();
+
+</script>
+
+</body>
+  </html>
