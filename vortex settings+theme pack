@@ -1,0 +1,61 @@
+// VORTEX SETTINGS + THEME PACK - BOSS BRILLIANT EDITION
+// All in ONE JavaScript file - Settings part of JS
+
+const VORTEX_SETTINGS = {
+  // Current saved settings (auto loaded from localStorage)
+  themeId: parseInt(localStorage.getItem('vx_theme') || '3'), // Default #3 you liked
+  userPic: localStorage.getItem('vx_userPic') || 'https://i.pravatar.cc/200?img=32',
+  userName: localStorage.getItem('vx_userName') || 'Brilliant Mere',
+  darkMode: localStorage.getItem('vx_dark') !== 'false',
+  glowIntensity: localStorage.getItem('vx_glow') || 'high',
+  bg3D: localStorage.getItem('vx_bg3d') !== 'false',
+
+  // Save all settings
+  save(){
+    localStorage.setItem('vx_theme', this.themeId);
+    localStorage.setItem('vx_userPic', this.userPic);
+    localStorage.setItem('vx_userName', this.userName);
+    localStorage.setItem('vx_dark', this.darkMode);
+    localStorage.setItem('vx_glow', this.glowIntensity);
+    localStorage.setItem('vx_bg3d', this.bg3D);
+    console.log('VORTEX Settings Saved:', this);
+  },
+
+  // Load settings
+  load(){
+    this.themeId = parseInt(localStorage.getItem('vx_theme') || '3');
+    this.userPic = localStorage.getItem('vx_userPic') || this.userPic;
+    return this;
+  },
+
+  // Apply theme LIVE
+  applyTheme(id){
+    this.themeId = id;
+    const t = VORTEX_THEMES.find(x=>x.id==id);
+    if(!t) return;
+    document.documentElement.style.setProperty('--c1', t.c1);
+    document.documentElement.style.setProperty('--c2', t.c2);
+    document.documentElement.style.setProperty('--c3', t.c3);
+    document.getElementById('styleNum') && (document.getElementById('styleNum').textContent = id);
+    this.save();
+  }
+};
+
+const VORTEX_THEMES = [
+  {id:1, name:"Electric Blue Vortex", c1:"#38bdf8", c2:"#0ea5e9", c3:"#7dd3fc", desc:"Blue cyan glowing energy"},
+  {id:2, name:"Purple Galaxy", c1:"#a78bfa", c2:"#7c3aed", c3:"#ec4899", desc:"Purple/pink space with stars"},
+  {id:3, name:"Cyber Rainbow", c1:"#f472b6", c2:"#38bdf8", c3:"#a78bfa", desc:"Multi neon colors - YOUR FAVORITE #3"},
+  {id:4, name:"Crystal Glass Neon", c1:"#22d3ee", c2:"#a78bfa", c3:"#ffffff", desc:"Transparent glass with neon edges"},
+  {id:5, name:"Neon Fire", c1:"#f97316", c2:"#ef4444", c3:"#facc15", desc:"Red/orange fire energy"},
+  {id:6, name:"Deep Space Vortex", c1:"#7c3aed", c2:"#000000", c3:"#38bdf8", desc:"Dark space with large glowing vortex"},
+  {id:7, name:"Electric Energy", c1:"#eab308", c2:"#f97316", c3:"#ffffff", desc:"Strong lightning glow"},
+  {id:8, name:"Neon Matrix", c1:"#22c55e", c2:"#000000", c3:"#4ade80", desc:"Green digital matrix"},
+  {id:9, name:"Pink/Purple Glow", c1:"#ec4899", c2:"#a855f7", c3:"#f472b6", desc:"Soft pink purple neon around profile"},
+  {id:10, name:"Vortex Ocean", c1:"#06b6d4", c2:"#0e7490", c3:"#67e8f9", desc:"Blue ocean flowing energy"}
+];
+
+// Auto apply saved theme on load
+document.addEventListener('DOMContentLoaded', ()=>{
+  VORTEX_SETTINGS.load();
+  VORTEX_SETTINGS.applyTheme(VORTEX_SETTINGS.themeId);
+});
