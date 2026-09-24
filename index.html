@@ -1,53 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VORTEX</title>
+<link rel="manifest" href="manifest.json">
+<style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:#02020a;
-  color:#fff;
-  font-family:sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-  position:relative;
-}
-/* STARS CANVAS */
-#stars{
-  position:fixed;top:0;left:0;
-  width:100%;height:100%;
-  z-index:-3;
-}
-/* GLOW LIGHTINGS - Stars theme */
-body::before{
-  content:'';
-  position:fixed;
-  top:-200px;left:-200px;
-  width:600px;height:600px;
-  background:radial-gradient(circle,rgba(138,92,245,0.5) 0%, transparent 70%);
-  filter:blur(40px);
-  z-index:-1;
-  animation: float1 8s infinite alternate;
-}
-body::after{
-  content:'';
-  position:fixed;
-  bottom:-200px;right:-100px;
-  width:700px;height:700px;
-  background:radial-gradient(circle,rgba(255,92,161,0.4) 0%, rgba(56,189,248,0.3) 50%, transparent 70%);
-  filter:blur(50px);
-  z-index:-1;
-  animation: float2 10s infinite alternate;
-}
-@keyframes float1{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
-@keyframes float2{0%{transform:translate(0,0)}100%{transform:translate(-30px,-40px)}}
-
-/* KEEP YOUR EXISTING CARDS - just make them glassy */
-.glass, [style*="border"]{
-  background:rgba(15,15,35,0.6) !important;
-  backdrop-filter:blur(16px) !important;
-  border:1px solid rgba(255,255,255,0.08) !important;
-  box-shadow:0 0 20px rgba(138,92,245,0.15) !important;
-}
-
-/* Bottom nav glassy */
-nav, [style*="position:fixed"][style*="bottom"]{
-  background:rgba(10,10,25,0.85) !important;
-  backdrop-filter:blur(20px) !important;
-  border-top:1px solid rgba(255,255,255,0.08) !important;
-}
+body{background:#02020a;color:#fff;font-family:sans-serif;min-height:100vh;overflow-x:hidden}
+#stars{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-3}
+body::before{content:'';position:fixed;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(138,92,245,0.6) 0%,transparent 70%);filter:blur(50px);z-index:-1}
+body::after{content:'';position:fixed;bottom:-200px;right:-100px;width:700px;height:700px;background:radial-gradient(circle,rgba(255,92,161,0.45),rgba(56,189,248,0.3) 50%,transparent 70%);filter:blur(60px);z-index:-1}
+.hub{padding:16px 16px 90px;position:relative;z-index:2}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.logo{font-size:28px;font-weight:900;background:linear-gradient(90deg,#8a5cf5,#ff5ca1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:rgba(18,18,40,.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:16px;box-shadow:0 0 20px rgba(138,92,245,.15)}
+.feed{margin-top:16px}
+.post{background:rgba(18,18,40,.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px;margin-bottom:12px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,25,.9);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-around;padding:12px;z-index:10}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="hub">
+  <div class="top"><div class="logo">VORTEX</div><div>🔔 ⚙️</div></div>
+  <div class="grid">
+    <div class="card"><h3>📖 Stories</h3><p>Share moments</p></div>
+    <div class="card"><h3>🎬 Reels</h3><p>Short videos</p></div>
+  </div>
+  <div class="feed">
+    <div class="post"><b>@brilliant</b><br>Welcome to STARS theme ✨</div>
+    <div class="post"><b>@user1</b><br>Lighting test 💜</div>
+  </div>
+</div>
+<div class="bottom-nav"><span>🏠</span><span>🔍</span><span>➕</span><span>💬</span><span>👤</span></div>
+<script>
+// STARS
+let c=document.getElementById('stars'),ctx=c.getContext('2d'),w,h,s=[];
+function R(){w=c.width=innerWidth;h=c.height=innerHeight}
+addEventListener('resize',R);R();
+for(let i=0;i<200;i++)s.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+0.3,sp:Math.random()*.5+.2,t:Math.random()*6});
+(function D(){ctx.clearRect(0,0,w,h);s.forEach(o=>{ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,7);ctx.fillStyle=`rgba(255,255,255,${0.3+Math.sin(o.t)*0.7})`;ctx.shadowBlur=o.r>1?10:0;ctx.shadowColor='#8a5cf5';ctx.fill();ctx.shadowBlur=0;o.y+=o.sp;o.t+=0.02;if(o.y>h){o.y=0;o.x=Math.random()*w}});requestAnimationFrame(D)})();
+</script>
+</body>
+</html>
