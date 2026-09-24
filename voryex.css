@@ -1,0 +1,928 @@
+/* =========================================================
+   VORTEX V16 — GENERAL LUXURY GALAXY DESIGN SYSTEM
+   css/vortex.css
+   ========================================================= */
+
+:root{
+  --vortex-bg:#03040a;
+  --vortex-bg-2:#070a16;
+
+  --vortex-cyan:#00d9ff;
+  --vortex-blue:#3478ff;
+  --vortex-purple:#8a5cf5;
+  --vortex-pink:#ff5ca1;
+  --vortex-violet:#b45cff;
+
+  --vortex-white:#ffffff;
+  --vortex-text:rgba(255,255,255,.92);
+  --vortex-muted:rgba(255,255,255,.58);
+  --vortex-faint:rgba(255,255,255,.34);
+
+  --glass:rgba(255,255,255,.055);
+  --glass-strong:rgba(18,21,43,.62);
+  --glass-soft:rgba(255,255,255,.035);
+
+  --border:rgba(255,255,255,.11);
+  --border-light:rgba(255,255,255,.16);
+
+  --radius-small:12px;
+  --radius-medium:18px;
+  --radius-large:26px;
+  --radius-xl:34px;
+
+  --shadow:
+    0 25px 80px rgba(0,0,0,.38);
+
+  --transition:
+    transform .25s ease,
+    opacity .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease,
+    background .25s ease;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  min-height:100%;
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(0,217,255,.09),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(138,92,245,.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(255,92,161,.07),
+      transparent 32%
+    ),
+    var(--vortex-bg);
+
+  color:var(--vortex-text);
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+
+/* =========================================================
+   BASIC ELEMENTS
+   ========================================================= */
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+img,
+video{
+  max-width:100%;
+  display:block;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+
+/* =========================================================
+   GALAXY BACKGROUND
+   ========================================================= */
+
+#stars{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-5;
+  pointer-events:none;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-4;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(0,217,255,.025) 45%,
+      transparent 70%
+    );
+
+  animation:vortexAtmosphere 12s ease-in-out infinite alternate;
+}
+
+@keyframes vortexAtmosphere{
+  from{
+    opacity:.45;
+  }
+
+  to{
+    opacity:1;
+  }
+}
+
+
+/* =========================================================
+   GLOW SYSTEM
+   ========================================================= */
+
+.glow{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(100px);
+  opacity:.22;
+  pointer-events:none;
+  z-index:-3;
+}
+
+.glow-1{
+  width:500px;
+  height:500px;
+  top:-180px;
+  left:-170px;
+  background:var(--vortex-purple);
+}
+
+.glow-2{
+  width:600px;
+  height:600px;
+  right:-220px;
+  bottom:-230px;
+  background:var(--vortex-pink);
+}
+
+.glow-3{
+  width:400px;
+  height:400px;
+  left:35%;
+  top:30%;
+  background:var(--vortex-cyan);
+  opacity:.08;
+}
+
+
+/* =========================================================
+   GENERAL PAGE CONTAINER
+   ========================================================= */
+
+.center{
+  min-height:100vh;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+}
+
+.hub{
+  width:min(1100px,100%);
+  margin:auto;
+  padding:22px 16px 50px;
+}
+
+
+/* =========================================================
+   GLASS SYSTEM
+   ========================================================= */
+
+.glass{
+  position:relative;
+
+  padding:20px;
+
+  border-radius:var(--radius-large);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.075),
+      rgba(255,255,255,.025)
+    );
+
+  border:1px solid var(--border);
+
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+
+  box-shadow:
+    var(--shadow),
+    inset 0 1px rgba(255,255,255,.08);
+
+  transition:var(--transition);
+}
+
+.glass:hover{
+  transform:translateY(-3px);
+
+  border-color:
+    rgba(0,217,255,.28);
+
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.42),
+    0 0 30px rgba(0,217,255,.06),
+    inset 0 1px rgba(255,255,255,.1);
+}
+
+
+/* =========================================================
+   MAIN GLASS CARD
+   ========================================================= */
+
+.glass-card{
+  position:relative;
+
+  width:min(430px,100%);
+
+  padding:42px 30px;
+
+  text-align:center;
+
+  border-radius:var(--radius-xl);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(18,21,43,.72),
+      rgba(255,255,255,.035)
+    );
+
+  border:1px solid var(--border-light);
+
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.55),
+    inset 0 1px rgba(255,255,255,.1);
+
+  overflow:hidden;
+}
+
+.glass-card::before{
+  content:"";
+
+  position:absolute;
+
+  width:220px;
+  height:220px;
+
+  top:-130px;
+  right:-100px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,217,255,.22),
+      transparent 70%
+    );
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   VORTEX LOGO
+   ========================================================= */
+
+.logo{
+  font-size:clamp(38px,9vw,58px);
+
+  line-height:1;
+
+  letter-spacing:
+    clamp(6px,2vw,12px);
+
+  font-weight:900;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff 10%,
+      #9ceeff 35%,
+      var(--vortex-purple) 70%,
+      var(--vortex-pink)
+    );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
+  filter:
+    drop-shadow(
+      0 0 24px rgba(0,217,255,.12)
+    );
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+  color:var(--vortex-white);
+}
+
+p{
+  color:var(--vortex-muted);
+}
+
+.sub{
+  margin-top:10px;
+
+  color:var(--vortex-muted);
+
+  font-size:10px;
+
+  letter-spacing:3px;
+
+  text-transform:uppercase;
+}
+
+.desc{
+  margin-top:14px;
+
+  color:var(--vortex-muted);
+
+  font-size:12px;
+
+  line-height:1.7;
+}
+
+
+/* =========================================================
+   PREMIUM BUTTONS
+   ========================================================= */
+
+.glass-btn{
+  position:relative;
+
+  margin-top:30px;
+
+  min-height:50px;
+
+  padding:14px 26px;
+
+  border:1px solid rgba(255,255,255,.16);
+
+  border-radius:999px;
+
+  color:#fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--vortex-purple),
+      var(--vortex-pink)
+    );
+
+  box-shadow:
+    0 12px 35px rgba(138,92,245,.22),
+    inset 0 1px rgba(255,255,255,.25);
+
+  font-weight:700;
+
+  letter-spacing:.5px;
+
+  transition:var(--transition);
+}
+
+.glass-btn:hover{
+  transform:translateY(-2px) scale(1.02);
+
+  box-shadow:
+    0 18px 45px rgba(138,92,245,.32),
+    0 0 30px rgba(255,92,161,.12),
+    inset 0 1px rgba(255,255,255,.3);
+}
+
+.glass-btn:active{
+  transform:scale(.97);
+}
+
+
+/* =========================================================
+   GRID SYSTEM
+   ========================================================= */
+
+.grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:14px;
+}
+
+
+/* =========================================================
+   PREMIUM ICON TILE
+   ========================================================= */
+
+.icon-tile{
+  width:48px;
+  height:48px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,217,255,.13),
+      rgba(138,92,245,.16)
+    );
+
+  border:1px solid rgba(255,255,255,.12);
+
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.12),
+    0 10px 30px rgba(0,0,0,.2);
+
+  font-size:21px;
+}
+
+
+/* =========================================================
+   HUB CARDS
+   ========================================================= */
+
+.hub-card{
+  position:relative;
+
+  padding:20px;
+
+  min-height:145px;
+
+  border-radius:24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.075),
+      rgba(255,255,255,.025)
+    );
+
+  border:1px solid var(--border);
+
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+
+  transition:var(--transition);
+
+  overflow:hidden;
+}
+
+.hub-card:hover{
+  transform:translateY(-4px);
+
+  border-color:
+    rgba(0,217,255,.3);
+
+  box-shadow:
+    0 25px 65px rgba(0,0,0,.35);
+}
+
+.hub-card h3{
+  margin-top:15px;
+
+  font-size:13px;
+
+  letter-spacing:1px;
+}
+
+.hub-card p{
+  margin-top:6px;
+
+  font-size:10px;
+}
+
+
+/* =========================================================
+   PREMIUM SECTION
+   ========================================================= */
+
+.section{
+  margin-top:20px;
+
+  padding:20px;
+
+  border-radius:26px;
+
+  background:
+    rgba(255,255,255,.04);
+
+  border:1px solid var(--border);
+
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+}
+
+.section-title{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-bottom:15px;
+}
+
+.section-title h2{
+  font-size:13px;
+
+  letter-spacing:2px;
+}
+
+.section-title span{
+  color:var(--vortex-faint);
+
+  font-size:9px;
+
+  letter-spacing:1px;
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  padding:6px 10px;
+
+  border-radius:999px;
+
+  background:
+    rgba(0,217,255,.07);
+
+  border:1px solid rgba(0,217,255,.16);
+
+  color:#9ceeff;
+
+  font-size:8px;
+
+  letter-spacing:1px;
+
+  text-transform:uppercase;
+}
+
+.badge-live{
+  color:#ff9cce;
+
+  background:
+    rgba(255,92,161,.08);
+
+  border-color:
+    rgba(255,92,161,.18);
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+input,
+textarea,
+select{
+  width:100%;
+
+  padding:13px 15px;
+
+  border-radius:14px;
+
+  border:1px solid var(--border);
+
+  outline:none;
+
+  color:#fff;
+
+  background:
+    rgba(255,255,255,.045);
+
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+
+  transition:var(--transition);
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:rgba(255,255,255,.35);
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:
+    rgba(0,217,255,.4);
+
+  box-shadow:
+    0 0 0 3px rgba(0,217,255,.06);
+}
+
+
+/* =========================================================
+   LOADING SCREEN
+   ========================================================= */
+
+#loading-screen{
+  position:fixed;
+
+  inset:0;
+
+  z-index:9999;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(0,217,255,.08),
+      transparent 35%
+    ),
+    #03040a;
+}
+
+.loading-wrapper{
+  text-align:center;
+}
+
+.vortex-logo-glass{
+  font-size:46px;
+
+  letter-spacing:10px;
+
+  font-weight:900;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff,
+      var(--vortex-cyan),
+      var(--vortex-purple)
+    );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+}
+
+.vortex-signature{
+  display:block;
+
+  margin-top:9px;
+
+  color:var(--vortex-muted);
+
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+.loading-status{
+  margin-top:15px;
+
+  font-size:10px;
+
+  color:var(--vortex-muted);
+}
+
+
+/* =========================================================
+   LUXURY SPINNER
+   ========================================================= */
+
+.luxury-spinner{
+  width:44px;
+  height:44px;
+
+  margin:25px auto 0;
+
+  border-radius:50%;
+
+  border:
+    2px solid rgba(255,255,255,.08);
+
+  border-top-color:
+    var(--vortex-cyan);
+
+  border-right-color:
+    var(--vortex-purple);
+
+  animation:
+    vortexSpin 1s linear infinite;
+
+  box-shadow:
+    0 0 25px rgba(0,217,255,.1);
+}
+
+@keyframes vortexSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.modal-overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:5000;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    rgba(0,0,0,.68);
+
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+.modal-overlay.hidden{
+  display:none;
+}
+
+.modal-card{
+  width:min(600px,100%);
+
+  max-height:90vh;
+
+  overflow:auto;
+
+  border-radius:28px;
+
+  background:
+    rgba(12,15,30,.88);
+
+  border:1px solid var(--border-light);
+
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.6);
+}
+
+.dynamic-glass{
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+}
+
+.modal-header{
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:20px;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.07);
+}
+
+.modal-header h3{
+  font-size:14px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:700px){
+
+  .hub{
+    padding:14px 11px 35px;
+  }
+
+  .glass-card{
+    padding:34px 22px;
+    border-radius:27px;
+  }
+
+  .grid{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:10px;
+  }
+
+  .glass{
+    padding:16px;
+    border-radius:20px;
+  }
+
+  .logo{
+    letter-spacing:7px;
+  }
+}
+
+
+@media(max-width:390px){
+
+  .grid{
+    gap:8px;
+  }
+
+  .glass{
+    padding:14px;
+  }
+
+  .logo{
+    font-size:36px;
+    letter-spacing:5px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  }
