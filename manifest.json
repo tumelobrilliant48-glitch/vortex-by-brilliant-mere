@@ -1,1 +1,174 @@
-{"name":"VORTEX by Brilliant Mere","short_name":"VORTEX","start_url":"./index.html","display":"standalone","background_color":"#050510","theme_color":"#00d8ff","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/4712/4712109.png","sizes":"512x512","type":"image/png"}]}
+{
+  "name": "VORTEX by Brilliant Mere — V16 Luxury Galaxy",
+  "short_name": "VORTEX",
+  "description": "VORTEX — A luxurious galaxy-themed social universe. Your world. Your people. Your Vortex. Built in Botswana for the world.",
+  "start_url": "./index.html?utm_source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
+  "orientation": "any",
+  "theme_color": "#050712",
+  "background_color": "#03040a",
+  "categories": [
+    "social",
+    "entertainment",
+    "games",
+    "lifestyle"
+  ],
+  "lang": "en",
+  "dir": "ltr",
+
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+
+  "handle_links": "preferred",
+
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3214/3214741.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3214/3214741.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3214/3214741.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3214/3214741.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3214/3214741.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=1080",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "VORTEX Galaxy — Luxury Mobile Experience"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "VORTEX Galaxy — Luxury Desktop Experience"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "VORTEX AI",
+      "short_name": "AI",
+      "description": "Enter the VORTEX AI galaxy",
+      "url": "./app.html#ai",
+      "icons": [
+        {
+          "src": "https://cdn-icons-png.flaticon.com/512/4712/4712027.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Galaxy Watch",
+      "short_name": "Watch",
+      "description": "Explore the VORTEX Galaxy video universe",
+      "url": "./app.html#videos",
+      "icons": [
+        {
+          "src": "https://cdn-icons-png.flaticon.com/512/1388/1388917.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "VORTEX Galaxy",
+      "short_name": "Galaxy",
+      "description": "Explore the VORTEX Galaxy",
+      "url": "./app.html#galaxy",
+      "icons": [
+        {
+          "src": "https://cdn-icons-png.flaticon.com/512/3214/3214741.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "VORTEX Arcade",
+      "short_name": "Games",
+      "description": "Enter the VORTEX luxury arcade",
+      "url": "./app.html#games",
+      "icons": [
+        {
+          "src": "https://cdn-icons-png.flaticon.com/512/808/808439.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Wallet",
+      "short_name": "Wallet",
+      "description": "Coins and payouts",
+      "url": "./app.html#wallet",
+      "icons": [
+        {
+          "src": "https://cdn-icons-png.flaticon.com/512/2838/2838895.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+
+  "share_target": {
+    "action": "./app.html#share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "media",
+          "accept": [
+            "image/*",
+            "video/*"
+          ]
+        }
+      ]
+    }
+  },
+
+  "protocol_handlers": [
+    {
+      "protocol": "web+vortex",
+      "url": "./app.html#%s"
+    }
+  ]
+}
