@@ -1,1590 +1,1686 @@
 /* =========================================================
-   VORTEX OMNIVERSE — BACKEND CORE
-   Authentication • Users • Profiles • Posts • Media
-   Messages • Notifications • Groups • Storage • Settings
+   VORTEX OMNIVERSE
+   BACKEND / API BRIDGE
    ========================================================= */
 
 "use strict";
 
-const VortexBackend = (() => {
+const VortexBackend = {
 
-  const DB_KEY = "vortex_backend_v1";
+  VERSION: "1.0.0",
 
-  const defaultDB = {
-    version: 1,
+  STORAGE_KEY: "vortex_backend_config",
 
-    session: {
-      loggedIn: false,
-      userId: null,
-      token: null
-    },
+  config: {
+    enabled: false,
+    mode: "local",
+    baseURL: "",
+    apiVersion: "v1",
+    timeout: 15000,
+    retries: 2,
+    credentials: "include",
+    debug: false
+  },
 
-    users: [],
+  state: {
+    online: navigator.onLine,
+    connected: false,
+    authenticated: false,
+    lastRequest: null,
+    lastError: null
+  },
 
-    posts: [],
+  token: null,
 
-    messages: [],
+  listeners: {},
 
-    groups: [],
+  requestQueue: [],
 
-    notifications: [],
+  cache: new Map(),
 
-    savedVideos: [],
+  /* =======================================================
+     INIT
+     ======================================================= */
 
-    vault: [],
+  init(options = {}) {
 
-    games: [],
+    this.load();
 
-    events: [],
+    this.config = {
+      ...this.config,
+      ...options
+    };
 
-    points: {},
+    this.state.online =
+      navigator.onLine;
 
-    settings: {},
+    this.token =
+      this.loadToken();
 
-    themes: [],
+    this.bindNetworkEvents();
 
-    chatFonts: [],
+    this.state.connected =
+      Boolean(
+        this.config.enabled &&
+        this.config.baseURL
+      );
 
-    cameraEffects: [],
-
-    reports: [],
-
-    follows: [],
-
-    friendships: []
-  };
-
-  function loadDB() {
-    try {
-      const saved = localStorage.getItem(DB_KEY);
-
-      if (!saved) {
-        saveDB(defaultDB);
-        return structuredClone(defaultDB);
+    this.emit(
+      "ready",
+      {
+        config: {
+          ...this.config
+        },
+        online:
+          this.state.online
       }
+    );
 
-      const db = JSON.parse(saved);
+    console.log(
+      "🌐 VORTEX Backend Bridge ready."
+    );
 
-      return {
-        ...structuredClone(defaultDB),
-        ...db
-      };
+    return this;
+
+  },
+
+  /* =======================================================
+     CONFIG
+     ======================================================= */
+
+  configure(options = {}) {
+
+    this.config = {
+      ...this.config,
+      ...options
+    };
+
+    this.save();
+
+    this.state.connected =
+      Boolean(
+        this.config.enabled &&
+        this.config.baseURL
+      );
+
+    this.emit(
+      "configured",
+      this.config
+    );
+
+    return {
+      success: true,
+      config: {
+        ...this.config
+      }
+    };
+
+  },
+
+  getConfig() {
+
+    return {
+      ...this.config
+    };
+
+  },
+
+  /* =======================================================
+     BASE URL
+     ======================================================= */
+
+  setBaseURL(url) {
+
+    url =
+      String(url || "")
+        .trim()
+        .replace(/\/+$/, "");
+
+    this.config.baseURL =
+      url;
+
+    this.config.enabled =
+      Boolean(url);
+
+    this.save();
+
+    return {
+      success: true,
+      baseURL: url
+    };
+
+  },
+
+  getBaseURL() {
+
+    return this.config.baseURL;
+
+  },
+
+  /* =======================================================
+     AUTH TOKEN
+     ======================================================= */
+
+  setToken(token) {
+
+    this.token =
+      token || null;
+
+    try {
+
+      if (token) {
+
+        localStorage.setItem(
+          "vortex_api_token",
+          token
+        );
+
+      } else {
+
+        localStorage.removeItem(
+          "vortex_api_token"
+        );
+
+      }
 
     } catch (error) {
-      console.error("VORTEX database error:", error);
-      return structuredClone(defaultDB);
-    }
-  }
 
-  function saveDB(db) {
-    localStorage.setItem(DB_KEY, JSON.stringify(db));
-  }
+      console.warn(
+        "VORTEX token storage error:",
+        error
+      );
 
-  function id(prefix = "vx") {
-    return (
-      prefix +
-      "_" +
-      Date.now().toString(36) +
-      "_" +
-      Math.random().toString(36).slice(2, 10)
-    );
-  }
-
-  function now() {
-    return new Date().toISOString();
-  }
-
-  function sanitize(value, max = 10000) {
-    return String(value ?? "").trim().slice(0, max);
-  }
-
-  function hashPassword(password) {
-    /*
-      Frontend/demo hash only.
-      Real production authentication must happen on a server
-      using HTTPS + Argon2/bcrypt/scrypt and secure sessions.
-    */
-
-    let hash = 2166136261;
-
-    for (let i = 0; i < password.length; i++) {
-      hash ^= password.charCodeAt(i);
-      hash +=
-        (hash << 1) +
-        (hash << 4) +
-        (hash << 7) +
-        (hash << 8) +
-        (hash << 24);
     }
 
-    return (hash >>> 0).toString(16);
-  }
+    this.state.authenticated =
+      Boolean(token);
 
-  function getDB() {
-    return loadDB();
-  }
-
-  function currentUser() {
-    const db = loadDB();
-
-    if (!db.session.userId) return null;
-
-    return (
-      db.users.find(
-        user => user.id === db.session.userId
-      ) || null
+    this.emit(
+      "authChanged",
+      {
+        authenticated:
+          this.state.authenticated
+      }
     );
-  }
+
+    return {
+      success: true
+    };
+
+  },
+
+  getToken() {
+
+    return this.token;
+
+  },
+
+  loadToken() {
+
+    try {
+
+      return localStorage.getItem(
+        "vortex_api_token"
+      );
+
+    } catch {
+
+      return null;
+
+    }
+
+  },
+
+  clearToken() {
+
+    return this.setToken(
+      null
+    );
+
+  },
 
   /* =======================================================
-     AUTHENTICATION
+     AUTH HELPERS
      ======================================================= */
 
-  function register({
-    name,
-    username,
-    email,
-    password
-  }) {
+  login(token, user = null) {
 
-    const db = loadDB();
-
-    name = sanitize(name, 80);
-    username = sanitize(username, 30)
-      .toLowerCase()
-      .replace(/[^a-z0-9_.]/g, "");
-
-    email = sanitize(email, 150).toLowerCase();
-
-    if (!name || !username || !email || !password) {
-      throw new Error("All registration fields are required.");
-    }
-
-    if (password.length < 6) {
-      throw new Error("Password must contain at least 6 characters.");
-    }
-
-    if (
-      db.users.some(
-        user => user.username.toLowerCase() === username
-      )
-    ) {
-      throw new Error("Username already exists.");
-    }
-
-    if (
-      db.users.some(
-        user => user.email.toLowerCase() === email
-      )
-    ) {
-      throw new Error("Email already exists.");
-    }
-
-    const user = {
-      id: id("user"),
-
-      name,
-
-      username,
-
-      email,
-
-      passwordHash: hashPassword(password),
-
-      avatar: "",
-
-      cover: "",
-
-      bio: "",
-
-      location: "",
-
-      website: "",
-
-      verified: false,
-
-      privacy: {
-        profile: "public",
-        posts: "public",
-        messages: "friends",
-        stories: "friends",
-        onlineStatus: true
-      },
-
-      friends: [],
-
-      followers: [],
-
-      following: [],
-
-      blocked: [],
-
-      points: 0,
-
-      level: 1,
-
-      achievements: [],
-
-      createdAt: now(),
-
-      lastSeen: now(),
-
-      online: true
-    };
-
-    db.users.push(user);
-
-    db.settings[user.id] = {
-      theme: "vortex-dark",
-
-      homeDecoration: "default",
-
-      font: "default",
-
-      sound: true,
-
-      vibration: true,
-
-      voiceAssistant: true,
-
-      greeting: true,
-
-      eyeDisplay: true,
-
-      eyeStyle: "vortex",
-
-      sleepAfter: 30,
-
-      autoplay: true,
-
-      dataSaver: false,
-
-      notifications: true,
-
-      privateVault: true,
-
-      appLock: false,
-
-      appLockType: "pin",
-
-      hiddenButtons: [],
-
-      language: "en"
-    };
-
-    db.points[user.id] = 0;
-
-    saveDB(db);
-
-    return publicUser(user);
-  }
-
-  function login(identifier, password) {
-
-    const db = loadDB();
-
-    identifier = sanitize(identifier, 150).toLowerCase();
-
-    const user = db.users.find(
-      u =>
-        u.email.toLowerCase() === identifier ||
-        u.username.toLowerCase() === identifier
-    );
-
-    if (!user) {
-      throw new Error("Account not found.");
-    }
-
-    if (user.passwordHash !== hashPassword(password)) {
-      throw new Error("Incorrect password.");
-    }
-
-    user.online = true;
-    user.lastSeen = now();
-
-    db.session.loggedIn = true;
-    db.session.userId = user.id;
-    db.session.token = id("session");
-
-    saveDB(db);
-
-    return publicUser(user);
-  }
-
-  function logout() {
-
-    const db = loadDB();
-
-    const user = currentUser();
+    this.setToken(token);
 
     if (user) {
-      user.online = false;
-      user.lastSeen = now();
+
+      try {
+
+        localStorage.setItem(
+          "vortex_backend_user",
+          JSON.stringify(user)
+        );
+
+      } catch {}
+
     }
 
-    db.session = {
-      loggedIn: false,
-      userId: null,
-      token: null
+    return {
+      success: true,
+      user
     };
 
-    saveDB(db);
-  }
+  },
 
-  function publicUser(user) {
+  logout() {
 
-    if (!user) return null;
+    this.clearToken();
 
-    const {
-      passwordHash,
-      email,
-      ...safeUser
-    } = user;
+    try {
 
-    return safeUser;
-  }
+      localStorage.removeItem(
+        "vortex_backend_user"
+      );
 
-  /* =======================================================
-     PROFILE
-     ======================================================= */
+    } catch {}
 
-  function updateProfile(changes) {
-
-    const db = loadDB();
-
-    const user = db.users.find(
-      u => u.id === db.session.userId
+    this.emit(
+      "logout"
     );
 
-    if (!user) {
-      throw new Error("You must be logged in.");
+    return {
+      success: true
+    };
+
+  },
+
+  getUser() {
+
+    try {
+
+      return JSON.parse(
+        localStorage.getItem(
+          "vortex_backend_user"
+        ) || "null"
+      );
+
+    } catch {
+
+      return null;
+
     }
 
-    const allowed = [
-      "name",
-      "username",
-      "bio",
-      "avatar",
-      "cover",
-      "location",
-      "website"
-    ];
+  },
 
-    allowed.forEach(key => {
+  isAuthenticated() {
 
-      if (changes[key] !== undefined) {
-        user[key] = sanitize(
-          changes[key],
-          key === "bio" ? 500 : 500
-        );
-      }
-
-    });
-
-    saveDB(db);
-
-    return publicUser(user);
-  }
-
-  function getProfile(userId) {
-
-    const db = loadDB();
-
-    const user = db.users.find(
-      u => u.id === userId
+    return Boolean(
+      this.token
     );
 
-    if (!user) return null;
-
-    return publicUser(user);
-  }
+  },
 
   /* =======================================================
-     PRIVACY
+     URL BUILDER
      ======================================================= */
 
-  function updatePrivacy(changes) {
+  buildURL(path) {
 
-    const db = loadDB();
+    path =
+      String(path || "");
 
-    const user = db.users.find(
-      u => u.id === db.session.userId
+    if (
+      /^https?:\/\//i.test(path)
+    ) {
+
+      return path;
+
+    }
+
+    const base =
+      this.config.baseURL
+        .replace(/\/+$/, "");
+
+    const cleanPath =
+      path.replace(
+        /^\/+/,
+        ""
+      );
+
+    if (!base) {
+
+      return "/" +
+        cleanPath;
+
+    }
+
+    return (
+      base +
+      "/" +
+      cleanPath
     );
 
-    if (!user) throw new Error("Not logged in.");
+  },
 
-    Object.assign(
-      user.privacy,
-      changes
+  /* =======================================================
+     HEADERS
+     ======================================================= */
+
+  getHeaders(extra = {}) {
+
+    const headers = {
+      "Accept":
+        "application/json",
+      ...extra
+    };
+
+    if (
+      this.token
+    ) {
+
+      headers[
+        "Authorization"
+      ] =
+        `Bearer ${this.token}`;
+
+    }
+
+    return headers;
+
+  },
+
+  /* =======================================================
+     REQUEST
+     ======================================================= */
+
+  async request(
+    path,
+    options = {}
+  ) {
+
+    if (
+      !this.config.enabled ||
+      !this.config.baseURL
+    ) {
+
+      return this.localResponse(
+        path,
+        options
+      );
+
+    }
+
+    if (
+      !navigator.onLine
+    ) {
+
+      this.queueRequest(
+        path,
+        options
+      );
+
+      return {
+        success: false,
+        offline: true,
+        queued: true,
+        error:
+          "Device is offline."
+      };
+
+    }
+
+    const method =
+      String(
+        options.method ||
+        "GET"
+      ).toUpperCase();
+
+    const url =
+      this.buildURL(
+        path
+      );
+
+    const headers =
+      this.getHeaders(
+        options.headers ||
+        {}
+      );
+
+    let body =
+      options.body;
+
+    if (
+      body !== undefined &&
+      body !== null &&
+      typeof body ===
+        "object" &&
+      !(body instanceof FormData) &&
+      !(body instanceof Blob)
+    ) {
+
+      headers[
+        "Content-Type"
+      ] =
+        "application/json";
+
+      body =
+        JSON.stringify(
+          body
+        );
+
+    }
+
+    let attempt = 0;
+    let lastError = null;
+
+    while (
+      attempt <=
+      this.config.retries
+    ) {
+
+      try {
+
+        this.state.lastRequest =
+          Date.now();
+
+        const controller =
+          new AbortController();
+
+        const timer =
+          setTimeout(
+            () =>
+              controller.abort(),
+            this.config.timeout
+          );
+
+        const response =
+          await fetch(
+            url,
+            {
+              method,
+              headers,
+              body,
+              credentials:
+                this.config.credentials,
+              signal:
+                controller.signal
+            }
+          );
+
+        clearTimeout(
+          timer
+        );
+
+        const result =
+          await this.parseResponse(
+            response
+          );
+
+        if (
+          response.status ===
+          401
+        ) {
+
+          this.state.authenticated =
+            false;
+
+          this.emit(
+            "unauthorized",
+            result
+          );
+
+        }
+
+        if (
+          !response.ok
+        ) {
+
+          throw new Error(
+            result?.message ||
+            result?.error ||
+            `HTTP ${response.status}`
+          );
+
+        }
+
+        this.state.lastError =
+          null;
+
+        this.state.connected =
+          true;
+
+        this.emit(
+          "response",
+          {
+            path,
+            method,
+            result
+          }
+        );
+
+        return {
+          success: true,
+          status:
+            response.status,
+          data:
+            result
+        };
+
+      } catch (error) {
+
+        lastError =
+          error;
+
+        attempt++;
+
+        if (
+          attempt >
+          this.config.retries
+        ) {
+          break;
+        }
+
+        await this.delay(
+          500 *
+          attempt
+        );
+
+      }
+
+    }
+
+    this.state.lastError =
+      lastError?.message ||
+      "Request failed.";
+
+    this.emit(
+      "error",
+      {
+        path,
+        method,
+        error:
+          this.state.lastError
+      }
     );
 
-    saveDB(db);
+    return {
+      success: false,
+      error:
+        this.state.lastError
+    };
 
-    return user.privacy;
-  }
+  },
 
-  function getPrivacy() {
+  /* =======================================================
+     RESPONSE PARSER
+     ======================================================= */
 
-    const db = loadDB();
+  async parseResponse(
+    response
+  ) {
 
-    const user = db.users.find(
-      u => u.id === db.session.userId
+    const type =
+      response.headers.get(
+        "content-type"
+      ) || "";
+
+    if (
+      type.includes(
+        "application/json"
+      )
+    ) {
+
+      return response.json();
+
+    }
+
+    return response.text();
+
+  },
+
+  /* =======================================================
+     HTTP METHODS
+     ======================================================= */
+
+  get(
+    path,
+    params = {},
+    options = {}
+  ) {
+
+    const query =
+      new URLSearchParams();
+
+    Object.entries(
+      params
+    ).forEach(
+      ([key, value]) => {
+
+        if (
+          value !== undefined &&
+          value !== null
+        ) {
+
+          query.set(
+            key,
+            String(value)
+          );
+
+        }
+
+      }
     );
 
-    return user?.privacy || null;
-  }
+    const queryString =
+      query.toString();
+
+    const finalPath =
+      queryString
+        ? `${path}?${queryString}`
+        : path;
+
+    return this.request(
+      finalPath,
+      {
+        ...options,
+        method: "GET"
+      }
+    );
+
+  },
+
+  post(
+    path,
+    body = {},
+    options = {}
+  ) {
+
+    return this.request(
+      path,
+      {
+        ...options,
+        method: "POST",
+        body
+      }
+    );
+
+  },
+
+  put(
+    path,
+    body = {},
+    options = {}
+  ) {
+
+    return this.request(
+      path,
+      {
+        ...options,
+        method: "PUT",
+        body
+      }
+    );
+
+  },
+
+  patch(
+    path,
+    body = {},
+    options = {}
+  ) {
+
+    return this.request(
+      path,
+      {
+        ...options,
+        method: "PATCH",
+        body
+      }
+    );
+
+  },
+
+  delete(
+    path,
+    body = {},
+    options = {}
+  ) {
+
+    return this.request(
+      path,
+      {
+        ...options,
+        method: "DELETE",
+        body
+      }
+    );
+
+  },
+
+  /* =======================================================
+     AUTH API
+     ======================================================= */
+
+  apiLogin(credentials) {
+
+    return this.post(
+      "/auth/login",
+      credentials
+    );
+
+  },
+
+  apiRegister(data) {
+
+    return this.post(
+      "/auth/register",
+      data
+    );
+
+  },
+
+  apiLogout() {
+
+    return this.post(
+      "/auth/logout"
+    );
+
+  },
+
+  apiMe() {
+
+    return this.get(
+      "/auth/me"
+    );
+
+  },
 
   /* =======================================================
      POSTS
      ======================================================= */
 
-  function createPost({
-    text = "",
-    media = [],
-    visibility = "public",
-    type = "post",
-    location = "",
-    feeling = ""
-  }) {
+  createPost(data) {
 
-    const db = loadDB();
-
-    const user = currentUser();
-
-    if (!user) {
-      throw new Error("Login required.");
-    }
-
-    const validVisibility = [
-      "public",
-      "friends",
-      "private"
-    ];
-
-    if (!validVisibility.includes(visibility)) {
-      visibility = "public";
-    }
-
-    const post = {
-
-      id: id("post"),
-
-      userId: user.id,
-
-      text: sanitize(text, 5000),
-
-      media: Array.isArray(media)
-        ? media.slice(0, 20)
-        : [],
-
-      type,
-
-      visibility,
-
-      location: sanitize(location, 100),
-
-      feeling: sanitize(feeling, 100),
-
-      likes: [],
-
-      comments: [],
-
-      shares: 0,
-
-      savedBy: [],
-
-      reports: [],
-
-      createdAt: now(),
-
-      editedAt: null
-    };
-
-    db.posts.unshift(post);
-
-    saveDB(db);
-
-    return post;
-  }
-
-  function canViewPost(post, viewerId) {
-
-    if (post.visibility === "public") {
-      return true;
-    }
-
-    if (post.visibility === "private") {
-      return post.userId === viewerId;
-    }
-
-    if (post.visibility === "friends") {
-
-      const owner = dbUser(post.userId);
-
-      return (
-        owner &&
-        owner.friends.includes(viewerId)
-      );
-    }
-
-    return false;
-  }
-
-  function dbUser(userId) {
-
-    const db = loadDB();
-
-    return db.users.find(
-      u => u.id === userId
-    );
-  }
-
-  function getFeed() {
-
-    const db = loadDB();
-
-    const viewerId = db.session.userId;
-
-    return db.posts
-      .filter(post =>
-        canViewPost(post, viewerId)
-      )
-      .map(post => ({
-        ...post,
-        author: publicUser(
-          db.users.find(
-            u => u.id === post.userId
-          )
-        )
-      }));
-  }
-
-  function likePost(postId) {
-
-    const db = loadDB();
-
-    const post = db.posts.find(
-      p => p.id === postId
+    return this.post(
+      "/posts",
+      data
     );
 
-    if (!post) throw new Error("Post not found.");
+  },
 
-    const uid = db.session.userId;
+  getPosts(params = {}) {
 
-    if (!uid) throw new Error("Login required.");
-
-    const index = post.likes.indexOf(uid);
-
-    if (index >= 0) {
-      post.likes.splice(index, 1);
-    } else {
-      post.likes.push(uid);
-    }
-
-    saveDB(db);
-
-    return {
-      liked: post.likes.includes(uid),
-      count: post.likes.length
-    };
-  }
-
-  function commentPost(postId, text) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) throw new Error("Login required.");
-
-    const post = db.posts.find(
-      p => p.id === postId
+    return this.get(
+      "/posts",
+      params
     );
 
-    if (!post) throw new Error("Post not found.");
+  },
 
-    const comment = {
-      id: id("comment"),
-      userId: uid,
-      text: sanitize(text, 1000),
-      createdAt: now()
-    };
+  getPost(id) {
 
-    post.comments.push(comment);
-
-    saveDB(db);
-
-    return comment;
-  }
-
-  function deletePost(postId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    const index = db.posts.findIndex(
-      p =>
-        p.id === postId &&
-        p.userId === uid
+    return this.get(
+      `/posts/${encodeURIComponent(id)}`
     );
 
-    if (index === -1) {
-      throw new Error("Post not found or permission denied.");
-    }
+  },
 
-    db.posts.splice(index, 1);
+  updatePost(id, data) {
 
-    saveDB(db);
+    return this.patch(
+      `/posts/${encodeURIComponent(id)}`,
+      data
+    );
 
-    return true;
-  }
+  },
+
+  deletePost(id) {
+
+    return this.delete(
+      `/posts/${encodeURIComponent(id)}`
+    );
+
+  },
 
   /* =======================================================
-     MESSAGES / CHAT
+     USERS
      ======================================================= */
 
-  function sendMessage({
-    receiverId,
-    text = "",
-    media = null,
-    type = "text"
-  }) {
+  getUsers(params = {}) {
 
-    const db = loadDB();
-
-    const senderId = db.session.userId;
-
-    if (!senderId) {
-      throw new Error("Login required.");
-    }
-
-    if (!receiverId) {
-      throw new Error("Receiver required.");
-    }
-
-    const message = {
-
-      id: id("msg"),
-
-      senderId,
-
-      receiverId,
-
-      text: sanitize(text, 5000),
-
-      type,
-
-      media,
-
-      voice: type === "voice"
-        ? media
-        : null,
-
-      read: false,
-
-      createdAt: now()
-    };
-
-    db.messages.push(message);
-
-    db.notifications.push({
-      id: id("notification"),
-      userId: receiverId,
-      type: "message",
-      from: senderId,
-      messageId: message.id,
-      createdAt: now(),
-      read: false
-    });
-
-    saveDB(db);
-
-    return message;
-  }
-
-  function getConversation(otherUserId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) return [];
-
-    return db.messages.filter(
-      message =>
-        (
-          message.senderId === uid &&
-          message.receiverId === otherUserId
-        ) ||
-        (
-          message.senderId === otherUserId &&
-          message.receiverId === uid
-        )
-    );
-  }
-
-  function markMessageRead(messageId) {
-
-    const db = loadDB();
-
-    const message = db.messages.find(
-      m => m.id === messageId
+    return this.get(
+      "/users",
+      params
     );
 
-    if (message) {
-      message.read = true;
-      saveDB(db);
-    }
-  }
+  },
+
+  getUserById(id) {
+
+    return this.get(
+      `/users/${encodeURIComponent(id)}`
+    );
+
+  },
+
+  updateUser(id, data) {
+
+    return this.patch(
+      `/users/${encodeURIComponent(id)}`,
+      data
+    );
+
+  },
 
   /* =======================================================
-     FRIENDS / FOLLOWING
+     FRIENDS
      ======================================================= */
 
-  function addFriend(userId) {
+  sendFriendRequest(userId) {
 
-    const db = loadDB();
-
-    const me = db.users.find(
-      u => u.id === db.session.userId
+    return this.post(
+      "/friends/request",
+      {
+        userId
+      }
     );
 
-    const target = db.users.find(
-      u => u.id === userId
+  },
+
+  acceptFriendRequest(userId) {
+
+    return this.post(
+      "/friends/accept",
+      {
+        userId
+      }
     );
 
-    if (!me || !target) {
-      throw new Error("User not found.");
-    }
+  },
 
-    if (me.id === target.id) {
-      throw new Error("You cannot add yourself.");
-    }
+  removeFriend(userId) {
 
-    if (!me.friends.includes(target.id)) {
-      me.friends.push(target.id);
-    }
-
-    if (!target.friends.includes(me.id)) {
-      target.friends.push(me.id);
-    }
-
-    saveDB(db);
-
-    return true;
-  }
-
-  function followUser(userId) {
-
-    const db = loadDB();
-
-    const me = db.users.find(
-      u => u.id === db.session.userId
+    return this.delete(
+      `/friends/${encodeURIComponent(userId)}`
     );
 
-    const target = db.users.find(
-      u => u.id === userId
-    );
-
-    if (!me || !target) {
-      throw new Error("User not found.");
-    }
-
-    if (!me.following.includes(userId)) {
-      me.following.push(userId);
-    }
-
-    if (!target.followers.includes(me.id)) {
-      target.followers.push(me.id);
-    }
-
-    saveDB(db);
-
-    return true;
-  }
+  },
 
   /* =======================================================
-     VAULT
+     CHAT
      ======================================================= */
 
-  function addToVault({
-    type,
-    media,
-    name = ""
-  }) {
+  getConversations() {
 
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) throw new Error("Login required.");
-
-    const item = {
-
-      id: id("vault"),
-
-      userId: uid,
-
-      type,
-
-      name: sanitize(name, 100),
-
-      media,
-
-      locked: true,
-
-      createdAt: now()
-    };
-
-    db.vault.push(item);
-
-    saveDB(db);
-
-    return item;
-  }
-
-  function getVault() {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    return db.vault.filter(
-      item => item.userId === uid
-    );
-  }
-
-  function deleteVaultItem(itemId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    db.vault = db.vault.filter(
-      item =>
-        !(
-          item.id === itemId &&
-          item.userId === uid
-        )
+    return this.get(
+      "/chat/conversations"
     );
 
-    saveDB(db);
-  }
+  },
 
-  /* =======================================================
-     OFFLINE SAVED VIDEOS
-     ======================================================= */
+  getMessages(
+    conversationId,
+    params = {}
+  ) {
 
-  function saveVideoOffline({
-    videoId,
-    title,
-    source,
-    thumbnail = ""
-  }) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) throw new Error("Login required.");
-
-    const existing = db.savedVideos.find(
-      video =>
-        video.userId === uid &&
-        video.videoId === videoId
+    return this.get(
+      `/chat/${encodeURIComponent(
+        conversationId
+      )}/messages`,
+      params
     );
 
-    if (existing) {
-      return existing;
-    }
+  },
 
-    const item = {
+  sendMessage(
+    conversationId,
+    data
+  ) {
 
-      id: id("offline"),
-
-      userId: uid,
-
-      videoId,
-
-      title: sanitize(title, 200),
-
-      source,
-
-      thumbnail,
-
-      downloadedAt: now(),
-
-      status: "saved"
-    };
-
-    db.savedVideos.push(item);
-
-    saveDB(db);
-
-    return item;
-  }
-
-  function getOfflineVideos() {
-
-    const db = loadDB();
-
-    return db.savedVideos.filter(
-      video =>
-        video.userId === db.session.userId
-    );
-  }
-
-  function removeOfflineVideo(idToRemove) {
-
-    const db = loadDB();
-
-    db.savedVideos = db.savedVideos.filter(
-      video =>
-        !(
-          video.id === idToRemove &&
-          video.userId === db.session.userId
-        )
+    return this.post(
+      `/chat/${encodeURIComponent(
+        conversationId
+      )}/messages`,
+      data
     );
 
-    saveDB(db);
-  }
-
-  /* =======================================================
-     THEMES
-     ======================================================= */
-
-  function installTheme(theme) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) throw new Error("Login required.");
-
-    const themeId = sanitize(theme.id, 100);
-
-    const existing = db.themes.find(
-      t =>
-        t.userId === uid &&
-        t.themeId === themeId
-    );
-
-    if (!existing) {
-
-      db.themes.push({
-
-        id: id("theme"),
-
-        userId: uid,
-
-        themeId,
-
-        name: sanitize(theme.name, 100),
-
-        installedAt: now()
-      });
-
-    }
-
-    saveDB(db);
-  }
-
-  function setTheme(themeId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) throw new Error("Login required.");
-
-    db.settings[uid] ||= {};
-
-    db.settings[uid].theme = themeId;
-
-    saveDB(db);
-
-    return themeId;
-  }
-
-  /* =======================================================
-     SETTINGS
-     ======================================================= */
-
-  function getSettings() {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) return null;
-
-    return db.settings[uid] || {};
-  }
-
-  function updateSettings(changes) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) {
-      throw new Error("Login required.");
-    }
-
-    db.settings[uid] = {
-      ...(db.settings[uid] || {}),
-      ...changes
-    };
-
-    saveDB(db);
-
-    return db.settings[uid];
-  }
-
-  /* =======================================================
-     HIDDEN HOME BUTTONS
-     ======================================================= */
-
-  function hideHomeButton(buttonId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) return;
-
-    db.settings[uid] ||= {};
-
-    db.settings[uid].hiddenButtons ||= [];
-
-    if (
-      !db.settings[uid].hiddenButtons.includes(buttonId)
-    ) {
-      db.settings[uid].hiddenButtons.push(buttonId);
-    }
-
-    saveDB(db);
-  }
-
-  function showHomeButton(buttonId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) return;
-
-    db.settings[uid].hiddenButtons =
-      (db.settings[uid].hiddenButtons || [])
-        .filter(id => id !== buttonId);
-
-    saveDB(db);
-  }
-
-  /* =======================================================
-     GROUPS
-     ======================================================= */
-
-  function createGroup({
-    name,
-    description = "",
-    privacy = "public",
-    image = ""
-  }) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) throw new Error("Login required.");
-
-    const group = {
-
-      id: id("group"),
-
-      name: sanitize(name, 100),
-
-      description: sanitize(description, 500),
-
-      privacy,
-
-      image,
-
-      ownerId: uid,
-
-      members: [uid],
-
-      admins: [uid],
-
-      posts: [],
-
-      createdAt: now()
-    };
-
-    db.groups.push(group);
-
-    saveDB(db);
-
-    return group;
-  }
-
-  function joinGroup(groupId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    const group = db.groups.find(
-      g => g.id === groupId
-    );
-
-    if (!group) throw new Error("Group not found.");
-
-    if (!group.members.includes(uid)) {
-      group.members.push(uid);
-    }
-
-    saveDB(db);
-
-    return group;
-  }
-
-  /* =======================================================
-     GAMES
-     ======================================================= */
-
-  function registerGame(game) {
-
-    const db = loadDB();
-
-    const existing = db.games.find(
-      g => g.id === game.id
-    );
-
-    if (!existing) {
-      db.games.push({
-        ...game,
-        installed: false
-      });
-    }
-
-    saveDB(db);
-
-    return game;
-  }
-
-  function installGame(gameId) {
-
-    const db = loadDB();
-
-    const game = db.games.find(
-      g => g.id === gameId
-    );
-
-    if (!game) {
-      throw new Error("Game not found.");
-    }
-
-    game.installed = true;
-
-    saveDB(db);
-
-    return game;
-  }
-
-  /* =======================================================
-     POINTS / ACHIEVEMENTS
-     ======================================================= */
-
-  function addPoints(amount, reason = "") {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) return 0;
-
-    amount = Math.max(
-      0,
-      Number(amount) || 0
-    );
-
-    db.points[uid] =
-      Number(db.points[uid] || 0) +
-      amount;
-
-    const user = db.users.find(
-      u => u.id === uid
-    );
-
-    if (user) {
-      user.points = db.points[uid];
-
-      user.level =
-        Math.floor(user.points / 500) + 1;
-    }
-
-    db.notifications.push({
-      id: id("notification"),
-      userId: uid,
-      type: "points",
-      amount,
-      reason,
-      createdAt: now(),
-      read: false
-    });
-
-    saveDB(db);
-
-    return db.points[uid];
-  }
-
-  function getPoints() {
-
-    const db = loadDB();
-
-    return db.points[db.session.userId] || 0;
-  }
-
-  /* =======================================================
-     WEEKLY EVENTS
-     ======================================================= */
-
-  function createWeeklyEvent({
-    title,
-    description,
-    reward = 0,
-    startsAt,
-    endsAt
-  }) {
-
-    const db = loadDB();
-
-    const event = {
-
-      id: id("event"),
-
-      title: sanitize(title, 150),
-
-      description: sanitize(description, 1000),
-
-      reward: Number(reward) || 0,
-
-      startsAt,
-
-      endsAt,
-
-      participants: [],
-
-      createdAt: now()
-    };
-
-    db.events.push(event);
-
-    saveDB(db);
-
-    return event;
-  }
-
-  function joinEvent(eventId) {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    const event = db.events.find(
-      e => e.id === eventId
-    );
-
-    if (!event) {
-      throw new Error("Event not found.");
-    }
-
-    if (!event.participants.includes(uid)) {
-      event.participants.push(uid);
-    }
-
-    saveDB(db);
-
-    return event;
-  }
+  },
 
   /* =======================================================
      NOTIFICATIONS
      ======================================================= */
 
-  function getNotifications() {
+  getNotifications(
+    params = {}
+  ) {
 
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    return db.notifications
-      .filter(n => n.userId === uid)
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt) -
-          new Date(a.createdAt)
-      );
-  }
-
-  function markNotificationsRead() {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    db.notifications
-      .filter(n => n.userId === uid)
-      .forEach(n => {
-        n.read = true;
-      });
-
-    saveDB(db);
-  }
-
-  /* =======================================================
-     SEARCH
-     ======================================================= */
-
-  function searchUsers(query) {
-
-    const db = loadDB();
-
-    query = sanitize(query, 100)
-      .toLowerCase();
-
-    return db.users
-      .filter(user =>
-        user.name.toLowerCase().includes(query) ||
-        user.username.toLowerCase().includes(query)
-      )
-      .slice(0, 50)
-      .map(publicUser);
-  }
-
-  function searchPosts(query) {
-
-    const db = loadDB();
-
-    query = sanitize(query, 200)
-      .toLowerCase();
-
-    return db.posts.filter(post =>
-      post.text.toLowerCase().includes(query)
+    return this.get(
+      "/notifications",
+      params
     );
-  }
+
+  },
+
+  markNotificationRead(
+    id
+  ) {
+
+    return this.patch(
+      `/notifications/${encodeURIComponent(
+        id
+      )}`,
+      {
+        read: true
+      }
+    );
+
+  },
 
   /* =======================================================
-     STORAGE INFORMATION
+     MEDIA UPLOAD
      ======================================================= */
 
-  async function storageInfo() {
+  async uploadMedia(
+    file,
+    options = {}
+  ) {
 
-    if (!navigator.storage?.estimate) {
+    if (!file) {
+
       return {
-        supported: false
+        success: false,
+        error: "File is required."
       };
+
     }
 
-    const estimate =
-      await navigator.storage.estimate();
+    if (
+      !this.config.enabled ||
+      !this.config.baseURL
+    ) {
+
+      return {
+        success: false,
+        local: true,
+        error:
+          "No media backend configured."
+      };
+
+    }
+
+    const form =
+      new FormData();
+
+    form.append(
+      "file",
+      file
+    );
+
+    Object.entries(
+      options
+    ).forEach(
+      ([key, value]) => {
+
+        if (
+          value !== undefined &&
+          value !== null
+        ) {
+
+          form.append(
+            key,
+            String(value)
+          );
+
+        }
+
+      }
+    );
+
+    return this.request(
+      "/media/upload",
+      {
+        method: "POST",
+        body: form
+      }
+    );
+
+  },
+
+  /* =======================================================
+     GENERIC FILE UPLOAD
+     ======================================================= */
+
+  upload(
+    file,
+    options = {}
+  ) {
+
+    return this.uploadMedia(
+      file,
+      options
+    );
+
+  },
+
+  /* =======================================================
+     GROUPS
+     ======================================================= */
+
+  getGroups(
+    params = {}
+  ) {
+
+    return this.get(
+      "/groups",
+      params
+    );
+
+  },
+
+  getGroup(id) {
+
+    return this.get(
+      `/groups/${encodeURIComponent(id)}`
+    );
+
+  },
+
+  createGroup(data) {
+
+    return this.post(
+      "/groups",
+      data
+    );
+
+  },
+
+  joinGroup(id) {
+
+    return this.post(
+      `/groups/${encodeURIComponent(
+        id
+      )}/join`
+    );
+
+  },
+
+  /* =======================================================
+     EVENTS
+     ======================================================= */
+
+  getEvents(
+    params = {}
+  ) {
+
+    return this.get(
+      "/events",
+      params
+    );
+
+  },
+
+  createEvent(data) {
+
+    return this.post(
+      "/events",
+      data
+    );
+
+  },
+
+  attendEvent(id) {
+
+    return this.post(
+      `/events/${encodeURIComponent(
+        id
+      )}/attend`
+    );
+
+  },
+
+  /* =======================================================
+     GAMES
+     ======================================================= */
+
+  getGames(
+    params = {}
+  ) {
+
+    return this.get(
+      "/games",
+      params
+    );
+
+  },
+
+  saveGameScore(data) {
+
+    return this.post(
+      "/games/scores",
+      data
+    );
+
+  },
+
+  getLeaderboard(
+    gameId,
+    params = {}
+  ) {
+
+    return this.get(
+      `/games/${encodeURIComponent(
+        gameId
+      )}/leaderboard`,
+      params
+    );
+
+  },
+
+  /* =======================================================
+     VAULT
+     ======================================================= */
+
+  syncVault(items) {
+
+    return this.post(
+      "/vault/sync",
+      {
+        items
+      }
+    );
+
+  },
+
+  /* =======================================================
+     AI
+     ======================================================= */
+
+  aiRequest(data) {
+
+    return this.post(
+      "/ai",
+      data
+    );
+
+  },
+
+  /* =======================================================
+     CACHE
+     ======================================================= */
+
+  cacheSet(
+    key,
+    value,
+    ttl = 300000
+  ) {
+
+    this.cache.set(
+      key,
+      {
+        value,
+        expires:
+          Date.now() + ttl
+      }
+    );
+
+  },
+
+  cacheGet(key) {
+
+    const entry =
+      this.cache.get(key);
+
+    if (!entry) {
+      return null;
+    }
+
+    if (
+      Date.now() >
+      entry.expires
+    ) {
+
+      this.cache.delete(
+        key
+      );
+
+      return null;
+
+    }
+
+    return entry.value;
+
+  },
+
+  cacheDelete(key) {
+
+    return this.cache.delete(
+      key
+    );
+
+  },
+
+  clearCache() {
+
+    this.cache.clear();
+
+  },
+
+  /* =======================================================
+     OFFLINE QUEUE
+     ======================================================= */
+
+  queueRequest(
+    path,
+    options
+  ) {
+
+    this.requestQueue.push({
+
+      id:
+        `queue_${Date.now()}_${Math.random()
+          .toString(36)
+          .slice(2, 7)}`,
+
+      path,
+
+      options,
+
+      createdAt:
+        new Date().toISOString()
+
+    });
+
+    this.saveQueue();
+
+    this.emit(
+      "queued",
+      this.requestQueue[
+        this.requestQueue.length - 1
+      ]
+    );
+
+  },
+
+  async flushQueue() {
+
+    if (
+      !navigator.onLine
+    ) {
+      return;
+    }
+
+    if (
+      !this.requestQueue.length
+    ) {
+      return;
+    }
+
+    const queue = [
+      ...this.requestQueue
+    ];
+
+    this.requestQueue = [];
+
+    this.saveQueue();
+
+    for (
+      const request
+      of queue
+    ) {
+
+      const result =
+        await this.request(
+          request.path,
+          request.options
+        );
+
+      if (
+        !result.success
+      ) {
+
+        this.requestQueue.push(
+          request
+        );
+
+      }
+
+    }
+
+    this.saveQueue();
+
+    this.emit(
+      "queueFlushed",
+      {
+        remaining:
+          this.requestQueue.length
+      }
+    );
+
+  },
+
+  /* =======================================================
+     NETWORK
+     ======================================================= */
+
+  bindNetworkEvents() {
+
+    window.addEventListener(
+      "online",
+      () => {
+
+        this.state.online =
+          true;
+
+        this.emit(
+          "online"
+        );
+
+        this.flushQueue();
+
+      }
+    );
+
+    window.addEventListener(
+      "offline",
+      () => {
+
+        this.state.online =
+          false;
+
+        this.emit(
+          "offline"
+        );
+
+      }
+    );
+
+  },
+
+  /* =======================================================
+     HEALTH CHECK
+     ======================================================= */
+
+  async healthCheck() {
+
+    if (
+      !this.config.baseURL
+    ) {
+
+      return {
+        success: false,
+        local: true,
+        error:
+          "Backend URL is not configured."
+      };
+
+    }
+
+    const started =
+      Date.now();
+
+    const result =
+      await this.get(
+        "/health"
+      );
 
     return {
-      supported: true,
 
-      usage: estimate.usage || 0,
+      ...result,
 
-      quota: estimate.quota || 0,
+      latency:
+        Date.now() -
+        started
 
-      percent:
-        estimate.quota
-          ? ((estimate.usage || 0) /
-             estimate.quota) * 100
-          : 0
     };
-  }
+
+  },
 
   /* =======================================================
-     ACCOUNT DATA EXPORT
+     LOCAL FALLBACK
      ======================================================= */
 
-  function exportUserData() {
-
-    const db = loadDB();
-
-    const uid = db.session.userId;
-
-    if (!uid) {
-      throw new Error("Login required.");
-    }
+  localResponse(
+    path,
+    options
+  ) {
 
     return {
-      profile: publicUser(
-        db.users.find(u => u.id === uid)
-      ),
 
-      posts: db.posts.filter(
-        p => p.userId === uid
-      ),
+      success: false,
 
-      messages: db.messages.filter(
-        m =>
-          m.senderId === uid ||
-          m.receiverId === uid
-      ),
+      local: true,
 
-      vault: db.vault.filter(
-        v => v.userId === uid
-      ),
+      backend:
+        "not-configured",
 
-      savedVideos: db.savedVideos.filter(
-        v => v.userId === uid
-      ),
+      path,
 
-      settings: db.settings[uid] || {},
+      method:
+        options.method ||
+        "GET",
 
-      points: db.points[uid] || 0
+      error:
+        "VORTEX backend is not configured. Local engines can continue working."
+
     };
-  }
+
+  },
 
   /* =======================================================
-     DELETE ACCOUNT
+     HELPERS
      ======================================================= */
 
-  function deleteAccount() {
+  delay(ms) {
 
-    const db = loadDB();
+    return new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          ms
+        )
+    );
 
-    const uid = db.session.userId;
+  },
 
-    if (!uid) {
-      throw new Error("Login required.");
+  /* =======================================================
+     EVENTS
+     ======================================================= */
+
+  on(
+    event,
+    callback
+  ) {
+
+    if (
+      !this.listeners[event]
+    ) {
+
+      this.listeners[event] =
+        [];
+
     }
 
-    db.users =
-      db.users.filter(
-        user => user.id !== uid
-      );
+    this.listeners[event].push(
+      callback
+    );
 
-    db.posts =
-      db.posts.filter(
-        post => post.userId !== uid
-      );
+    return () => {
 
-    db.messages =
-      db.messages.filter(
-        message =>
-          message.senderId !== uid &&
-          message.receiverId !== uid
-      );
+      this.listeners[event] =
+        this.listeners[event]
+          .filter(
+            fn =>
+              fn !== callback
+          );
 
-    db.vault =
-      db.vault.filter(
-        item => item.userId !== uid
-      );
-
-    db.savedVideos =
-      db.savedVideos.filter(
-        item => item.userId !== uid
-      );
-
-    delete db.settings[uid];
-    delete db.points[uid];
-
-    db.session = {
-      loggedIn: false,
-      userId: null,
-      token: null
     };
 
-    saveDB(db);
-  }
+  },
+
+  emit(
+    event,
+    data
+  ) {
+
+    (
+      this.listeners[event] ||
+      []
+    ).forEach(
+      callback => {
+
+        try {
+
+          callback(data);
+
+        } catch (error) {
+
+          console.error(
+            "VORTEX Backend listener error:",
+            error
+          );
+
+        }
+
+      }
+    );
+
+  },
 
   /* =======================================================
-     PUBLIC API
+     STORAGE
      ======================================================= */
 
-  return {
+  save() {
 
-    getDB,
+    try {
 
-    currentUser,
+      localStorage.setItem(
+        this.STORAGE_KEY,
+        JSON.stringify(
+          this.config
+        )
+      );
 
-    register,
-    login,
-    logout,
+      this.saveQueue();
 
-    updateProfile,
-    getProfile,
+    } catch (error) {
 
-    updatePrivacy,
-    getPrivacy,
+      console.warn(
+        "VORTEX Backend save error:",
+        error
+      );
 
-    createPost,
-    getFeed,
-    likePost,
-    commentPost,
-    deletePost,
+    }
 
-    sendMessage,
-    getConversation,
-    markMessageRead,
+  },
 
-    addFriend,
-    followUser,
+  saveQueue() {
 
-    addToVault,
-    getVault,
-    deleteVaultItem,
+    try {
 
-    saveVideoOffline,
-    getOfflineVideos,
-    removeOfflineVideo,
+      localStorage.setItem(
+        "vortex_backend_queue",
+        JSON.stringify(
+          this.requestQueue
+        )
+      );
 
-    installTheme,
-    setTheme,
+    } catch {}
 
-    getSettings,
-    updateSettings,
+  },
 
-    hideHomeButton,
-    showHomeButton,
+  load() {
 
-    createGroup,
-    joinGroup,
+    try {
 
-    registerGame,
-    installGame,
+      const config =
+        JSON.parse(
+          localStorage.getItem(
+            this.STORAGE_KEY
+          ) || "{}"
+        );
 
-    addPoints,
-    getPoints,
+      this.config = {
+        ...this.config,
+        ...config
+      };
 
-    createWeeklyEvent,
-    joinEvent,
+      this.requestQueue =
+        JSON.parse(
+          localStorage.getItem(
+            "vortex_backend_queue"
+          ) || "[]"
+        );
 
-    getNotifications,
-    markNotificationsRead,
+    } catch (error) {
 
-    searchUsers,
-    searchPosts,
+      console.warn(
+        "VORTEX Backend load error:",
+        error
+      );
 
-    storageInfo,
+    }
 
-    exportUserData,
-    deleteAccount
-  };
+  },
 
-})();
+  /* =======================================================
+     STATUS
+     ======================================================= */
+
+  getStatus() {
+
+    return {
+
+      version:
+        this.VERSION,
+
+      online:
+        this.state.online,
+
+      connected:
+        this.state.connected,
+
+      authenticated:
+        this.state.authenticated,
+
+      configured:
+        Boolean(
+          this.config.baseURL
+        ),
+
+      queued:
+        this.requestQueue.length,
+
+      lastRequest:
+        this.state.lastRequest,
+
+      lastError:
+        this.state.lastError
+
+    };
+
+  }
+
+};
 
 /* =========================================================
-   GLOBAL ACCESS
+   GLOBAL
    ========================================================= */
 
-window.VortexBackend = VortexBackend;
+window.VortexBackend =
+  VortexBackend;
 
-console.log(
-  "%c VORTEX BACKEND CORE READY ",
-  "background:#00d4ff;color:#050510;font-weight:bold;padding:8px;border-radius:6px"
+/* =========================================================
+   OPTIONAL ALIAS
+   ========================================================= */
+
+window.VortexAPI =
+  VortexBackend;
+
+/* =========================================================
+   AUTO INIT
+   ========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    VortexBackend.init();
+
+  }
 );
