@@ -1,92 +1,3280 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VORTEX</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#060612;color:#fff;font-family:Arial;overflow-x:hidden}
-/* YOUR EYE VORTEX FROM SCREENSHOT */
-.eye-bg{position:fixed;inset:0;z-index:-2;background:#060612;display:flex;align-items:center;justify-content:center}
-.eye{width:85vw;height:85vw;max-width:520px;max-height:520px;border-radius:50%;background:radial-gradient(circle, #050510 0%, #050510 35%, #00d4ff 38%, #00a3cc 55%, #4a2080 70%, #1a0a40 85%, #060612 100%);box-shadow:0 0 80px #00d4ff,0 0 140px #7c3aed, inset 0 0 60px #00d4ff;animation:pulse 3s infinite}
-@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 80px #00d4ff,0 0 140px #7c3aed}50%{transform:scale(1.05);box-shadow:0 0 120px #00d4ff,0 0 200px #7c3aed}}
-.page{display:none;min-height:100vh;padding-bottom:100px}
-.page.active{display:block}
-.top{position:sticky;top:0;z-index:20;background:rgba(6,6,18,.92);backdrop-filter:blur(20px);display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(0,212,255,.2)}
-.logo{font-weight:900;font-size:22px;color:#00d4ff;text-shadow:0 0 10px #00d4ff}
-.btn{width:40px;height:40px;border-radius:50%;background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.3);color:#fff;display:flex;align-items:center;justify-content:center}
-.srow{display:flex;gap:10px;overflow-x:auto;padding:10px 12px}
-.s{width:110px;min-width:110px;height:180px;border-radius:16px;overflow:hidden;position:relative;background:#111;border:1px solid rgba(0,212,255,.3)}
-.s img{width:100%;height:100%;object-fit:cover}
-.s-plus{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);width:32px;height:32px;background:#00d4ff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;border:2px solid #060612}
-.slab{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.8);padding:6px;text-align:center;font-size:11px}
-.post{background:rgba(10,10,28,.9);margin:8px 0;padding:10px 12px;border:1px solid rgba(0,212,255,.15);border-radius:12px;margin-left:8px;margin-right:8px}
-.post-h{display:flex;gap:10px;align-items:center}
-.post-h img{width:38px;height:38px;border-radius:50%;border:1px solid #00d4ff}
-.pimg{width:100%;border-radius:12px;margin-top:8px;max-height:380px;object-fit:cover}
-.act{display:flex;justify-content:space-around;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;padding-top:6px}
-.act button{background:0;border:0;color:#aaa;font-size:13px;padding:6px}
-.drawer{position:fixed;top:0;left:-100%;width:84%;height:100%;background:#0a0a1e;z-index:100;transition:.3s;padding:14px;border-right:1px solid rgba(0,212,255,.3)}
-.drawer.open{left:0}
-.mitem{padding:12px;background:rgba(0,212,255,.08);border-radius:12px;margin:6px 0;border:1px solid rgba(0,212,255,.1)}
-.nav{position:fixed;bottom:10px;left:10px;right:10px;background:rgba(6,6,18,.96);backdrop-filter:blur(20px);display:flex;justify-content:space-around;padding:8px 0;border-radius:22px;border:1px solid rgba(0,212,255,.25);z-index:50}
-.nav button{background:0;border:0;color:#fff;opacity:.6;padding:6px 16px;border-radius:14px;display:flex;flex-direction:column;align-items:center}
-.nav button.active{opacity:1;background:rgba(0,212,255,.2);color:#00d4ff;box-shadow:0 0 15px rgba(0,212,255,.4)}
-.nav span{font-size:24px}
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#050712">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <title>VORTEX</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /*
+      VORTEX OMNIVERSE
+      SOCIAL PLATFORM FOUNDATION
+      FILE 01: index.html
+
+      This file contains the application shell.
+      Feature logic is connected through the JS modules.
+    */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      background: #050712;
+      color: #ffffff;
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    img,
+    video {
+      max-width: 100%;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =====================================================
+       APP
+    ===================================================== */
+
+    #app {
+      min-height: 100vh;
+      position: relative;
+    }
+
+    #app-loading {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(0, 217, 255, 0.14),
+          transparent 35%
+        ),
+        #050712;
+    }
+
+    .loading-eye {
+      width: 90px;
+      height: 50px;
+      border: 2px solid #00d9ff;
+      border-radius: 50%;
+      position: relative;
+      box-shadow:
+        0 0 20px rgba(0, 217, 255, .7),
+        inset 0 0 20px rgba(0, 217, 255, .35);
+      animation: loadingPulse 1.5s infinite;
+    }
+
+    .loading-eye::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #00d9ff;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 30px #00d9ff;
+    }
+
+    @keyframes loadingPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: .75;
+      }
+
+      50% {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    .loading-title {
+      margin-top: 22px;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #00d9ff;
+      text-shadow: 0 0 18px rgba(0, 217, 255, .7);
+    }
+
+    .loading-text {
+      margin-top: 8px;
+      color: rgba(255,255,255,.55);
+      font-size: 13px;
+    }
+
+    /* =====================================================
+       MAIN SHELL
+    ===================================================== */
+
+    .vortex-shell {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr) 290px;
+    }
+
+    /* =====================================================
+       LEFT SIDEBAR
+    ===================================================== */
+
+    .left-sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 14px;
+      border-right: 1px solid rgba(255,255,255,.08);
+      background: rgba(5,7,18,.92);
+      backdrop-filter: blur(22px);
+      overflow-y: auto;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      margin-bottom: 24px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid #00d9ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00d9ff;
+      box-shadow: 0 0 20px rgba(0,217,255,.45);
+      font-size: 18px;
+    }
+
+    .brand-name {
+      font-weight: 900;
+      letter-spacing: 2px;
+      font-size: 20px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 22px;
+    }
+
+    .sidebar-label {
+      color: rgba(255,255,255,.35);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 0 10px 7px;
+    }
+
+    .side-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.75);
+      border-radius: 13px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      margin: 3px 0;
+      transition: .2s ease;
+    }
+
+    .side-button:hover,
+    .side-button.active {
+      background: rgba(0,217,255,.11);
+      color: #00d9ff;
+    }
+
+    .side-icon {
+      width: 28px;
+      text-align: center;
+      font-size: 19px;
+    }
+
+    /* =====================================================
+       CENTER
+    ===================================================== */
+
+    .main-column {
+      min-width: 0;
+      border-right: 1px solid rgba(255,255,255,.07);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      min-height: 66px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(5,7,18,.84);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .mobile-brand {
+      display: none;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(0,217,255,.18);
+      border-radius: 13px;
+      color: #fff;
+      background: rgba(255,255,255,.055);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: .2s ease;
+    }
+
+    .icon-button:hover {
+      background: rgba(0,217,255,.14);
+      border-color: rgba(0,217,255,.4);
+      transform: translateY(-1px);
+    }
+
+    /* =====================================================
+       EYES NAVIGATION
+    ===================================================== */
+
+    .eyes-navigation {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 42px;
+      padding: 22px 15px 12px;
+    }
+
+    .eye-shortcut {
+      width: 100px;
+      height: 62px;
+      position: relative;
+      border: 1px solid rgba(0,217,255,.3);
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          circle,
+          rgba(0,217,255,.18),
+          rgba(30,20,70,.55)
+        );
+      box-shadow:
+        0 0 25px rgba(0,217,255,.15),
+        inset 0 0 22px rgba(124,58,237,.18);
+      color: #fff;
+      transition: .25s ease;
+    }
+
+    .eye-shortcut::before {
+      content: "";
+      position: absolute;
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #00d9ff;
+      box-shadow:
+        0 0 14px #00d9ff,
+        0 0 35px rgba(0,217,255,.7);
+    }
+
+    .eye-shortcut:hover {
+      transform: scale(1.06);
+      border-color: #00d9ff;
+      box-shadow:
+        0 0 35px rgba(0,217,255,.4),
+        inset 0 0 25px rgba(124,58,237,.3);
+    }
+
+    .eye-label {
+      position: absolute;
+      left: 50%;
+      bottom: -20px;
+      transform: translateX(-50%);
+      font-size: 9px;
+      color: rgba(255,255,255,.55);
+      white-space: nowrap;
+    }
+
+    .eye-speaking {
+      animation: eyeSpeaking .7s infinite alternate;
+    }
+
+    @keyframes eyeSpeaking {
+      from {
+        filter: brightness(1);
+        transform: scale(1);
+      }
+
+      to {
+        filter: brightness(1.7);
+        transform: scale(1.08);
+      }
+    }
+
+    /* =====================================================
+       HOME HERO
+    ===================================================== */
+
+    .home-hero {
+      margin: 22px 16px 12px;
+      border: 1px solid rgba(0,217,255,.13);
+      border-radius: 24px;
+      padding: 20px;
+      background:
+        radial-gradient(
+          circle at top right,
+          rgba(124,58,237,.2),
+          transparent 35%
+        ),
+        rgba(255,255,255,.035);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-small {
+      color: #00d9ff;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .hero-title {
+      font-size: clamp(25px, 5vw, 38px);
+      line-height: 1.05;
+      font-weight: 900;
+    }
+
+    .hero-title span {
+      color: #00d9ff;
+      text-shadow: 0 0 18px rgba(0,217,255,.35);
+    }
+
+    .hero-description {
+      color: rgba(255,255,255,.55);
+      margin-top: 10px;
+      max-width: 650px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    /* =====================================================
+       QUICK ACTIONS
+    ===================================================== */
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      padding: 0 16px 12px;
+    }
+
+    .quick-card {
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.045);
+      color: #fff;
+      border-radius: 17px;
+      padding: 13px 10px;
+      text-align: center;
+      transition: .2s ease;
+    }
+
+    .quick-card:hover {
+      border-color: rgba(0,217,255,.35);
+      background: rgba(0,217,255,.08);
+      transform: translateY(-2px);
+    }
+
+    .quick-card-icon {
+      display: block;
+      font-size: 23px;
+      margin-bottom: 5px;
+    }
+
+    .quick-card-name {
+      display: block;
+      font-size: 11px;
+      color: rgba(255,255,255,.7);
+    }
+
+    /* =====================================================
+       COMPOSER
+    ===================================================== */
+
+    .composer {
+      margin: 0 16px 12px;
+      padding: 13px;
+      border-radius: 19px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .composer-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(0,217,255,.35);
+      background: #101329;
+    }
+
+    .composer-input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.2);
+      color: #fff;
+      border-radius: 15px;
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    .composer-input:focus {
+      border-color: rgba(0,217,255,.45);
+    }
+
+    .composer-actions {
+      display: flex;
+      gap: 7px;
+      margin-top: 10px;
+      padding-left: 52px;
+    }
+
+    .composer-action {
+      flex: 1;
+      border: 0;
+      border-radius: 12px;
+      padding: 9px;
+      color: rgba(255,255,255,.7);
+      background: rgba(255,255,255,.045);
+    }
+
+    /* =====================================================
+       STORIES
+    ===================================================== */
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px 8px;
+    }
+
+    .section-heading h2 {
+      font-size: 16px;
+    }
+
+    .section-heading button {
+      border: 0;
+      background: transparent;
+      color: #00d9ff;
+      font-size: 12px;
+    }
+
+    .stories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 3px 16px 14px;
+      scrollbar-width: none;
+    }
+
+    .stories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .story-card {
+      min-width: 104px;
+      width: 104px;
+      height: 150px;
+      border-radius: 17px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255,255,255,.1);
+      background: #111528;
+    }
+
+    .story-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .story-gradient {
+      position: absolute;
+      inset: 45% 0 0;
+      background: linear-gradient(transparent, rgba(0,0,0,.85));
+    }
+
+    .story-name {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .story-add {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #00d9ff;
+      color: #001018;
+      border: 3px solid #050712;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 22px;
+    }
+
+    /* =====================================================
+       FEED
+    ===================================================== */
+
+    .feed {
+      padding-bottom: 90px;
+    }
+
+    .post-card {
+      margin: 9px 16px;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,.075);
+      border-radius: 20px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .post-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .post-user {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .post-user strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .post-user small {
+      color: rgba(255,255,255,.4);
+      font-size: 11px;
+    }
+
+    .more-button {
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.55);
+      font-size: 20px;
+    }
+
+    .post-text {
+      margin-top: 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,.86);
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .post-media {
+      margin-top: 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .post-media img,
+    .post-media video {
+      display: block;
+      width: 100%;
+      max-height: 600px;
+      object-fit: cover;
+    }
+
+    .post-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .post-action {
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.62);
+      padding: 9px 4px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .post-action:hover {
+      background: rgba(0,217,255,.08);
+      color: #00d9ff;
+    }
+
+    /* =====================================================
+       RIGHT SIDEBAR
+    ===================================================== */
+
+    .right-sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 15px;
+      overflow-y: auto;
+      background: rgba(5,7,18,.72);
+    }
+
+    .right-card {
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 18px;
+      background: rgba(255,255,255,.035);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .right-title {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .event-row,
+    .friend-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+
+    .event-row:last-child,
+    .friend-row:last-child {
+      border-bottom: 0;
+    }
+
+    .event-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: rgba(0,217,255,.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .event-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .event-info strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .event-info small {
+      color: rgba(255,255,255,.42);
+      font-size: 10px;
+    }
+
+    /* =====================================================
+       PAGES
+    ===================================================== */
+
+    .page {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 66px;
+      padding: 10px 16px;
+      background: rgba(5,7,18,.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .page-header h1 {
+      font-size: 18px;
+    }
+
+    .page-body {
+      padding: 16px;
+      padding-bottom: 100px;
+    }
+
+    .placeholder-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .feature-card {
+      min-height: 130px;
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+    }
+
+    .feature-card-icon {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+      font-size: 14px;
+    }
+
+    .feature-card p {
+      margin-top: 5px;
+      color: rgba(255,255,255,.48);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    /* =====================================================
+       BOTTOM NAVIGATION
+    ===================================================== */
+
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      left: 9px;
+      right: 9px;
+      bottom: max(9px, env(safe-area-inset-bottom));
+      z-index: 200;
+      padding: 7px;
+      border: 1px solid rgba(0,217,255,.16);
+      border-radius: 22px;
+      background: rgba(5,7,18,.92);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 15px 50px rgba(0,0,0,.35);
+    }
+
+    .bottom-nav-inner {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+
+    .bottom-button {
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.55);
+      padding: 8px 4px;
+      border-radius: 15px;
+      font-size: 10px;
+    }
+
+    .bottom-button span {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+    .bottom-button.active {
+      color: #00d9ff;
+      background: rgba(0,217,255,.1);
+    }
+
+    /* =====================================================
+       DRAWER
+    ===================================================== */
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      z-index: 500;
+      display: none;
+    }
+
+    .drawer-backdrop.open {
+      display: block;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: -330px;
+      width: min(330px, 88vw);
+      z-index: 501;
+      background: #080b1b;
+      border-right: 1px solid rgba(0,217,255,.15);
+      padding: 18px;
+      transition: left .25s ease;
+      overflow-y: auto;
+    }
+
+    .mobile-drawer.open {
+      left: 0;
+    }
+
+    .drawer-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 1050px) {
+      .vortex-shell {
+        grid-template-columns: 210px minmax(0, 1fr);
+      }
+
+      .right-sidebar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .vortex-shell {
+        display: block;
+      }
+
+      .left-sidebar {
+        display: none;
+      }
+
+      .main-column {
+        border-right: 0;
+      }
+
+      .mobile-brand {
+        display: block;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: #00d9ff;
+      }
+
+      .topbar {
+        min-height: 58px;
+        padding: 8px 10px;
+      }
+
+      .eyes-navigation {
+        gap: 25px;
+        padding-top: 17px;
+      }
+
+      .eye-shortcut {
+        width: 82px;
+        height: 52px;
+      }
+
+      .quick-actions {
+        grid-template-columns: repeat(4, 1fr);
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .home-hero {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .composer {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .post-card {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .stories {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .section-heading {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .bottom-nav {
+        display: block;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .quick-card {
+        padding: 10px 4px;
+      }
+
+      .quick-card-icon {
+        font-size: 20px;
+      }
+
+      .quick-card-name {
+        font-size: 9px;
+      }
+
+      .composer-actions {
+        padding-left: 0;
+      }
+
+      .composer-action {
+        font-size: 11px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="eye-bg"><div class="eye"></div></div>
-<input type="file" id="fStory" accept="image/*" class="hidden">
-<input type="file" id="fPost" accept="image/*" class="hidden">
 
-<div class="drawer" id="drawer">
-<div style="display:flex;justify-content:space-between"><b style="color:#00d4ff">☰ VORTEX Menu</b><button class="btn" onclick="closeD()">✕</button></div>
-<div class="mitem" onclick="tab('home',0)">🏠 Home</div>
-<div class="mitem" onclick="tab('friends',1)">👥 Friends</div>
-<div class="mitem" onclick="tab('video',2)">🎬 Reels</div>
-<div class="mitem" onclick="tab('market',3)">🏪 Marketplace</div>
-<div class="mitem" onclick="alert('Settings: Theme Eye Blue saved! Dark mode ON')">⚙️ Settings & Privacy - Eye Vortex Theme</div>
-<div class="mitem" style="color:#ff6b6b" onclick="localStorage.clear();location.reload()">🚪 Clear Data / Logout</div>
-<div class="mitem" style="opacity:.6;font-size:11px">Backend file can't run on GitHub Pages. Use frontend only for now. For backend host on Render.com</div>
-</div>
+  <!-- =====================================================
+       APP LOADING
+  ====================================================== -->
 
-<div id="home" class="page active">
-<div class="top"><div style="display:flex;gap:10px;align-items:center"><button class="btn" onclick="openD()">☰</button><div class="logo">VORTEX</div></div><div style="display:flex;gap:8px"><button class="btn" onclick="alert('Search LIVE - filter feed')">🔍</button><button class="btn" onclick="tab('friends',1)">💬</button></div></div>
-<div style="margin:10px 12px;background:rgba(255,255,255,.08);border-radius:22px;padding:10px 14px;display:flex;gap:10px;align-items:center;border:1px solid rgba(0,212,255,.15)"><img src="https://i.pravatar.cc/100?img=32" style="width:34px;height:34px;border-radius:50%"><input style="flex:1;background:0;border:0;color:#fff;outline:0" placeholder="What's on your mind, Brilliant?" onclick="createPost()"><button class="btn" style="width:32px;height:32px;background:#00d4ff;color:#000" onclick="document.getElementById('fPost').click()">📷</button></div>
-<div class="srow" id="storyRow"></div>
-<div id="feed"></div>
-</div>
+  <div id="app-loading">
+    <div class="loading-eye"></div>
+    <div class="loading-title">VORTEX</div>
+    <div class="loading-text">Entering your world...</div>
+  </div>
 
-<div id="friends" class="page"><div class="top"><button class="btn" onclick="openD()">☰</button><b>Friends</b><button class="btn">🔍</button></div><div id="friendsList" style="padding:10px"></div></div>
-<div id="video" class="page"><div class="top"><button class="btn" onclick="openD()">☰</button><b>Video</b><button class="btn" onclick="document.getElementById('fPost').click()">＋</button></div><div id="videoFeed"></div></div>
-<div id="market" class="page"><div class="top"><button class="btn" onclick="openD()">☰</button><b>Marketplace</b></div><div id="marketGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px"></div></div>
+  <!-- =====================================================
+       FILE INPUTS
+  ====================================================== -->
 
-<div class="nav">
-<button class="active" id="b0" onclick="tab('home',0)"><span>🏠</span><small>Home</small></button>
-<button id="b1" onclick="tab('friends',1)"><span>👥</span><small>Friends</small></button>
-<button id="b2" onclick="tab('video',2)"><span>🎬</span><small>Video</small></button>
-<button id="b3" onclick="tab('market',3)"><span>🏪</span><small>Market</small></button>
-<button id="b4" onclick="openD()"><span>☰</span><small>Menu</small></button>
-</div>
+  <input
+    id="image-upload"
+    class="hidden"
+    type="file"
+    accept="image/*"
+  >
 
-<script>
-function openD(){document.getElementById('drawer').classList.add('open')}
-function closeD(){document.getElementById('drawer').classList.remove('open')}
-function tab(id,i){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(i!=null)document.getElementById('b'+i).classList.add('active');closeD();window.scrollTo(0,0)}
-let stories=JSON.parse(localStorage.getItem('vx_s')||'[]');
-let posts=JSON.parse(localStorage.getItem('vx_p')||'[]');
-function renderStories(){let r=document.getElementById('storyRow');r.innerHTML=`<div class=s onclick="document.getElementById('fStory').click()"><img src=https://picsum.photos/200/300?1><div class=s-plus>+</div><div class=slab>Create story</div></div>`;stories.forEach(s=>{r.innerHTML+=`<div class=s><img src=${s}><div class=slab>You</div></div>`});if(stories.length==0)r.innerHTML+=`<div class=s><img src=https://picsum.photos/200/300?2><div class=slab>VortexX</div></div><div class=s><img src=https://picsum.photos/200/300?3><div class=slab>Brilliant</div></div>`}
-function renderFeed(){let f=document.getElementById('feed');f.innerHTML='';let all=posts.length?posts:[{name:'The Peoples Daily',text:'BETWAY QUEEN NEO DONATES P2,000',img:'https://picsum.photos/600/400?5',likes:124}];all.forEach((p,i)=>{f.innerHTML+=`<div class=post><div class=post-h><img src=https://i.pravatar.cc/100?img=${32+i}><div><b>${p.name}</b><br><small style=opacity:.5>Now • 🌍</small></div></div><p style=margin:8px 0>${p.text}</p>${p.img?`<img class=pimg src=${p.img}>`:''}<div class=act><button onclick="this.textContent='❤️ Liked';this.style.color='#00d4ff'">👍 Like ${p.likes||0}</button><button>💬 Comment</button><button>↗️ Share</button></div></div>`});}
-function renderFriends(){document.getElementById('friendsList').innerHTML=`<div class=mitem>👤 Neo Queen - 12 mutual <button style="float:right;background:#00d4ff;border:0;padding:6px 12px;border-radius:12px;color:#000;font-weight:700">Confirm</button></div><div class=mitem>👤 Caro Pako - 5 mutual <button style="float:right;background:#00d4ff;border:0;padding:6px 12px;border-radius:12px;color:#000;font-weight:700">Add</button></div>`}
-function renderVideo(){document.getElementById('videoFeed').innerHTML=`<div class=post><img class=pimg src=https://picsum.photos/400/700?1 style=height:420px><div class=act><button>❤️ 1.2k</button><button>💬 89</button><button>↗️ Share</button></div></div>`}
-function renderMarket(){document.getElementById('marketGrid').innerHTML=`<div style="background:rgba(255,255,255,.06);border-radius:12px;overflow:hidden"><img src=https://picsum.photos/300/200?1 style=width:100%;height:110px;object-fit:cover><div style=padding:8px><b>P8,500 iPhone</b></div></div><div style="background:rgba(255,255,255,.06);border-radius:12px;overflow:hidden"><img src=https://picsum.photos/300/200?2 style=width:100%;height:110px;object-fit:cover><div style=padding:8px><b>P45,000 BMW</b></div></div>`}
-function createPost(){let t=prompt("What's on your mind, Brilliant?");if(!t)return;if(confirm('Add YOUR photo?')){document.getElementById('fPost').dataset.text=t;document.getElementById('fPost').click()}else{posts.unshift({name:'Brilliant',text:t,img:'',likes:0});localStorage.setItem('vx_p',JSON.stringify(posts));renderFeed()}}
-document.getElementById('fStory').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let u=URL.createObjectURL(f);stories.unshift(u);localStorage.setItem('vx_s',JSON.stringify(stories));renderStories()});
-document.getElementById('fPost').addEventListener('change',e=>{let f=e.target.files[0];let txt=e.target.dataset.text||'';let u=f?URL.createObjectURL(f):'';posts.unshift({name:'Brilliant',text:txt,img:u,likes:0});localStorage.setItem('vx_p',JSON.stringify(posts));renderFeed()});
-renderStories();renderFeed();renderFriends();renderVideo();renderMarket();
-</script>
+  <input
+    id="video-upload"
+    class="hidden"
+    type="file"
+    accept="video/*"
+  >
+
+  <input
+    id="avatar-upload"
+    class="hidden"
+    type="file"
+    accept="image/*"
+  >
+
+  <input
+    id="voice-input"
+    class="hidden"
+    type="file"
+    accept="audio/*"
+  >
+
+  <!-- =====================================================
+       MOBILE DRAWER
+  ====================================================== -->
+
+  <div
+    id="drawer-backdrop"
+    class="drawer-backdrop"
+    onclick="VortexUI.closeDrawer()"
+  ></div>
+
+  <aside id="mobile-drawer" class="mobile-drawer">
+
+    <div class="drawer-title">
+      <strong>🌀 VORTEX</strong>
+
+      <button
+        class="icon-button"
+        type="button"
+        onclick="VortexUI.closeDrawer()"
+      >
+        ✕
+      </button>
+    </div>
+
+    <button class="side-button" onclick="VortexUI.openPage('home')">
+      <span class="side-icon">🏠</span>
+      Home
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('messages')">
+      <span class="side-icon">💬</span>
+      Messages
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('reels')">
+      <span class="side-icon">🎬</span>
+      Reels
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('groups')">
+      <span class="side-icon">👥</span>
+      Groups
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('games')">
+      <span class="side-icon">🎮</span>
+      Games
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('vault')">
+      <span class="side-icon">🔐</span>
+      Vault
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('marketplace')">
+      <span class="side-icon">🏪</span>
+      Marketplace
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('events')">
+      <span class="side-icon">🏆</span>
+      Events
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('profile')">
+      <span class="side-icon">👤</span>
+      Profile
+    </button>
+
+    <button class="side-button" onclick="VortexUI.openPage('settings')">
+      <span class="side-icon">⚙️</span>
+      Settings
+    </button>
+
+  </aside>
+
+  <!-- =====================================================
+       APPLICATION
+  ====================================================== -->
+
+  <div id="app">
+
+    <div class="vortex-shell">
+
+      <!-- =================================================
+           LEFT SIDEBAR
+      ================================================== -->
+
+      <aside class="left-sidebar">
+
+        <div class="brand">
+          <div class="brand-mark">◉</div>
+          <div class="brand-name">VORTEX</div>
+        </div>
+
+        <div class="sidebar-section">
+
+          <div class="sidebar-label">Main</div>
+
+          <button
+            class="side-button active"
+            data-page-button="home"
+            onclick="VortexUI.openPage('home')"
+          >
+            <span class="side-icon">🏠</span>
+            Home
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="reels"
+            onclick="VortexUI.openPage('reels')"
+          >
+            <span class="side-icon">🎬</span>
+            Reels
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="messages"
+            onclick="VortexUI.openPage('messages')"
+          >
+            <span class="side-icon">💬</span>
+            Messages
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="notifications"
+            onclick="VortexUI.openPage('notifications')"
+          >
+            <span class="side-icon">🔔</span>
+            Notifications
+          </button>
+
+        </div>
+
+        <div class="sidebar-section">
+
+          <div class="sidebar-label">Discover</div>
+
+          <button
+            class="side-button"
+            data-page-button="groups"
+            onclick="VortexUI.openPage('groups')"
+          >
+            <span class="side-icon">👥</span>
+            Groups
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="games"
+            onclick="VortexUI.openPage('games')"
+          >
+            <span class="side-icon">🎮</span>
+            Games
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="marketplace"
+            onclick="VortexUI.openPage('marketplace')"
+          >
+            <span class="side-icon">🏪</span>
+            Marketplace
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="events"
+            onclick="VortexUI.openPage('events')"
+          >
+            <span class="side-icon">🏆</span>
+            Events
+          </button>
+
+        </div>
+
+        <div class="sidebar-section">
+
+          <div class="sidebar-label">Personal</div>
+
+          <button
+            class="side-button"
+            data-page-button="profile"
+            onclick="VortexUI.openPage('profile')"
+          >
+            <span class="side-icon">👤</span>
+            Profile
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="vault"
+            onclick="VortexUI.openPage('vault')"
+          >
+            <span class="side-icon">🔐</span>
+            Vault
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="themes"
+            onclick="VortexUI.openPage('themes')"
+          >
+            <span class="side-icon">🎨</span>
+            Themes
+          </button>
+
+          <button
+            class="side-button"
+            data-page-button="settings"
+            onclick="VortexUI.openPage('settings')"
+          >
+            <span class="side-icon">⚙️</span>
+            Settings
+          </button>
+
+        </div>
+
+      </aside>
+
+      <!-- =================================================
+           MAIN COLUMN
+      ================================================== -->
+
+      <main class="main-column">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+          <button
+            class="icon-button"
+            type="button"
+            aria-label="Open menu"
+            onclick="VortexUI.openDrawer()"
+          >
+            ☰
+          </button>
+
+          <div class="mobile-brand">VORTEX</div>
+
+          <div class="top-actions">
+
+            <button
+              class="icon-button"
+              type="button"
+              aria-label="Search"
+              onclick="VortexUI.openPage('discover')"
+            >
+              🔍
+            </button>
+
+            <button
+              class="icon-button"
+              type="button"
+              aria-label="Messages"
+              onclick="VortexUI.openPage('messages')"
+            >
+              💬
+            </button>
+
+            <button
+              class="icon-button"
+              type="button"
+              aria-label="Notifications"
+              onclick="VortexUI.openPage('notifications')"
+            >
+              🔔
+            </button>
+
+          </div>
+
+        </header>
+
+        <!-- =================================================
+             HOME PAGE
+        ================================================== -->
+
+        <section
+          id="page-home"
+          class="page active"
+          data-page="home"
+        >
+
+          <!-- EYES -->
+
+          <div class="eyes-navigation">
+
+            <button
+              id="left-eye"
+              class="eye-shortcut"
+              type="button"
+              aria-label="VORTEX left eye shortcut"
+              onclick="VortexUI.eyeAction('left')"
+              oncontextmenu="VortexUI.customizeEye(event,'left')"
+            >
+              <span class="eye-label" id="left-eye-label">
+                Messages
+              </span>
+            </button>
+
+            <button
+              id="right-eye"
+              class="eye-shortcut"
+              type="button"
+              aria-label="VORTEX right eye shortcut"
+              onclick="VortexUI.eyeAction('right')"
+              oncontextmenu="VortexUI.customizeEye(event,'right')"
+            >
+              <span class="eye-label" id="right-eye-label">
+                Reels
+              </span>
+            </button>
+
+          </div>
+
+          <!-- HERO -->
+
+          <div class="home-hero">
+
+            <div class="hero-small">
+              YOUR VORTEX WORLD
+            </div>
+
+            <h1 class="hero-title">
+              Welcome back,
+              <span id="home-user-name">Brilliant</span>.
+            </h1>
+
+            <p class="hero-description">
+              Connect, create, discover, play and build your own
+              futuristic social world.
+            </p>
+
+          </div>
+
+          <!-- QUICK ACTIONS -->
+
+          <div class="quick-actions">
+
+            <button
+              class="quick-card"
+              onclick="VortexUI.openPage('messages')"
+            >
+              <span class="quick-card-icon">💬</span>
+              <span class="quick-card-name">Chat</span>
+            </button>
+
+            <button
+              class="quick-card"
+              onclick="VortexUI.openPage('reels')"
+            >
+              <span class="quick-card-icon">🎬</span>
+              <span class="quick-card-name">Reels</span>
+            </button>
+
+            <button
+              class="quick-card"
+              onclick="VortexUI.openPage('games')"
+            >
+              <span class="quick-card-icon">🎮</span>
+              <span class="quick-card-name">Games</span>
+            </button>
+
+            <button
+              class="quick-card"
+              onclick="VortexUI.openPage('vault')"
+            >
+              <span class="quick-card-icon">🔐</span>
+              <span class="quick-card-name">Vault</span>
+            </button>
+
+          </div>
+
+          <!-- COMPOSER -->
+
+          <div class="composer">
+
+            <div class="composer-top">
+
+              <img
+                id="composer-avatar"
+                class="avatar"
+                src="https://i.pravatar.cc/100?img=12"
+                alt="Profile"
+              >
+
+              <input
+                id="post-composer"
+                class="composer-input"
+                type="text"
+                autocomplete="off"
+                placeholder="What's happening in your VORTEX?"
+                onclick="VortexUI.focusComposer()"
+              >
+
+            </div>
+
+            <div class="composer-actions">
+
+              <button
+                class="composer-action"
+                type="button"
+                onclick="VortexUI.selectImage()"
+              >
+                📷 Photo
+              </button>
+
+              <button
+                class="composer-action"
+                type="button"
+                onclick="VortexUI.selectVideo()"
+              >
+                🎥 Video
+              </button>
+
+              <button
+                class="composer-action"
+                type="button"
+                onclick="VortexUI.openPostPrivacy()"
+              >
+                🔒 Privacy
+              </button>
+
+              <button
+                class="composer-action"
+                type="button"
+                onclick="VortexUI.createPost()"
+              >
+                🚀 Post
+              </button>
+
+            </div>
+
+          </div>
+
+          <!-- STORIES -->
+
+          <div class="section-heading">
+
+            <h2>Stories</h2>
+
+            <button onclick="VortexUI.openPage('stories')">
+              View all
+            </button>
+
+          </div>
+
+          <div id="stories" class="stories">
+
+            <button
+              class="story-card"
+              type="button"
+              onclick="VortexUI.createStory()"
+            >
+              <img
+                src="https://picsum.photos/220/320?random=41"
+                alt="Create story"
+              >
+
+              <span class="story-add">+</span>
+
+              <span class="story-gradient"></span>
+
+              <span class="story-name">
+                Create story
+              </span>
+
+            </button>
+
+            <div class="story-card">
+
+              <img
+                src="https://picsum.photos/220/320?random=42"
+                alt="Vortex story"
+              >
+
+              <span class="story-gradient"></span>
+
+              <span class="story-name">
+                Vortex
+              </span>
+
+            </div>
+
+            <div class="story-card">
+
+              <img
+                src="https://picsum.photos/220/320?random=43"
+                alt="Brilliant story"
+              >
+
+              <span class="story-gradient"></span>
+
+              <span class="story-name">
+                Brilliant
+              </span>
+
+            </div>
+
+            <div class="story-card">
+
+              <img
+                src="https://picsum.photos/220/320?random=44"
+                alt="Creator story"
+              >
+
+              <span class="story-gradient"></span>
+
+              <span class="story-name">
+                Creator
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- FEED -->
+
+          <div class="section-heading">
+
+            <h2>VORTEX Feed</h2>
+
+            <button onclick="VortexUI.refreshFeed()">
+              Refresh
+            </button>
+
+          </div>
+
+          <div id="feed" class="feed">
+
+            <article class="post-card">
+
+              <div class="post-header">
+
+                <img
+                  class="avatar"
+                  src="https://i.pravatar.cc/100?img=32"
+                  alt="VORTEX"
+                >
+
+                <div class="post-user">
+
+                  <strong>VORTEX World</strong>
+
+                  <small>
+                    Public • Now
+                  </small>
+
+                </div>
+
+                <button
+                  class="more-button"
+                  type="button"
+                  onclick="VortexUI.postMenu(this)"
+                >
+                  ⋯
+                </button>
+
+              </div>
+
+              <div class="post-text">
+                Welcome to VORTEX — your social world for connecting,
+                creating, discovering, playing and sharing.
+              </div>
+
+              <div class="post-actions">
+
+                <button class="post-action">
+                  ❤️ Like
+                </button>
+
+                <button class="post-action">
+                  💬 Comment
+                </button>
+
+                <button class="post-action">
+                  ↗️ Share
+                </button>
+
+                <button class="post-action">
+                  🔖 Save
+                </button>
+
+              </div>
+
+            </article>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             REELS
+        ================================================== -->
+
+        <section
+          id="page-reels"
+          class="page"
+          data-page="reels"
+        >
+
+          <header class="page-header">
+
+            <h1>🎬 Reels</h1>
+
+            <div class="top-actions">
+
+              <button
+                class="icon-button"
+                onclick="VortexUI.selectVideo()"
+              >
+                ＋
+              </button>
+
+              <button
+                class="icon-button"
+                onclick="VortexUI.openPage('settings')"
+              >
+                ⚙️
+              </button>
+
+            </div>
+
+          </header>
+
+          <div class="page-body">
+
+            <div id="reels-container">
+
+              <div class="feature-card">
+
+                <div class="feature-card-icon">
+                  🎬
+                </div>
+
+                <h3>VORTEX Reels</h3>
+
+                <p>
+                  Short videos, creators, music, comments,
+                  reactions and sharing will live here.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             MESSAGES
+        ================================================== -->
+
+        <section
+          id="page-messages"
+          class="page"
+          data-page="messages"
+        >
+
+          <header class="page-header">
+
+            <h1>💬 Messages</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.newChat()"
+            >
+              ＋
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div id="messages-container">
+
+              <div class="feature-card">
+
+                <div class="feature-card-icon">
+                  💬
+                </div>
+
+                <h3>Your conversations</h3>
+
+                <p>
+                  Text, images, videos, voice notes, reactions,
+                  replies and group conversations will connect here.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             GROUPS
+        ================================================== -->
+
+        <section
+          id="page-groups"
+          class="page"
+          data-page="groups"
+        >
+
+          <header class="page-header">
+
+            <h1>👥 Groups</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.createGroup()"
+            >
+              ＋
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="placeholder-grid">
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🌍</div>
+                <h3>Public Groups</h3>
+                <p>Discover communities.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🔒</div>
+                <h3>Private Groups</h3>
+                <p>Communities with controlled access.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">📢</div>
+                <h3>Pages</h3>
+                <p>Creators and businesses.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">💬</div>
+                <h3>Group Chat</h3>
+                <p>Real-time community conversations.</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             GAMES
+        ================================================== -->
+
+        <section
+          id="page-games"
+          class="page"
+          data-page="games"
+        >
+
+          <header class="page-header">
+
+            <h1>🎮 VORTEX Games</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.openGameStore()"
+            >
+              🛒
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="placeholder-grid">
+
+              <button class="feature-card" onclick="VortexUI.openGame('chess')">
+                <div class="feature-card-icon">♟️</div>
+                <h3>Chess</h3>
+                <p>Board game system.</p>
+              </button>
+
+              <button class="feature-card" onclick="VortexUI.openGame('checkers')">
+                <div class="feature-card-icon">🔴</div>
+                <h3>Checkers</h3>
+                <p>Classic board battles.</p>
+              </button>
+
+              <button class="feature-card" onclick="VortexUI.openGame('arcade')">
+                <div class="feature-card-icon">🕹️</div>
+                <h3>Arcade</h3>
+                <p>Mini-game collection.</p>
+              </button>
+
+              <button class="feature-card" onclick="VortexUI.openGame('racing')">
+                <div class="feature-card-icon">🏎️</div>
+                <h3>Racing</h3>
+                <p>Fast VORTEX challenges.</p>
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             VAULT
+        ================================================== -->
+
+        <section
+          id="page-vault"
+          class="page"
+          data-page="vault"
+        >
+
+          <header class="page-header">
+
+            <h1>🔐 VORTEX Vault</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.lockVault()"
+            >
+              🔒
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="feature-card">
+
+              <div class="feature-card-icon">
+                🔐
+              </div>
+
+              <h3>Private Vault</h3>
+
+              <p>
+                Your private photos, videos and protected media.
+                Vault access will be connected to authentication
+                and secure device storage.
+              </p>
+
+              <br>
+
+              <button
+                class="composer-action"
+                onclick="VortexUI.openVault()"
+              >
+                Open Vault
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             MARKETPLACE
+        ================================================== -->
+
+        <section
+          id="page-marketplace"
+          class="page"
+          data-page="marketplace"
+        >
+
+          <header class="page-header">
+
+            <h1>🏪 Marketplace</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.createListing()"
+            >
+              ＋
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="placeholder-grid">
+
+              <div class="feature-card">
+                <div class="feature-card-icon">📱</div>
+                <h3>Electronics</h3>
+                <p>Discover products.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🚗</div>
+                <h3>Vehicles</h3>
+                <p>Buy and sell vehicles.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">👕</div>
+                <h3>Fashion</h3>
+                <p>Marketplace fashion.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🏠</div>
+                <h3>Property</h3>
+                <p>Listings and services.</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             EVENTS
+        ================================================== -->
+
+        <section
+          id="page-events"
+          class="page"
+          data-page="events"
+        >
+
+          <header class="page-header">
+
+            <h1>🏆 VORTEX Events</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.createEvent()"
+            >
+              ＋
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="feature-card">
+
+              <div class="feature-card-icon">
+                📸
+              </div>
+
+              <h3>Weekly World Photo Challenge</h3>
+
+              <p>
+                Submit your best photo, collect community reactions,
+                earn VORTEX XP and unlock achievements.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             PROFILE
+        ================================================== -->
+
+        <section
+          id="page-profile"
+          class="page"
+          data-page="profile"
+        >
+
+          <header class="page-header">
+
+            <h1>👤 Profile</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.editProfile()"
+            >
+              ✎
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="feature-card">
+
+              <img
+                id="profile-avatar"
+                class="avatar"
+                style="width:75px;height:75px"
+                src="https://i.pravatar.cc/100?img=12"
+                alt="Profile"
+              >
+
+              <br><br>
+
+              <h3 id="profile-name">
+                Brilliant
+              </h3>
+
+              <p id="profile-bio">
+                Building my VORTEX world. 🌀
+              </p>
+
+              <br>
+
+              <button
+                class="composer-action"
+                onclick="VortexUI.editProfile()"
+              >
+                Edit Profile
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             THEMES
+        ================================================== -->
+
+        <section
+          id="page-themes"
+          class="page"
+          data-page="themes"
+        >
+
+          <header class="page-header">
+
+            <h1>🎨 VORTEX Themes</h1>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="placeholder-grid">
+
+              <div class="feature-card">
+                <div class="feature-card-icon">💎</div>
+                <h3>Glass</h3>
+                <p>Transparent glass interface.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">⚡</div>
+                <h3>Neon</h3>
+                <p>Electric futuristic interface.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🌌</div>
+                <h3>Galaxy</h3>
+                <p>Deep-space atmosphere.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🌀</div>
+                <h3>Vortex Eye</h3>
+                <p>The signature VORTEX style.</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             NOTIFICATIONS
+        ================================================== -->
+
+        <section
+          id="page-notifications"
+          class="page"
+          data-page="notifications"
+        >
+
+          <header class="page-header">
+
+            <h1>🔔 Notifications</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.clearNotifications()"
+            >
+              ✓
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="feature-card">
+
+              <div class="feature-card-icon">
+                🔔
+              </div>
+
+              <h3>You're all caught up</h3>
+
+              <p>
+                New likes, comments, messages, friend requests,
+                achievements and events will appear here.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             DISCOVER
+        ================================================== -->
+
+        <section
+          id="page-discover"
+          class="page"
+          data-page="discover"
+        >
+
+          <header class="page-header">
+
+            <h1>🔍 Discover</h1>
+
+          </header>
+
+          <div class="page-body">
+
+            <input
+              id="discover-search"
+              class="composer-input"
+              style="width:100%"
+              placeholder="Search people, posts, reels, groups..."
+              autocomplete="off"
+            >
+
+            <br><br>
+
+            <div class="placeholder-grid">
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🔥</div>
+                <h3>Trending</h3>
+                <p>Popular VORTEX content.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">👤</div>
+                <h3>People</h3>
+                <p>Discover creators and friends.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">👥</div>
+                <h3>Groups</h3>
+                <p>Find communities.</p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-card-icon">🎬</div>
+                <h3>Videos</h3>
+                <p>Discover reels and videos.</p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             STORIES
+        ================================================== -->
+
+        <section
+          id="page-stories"
+          class="page"
+          data-page="stories"
+        >
+
+          <header class="page-header">
+
+            <h1>📸 Stories</h1>
+
+            <button
+              class="icon-button"
+              onclick="VortexUI.createStory()"
+            >
+              ＋
+            </button>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="feature-card">
+
+              <div class="feature-card-icon">
+                📸
+              </div>
+
+              <h3>VORTEX Stories</h3>
+
+              <p>
+                Temporary photos and videos shared with your
+                chosen audience.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             SETTINGS
+        ================================================== -->
+
+        <section
+          id="page-settings"
+          class="page"
+          data-page="settings"
+        >
+
+          <header class="page-header">
+
+            <h1>⚙️ Settings</h1>
+
+          </header>
+
+          <div class="page-body">
+
+            <div class="feature-card">
+
+              <h3>Account</h3>
+              <p>Authentication and account management.</p>
+
+              <br>
+
+              <button class="side-button">
+                👤 Account information
+              </button>
+
+              <button class="side-button">
+                🔐 Security
+              </button>
+
+              <button class="side-button">
+                👁️ Privacy
+              </button>
+
+            </div>
+
+            <br>
+
+            <div class="feature-card">
+
+              <h3>Personalization</h3>
+              <p>Control how your VORTEX looks and behaves.</p>
+
+              <br>
+
+              <button
+                class="side-button"
+                onclick="VortexUI.openPage('themes')"
+              >
+                🎨 Themes
+              </button>
+
+              <button class="side-button">
+                🏠 Home customization
+              </button>
+
+              <button class="side-button">
+                🔤 Chat fonts
+              </button>
+
+              <button class="side-button">
+                👁️ Eye shortcuts
+              </button>
+
+            </div>
+
+            <br>
+
+            <div class="feature-card">
+
+              <h3>VORTEX AI</h3>
+              <p>
+                Optional voice assistant, greeting and
+                wake-word controls.
+              </p>
+
+              <br>
+
+              <button class="side-button">
+                🤖 Enable VORTEX AI
+              </button>
+
+              <button class="side-button">
+                🎤 Voice settings
+              </button>
+
+              <button class="side-button">
+                💤 Sleep timer
+              </button>
+
+              <button class="side-button">
+                🕐 Hourly time announcements
+              </button>
+
+            </div>
+
+            <br>
+
+            <div class="feature-card">
+
+              <h3>Offline</h3>
+              <p>
+                Manage downloaded videos and saved content.
+              </p>
+
+              <br>
+
+              <button
+                class="side-button"
+                onclick="VortexUI.openOffline()"
+              >
+                📥 Downloads
+              </button>
+
+              <button class="side-button">
+                🗑️ Manage cached content
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- =================================================
+           RIGHT SIDEBAR
+      ================================================== -->
+
+      <aside class="right-sidebar">
+
+        <div class="right-card">
+
+          <div class="right-title">
+            🏆 Weekly VORTEX
+          </div>
+
+          <div class="event-row">
+
+            <div class="event-icon">
+              📸
+            </div>
+
+            <div class="event-info">
+
+              <strong>
+                World Photo Challenge
+              </strong>
+
+              <small>
+                Earn XP & achievements
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="right-card">
+
+          <div class="right-title">
+            👥 People you may know
+          </div>
+
+          <div class="friend-row">
+
+            <img
+              class="avatar"
+              src="https://i.pravatar.cc/100?img=13"
+              alt=""
+            >
+
+            <div class="event-info">
+
+              <strong>Vortex Creator</strong>
+
+              <small>12 mutual connections</small>
+
+            </div>
+
+          </div>
+
+          <div class="friend-row">
+
+            <img
+              class="avatar"
+              src="https://i.pravatar.cc/100?img=14"
+              alt=""
+            >
+
+            <div class="event-info">
+
+              <strong>Neo World</strong>
+
+              <small>8 mutual connections</small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="right-card">
+
+          <div class="right-title">
+            🪙 Your VORTEX XP
+          </div>
+
+          <strong
+            id="xp-display"
+            style="font-size:25px;color:#00d9ff"
+          >
+            0
+          </strong>
+
+          <p
+            style="
+              margin-top:6px;
+              color:rgba(255,255,255,.4);
+              font-size:11px
+            "
+          >
+            Build achievements through activity.
+          </p>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================================
+       MOBILE BOTTOM NAV
+  ====================================================== -->
+
+  <nav class="bottom-nav">
+
+    <div class="bottom-nav-inner">
+
+      <button
+        class="bottom-button active"
+        data-bottom-page="home"
+        onclick="VortexUI.openPage('home')"
+      >
+        <span>🏠</span>
+        Home
+      </button>
+
+      <button
+        class="bottom-button"
+        data-bottom-page="reels"
+        onclick="VortexUI.openPage('reels')"
+      >
+        <span>🎬</span>
+        Reels
+      </button>
+
+      <button
+        class="bottom-button"
+        data-bottom-page="messages"
+        onclick="VortexUI.openPage('messages')"
+      >
+        <span>💬</span>
+        Chat
+      </button>
+
+      <button
+        class="bottom-button"
+        data-bottom-page="games"
+        onclick="VortexUI.openPage('games')"
+      >
+        <span>🎮</span>
+        Games
+      </button>
+
+      <button
+        class="bottom-button"
+        data-bottom-page="settings"
+        onclick="VortexUI.openPage('settings')"
+      >
+        <span>☰</span>
+        Menu
+      </button>
+
+    </div>
+
+  </nav>
+
+  <!-- =====================================================
+       APPLICATION SCRIPT
+  ====================================================== -->
+
+  <script>
+    "use strict";
+
+    /*
+      VORTEX CORE UI BRIDGE
+
+      The detailed systems will be connected by:
+      app.js
+      auth.js
+      users.js
+      social.js
+      media.js
+      messages.js
+      reels.js
+      groups.js
+      games.js
+      marketplace.js
+      events.js
+      vault.js
+      themes.js
+      notifications.js
+      settings.js
+      points.js
+      economy.js
+      ai.js
+      offline.js
+      home.js
+    */
+
+    window.VortexUI = window.VortexUI || {};
+
+    VortexUI.state = {
+      currentPage: "home",
+      leftEye: "messages",
+      rightEye: "reels",
+      userName: "Brilliant",
+      postPrivacy: "public",
+      aiEnabled: false,
+      initialized: false
+    };
+
+    /* =====================================================
+       PAGE NAVIGATION
+    ====================================================== */
+
+    VortexUI.openPage = function(pageName) {
+
+      const pages = document.querySelectorAll(".page");
+
+      pages.forEach(function(page) {
+        page.classList.remove("active");
+      });
+
+      const target = document.getElementById(
+        "page-" + pageName
+      );
+
+      if (target) {
+        target.classList.add("active");
+        VortexUI.state.currentPage = pageName;
+      }
+
+      document
+        .querySelectorAll("[data-page-button]")
+        .forEach(function(button) {
+          button.classList.toggle(
+            "active",
+            button.dataset.pageButton === pageName
+          );
+        });
+
+      document
+        .querySelectorAll("[data-bottom-page]")
+        .forEach(function(button) {
+          button.classList.toggle(
+            "active",
+            button.dataset.bottomPage === pageName
+          );
+        });
+
+      VortexUI.closeDrawer();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+      document.dispatchEvent(
+        new CustomEvent("vortex:navigation", {
+          detail: {
+            page: pageName
+          }
+        })
+      );
+    };
+
+    /* =====================================================
+       DRAWER
+    ====================================================== */
+
+    VortexUI.openDrawer = function() {
+
+      const drawer =
+        document.getElementById("mobile-drawer");
+
+      const backdrop =
+        document.getElementById("drawer-backdrop");
+
+      if (drawer) {
+        drawer.classList.add("open");
+      }
+
+      if (backdrop) {
+        backdrop.classList.add("open");
+      }
+    };
+
+    VortexUI.closeDrawer = function() {
+
+      const drawer =
+        document.getElementById("mobile-drawer");
+
+      const backdrop =
+        document.getElementById("drawer-backdrop");
+
+      if (drawer) {
+        drawer.classList.remove("open");
+      }
+
+      if (backdrop) {
+        backdrop.classList.remove("open");
+      }
+    };
+
+    /* =====================================================
+       EYES
+    ====================================================== */
+
+    VortexUI.eyeAction = function(side) {
+
+      const destination =
+        side === "left"
+          ? VortexUI.state.leftEye
+          : VortexUI.state.rightEye;
+
+      VortexUI.openPage(destination);
+    };
+
+    VortexUI.customizeEye = function(event, side) {
+
+      event.preventDefault();
+
+      const current =
+        side === "left"
+          ? VortexUI.state.leftEye
+          : VortexUI.state.rightEye;
+
+      const choice = prompt(
+        "Set this VORTEX eye shortcut.\n\n" +
+        "Type one of:\n" +
+        "messages\n" +
+        "reels\n" +
+        "games\n" +
+        "vault\n" +
+        "settings\n" +
+        "profile\n" +
+        "events",
+        current
+      );
+
+      if (!choice) {
+        return;
+      }
+
+      const allowed = [
+        "messages",
+        "reels",
+        "games",
+        "vault",
+        "settings",
+        "profile",
+        "events"
+      ];
+
+      if (!allowed.includes(choice.toLowerCase())) {
+        alert("That shortcut is not available yet.");
+        return;
+      }
+
+      if (side === "left") {
+        VortexUI.state.leftEye = choice.toLowerCase();
+      } else {
+        VortexUI.state.rightEye = choice.toLowerCase();
+      }
+
+      VortexUI.updateEyeLabels();
+
+      localStorage.setItem(
+        "vortex_eye_shortcuts",
+        JSON.stringify({
+          left: VortexUI.state.leftEye,
+          right: VortexUI.state.rightEye
+        })
+      );
+    };
+
+    VortexUI.updateEyeLabels = function() {
+
+      const left =
+        document.getElementById("left-eye-label");
+
+      const right =
+        document.getElementById("right-eye-label");
+
+      if (left) {
+        left.textContent =
+          VortexUI.state.leftEye;
+      }
+
+      if (right) {
+        right.textContent =
+          VortexUI.state.rightEye;
+      }
+    };
+
+    /* =====================================================
+       COMPOSER
+    ====================================================== */
+
+    VortexUI.focusComposer = function() {
+
+      const input =
+        document.getElementById("post-composer");
+
+      if (input) {
+        input.focus();
+      }
+    };
+
+    VortexUI.createPost = function() {
+
+      const input =
+        document.getElementById("post-composer");
+
+      const text =
+        input ? input.value.trim() : "";
+
+      if (!text) {
+        alert("Write something first.");
+        return;
+      }
+
+      document.dispatchEvent(
+        new CustomEvent("vortex:create-post", {
+          detail: {
+            text: text,
+            privacy: VortexUI.state.postPrivacy
+          }
+        })
+      );
+
+      if (input) {
+        input.value = "";
+      }
+
+      alert(
+        "Post ready. The social backend will handle publishing."
+      );
+    };
+
+    VortexUI.openPostPrivacy = function() {
+
+      const choice = prompt(
+        "Post privacy:\n\n" +
+        "public\n" +
+        "friends\n" +
+        "contacts\n" +
+        "private",
+        VortexUI.state.postPrivacy
+      );
+
+      if (!choice) {
+        return;
+      }
+
+      const allowed = [
+        "public",
+        "friends",
+        "contacts",
+        "private"
+      ];
+
+      if (allowed.includes(choice.toLowerCase())) {
+
+        VortexUI.state.postPrivacy =
+          choice.toLowerCase();
+
+      }
+    };
+
+    /* =====================================================
+       MEDIA
+    ====================================================== */
+
+    VortexUI.selectImage = function() {
+
+      const input =
+        document.getElementById("image-upload");
+
+      if (input) {
+        input.click();
+      }
+    };
+
+    VortexUI.selectVideo = function() {
+
+      const input =
+        document.getElementById("video-upload");
+
+      if (input) {
+        input.click();
+      }
+    };
+
+    VortexUI.createStory = function() {
+
+      alert(
+        "Story creator will connect to the VORTEX media system."
+      );
+    };
+
+    /* =====================================================
+       OTHER ACTIONS
+    ====================================================== */
+
+    VortexUI.refreshFeed = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:refresh-feed")
+      );
+    };
+
+    VortexUI.postMenu = function() {
+
+      alert(
+        "Post options:\n\n" +
+        "Edit\n" +
+        "Delete\n" +
+        "Save\n" +
+        "Hide\n" +
+        "Report"
+      );
+    };
+
+    VortexUI.newChat = function() {
+
+      VortexUI.openPage("messages");
+
+      document.dispatchEvent(
+        new Event("vortex:new-chat")
+      );
+    };
+
+    VortexUI.createGroup = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:create-group")
+      );
+
+      alert("Group creation will connect to the backend.");
+    };
+
+    VortexUI.openGameStore = function() {
+
+      alert(
+        "VORTEX Game Store will connect to the game system."
+      );
+    };
+
+    VortexUI.openGame = function(game) {
+
+      document.dispatchEvent(
+        new CustomEvent("vortex:open-game", {
+          detail: {
+            game: game
+          }
+        })
+      );
+
+      alert(
+        "Opening VORTEX " + game + "..."
+      );
+    };
+
+    VortexUI.lockVault = function() {
+
+      alert(
+        "Vault lock will use the VORTEX authentication/security system."
+      );
+    };
+
+    VortexUI.openVault = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:open-vault")
+      );
+    };
+
+    VortexUI.createListing = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:create-listing")
+      );
+
+      alert(
+        "Marketplace listing creator will connect to the backend."
+      );
+    };
+
+    VortexUI.createEvent = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:create-event")
+      );
+
+      alert(
+        "Event creator will connect to the events system."
+      );
+    };
+
+    VortexUI.editProfile = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:edit-profile")
+      );
+
+      alert(
+        "Profile editor will connect to the user system."
+      );
+    };
+
+    VortexUI.clearNotifications = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:clear-notifications")
+      );
+    };
+
+    VortexUI.openOffline = function() {
+
+      document.dispatchEvent(
+        new Event("vortex:open-offline")
+      );
+
+      alert(
+        "Offline downloads will connect to the VORTEX offline system."
+      );
+    };
+
+    /* =====================================================
+       LOAD LOCAL UI PREFERENCES
+    ====================================================== */
+
+    VortexUI.loadPreferences = function() {
+
+      try {
+
+        const savedEyes =
+          JSON.parse(
+            localStorage.getItem(
+              "vortex_eye_shortcuts"
+            ) || "null"
+          );
+
+        if (savedEyes) {
+
+          if (savedEyes.left) {
+            VortexUI.state.leftEye =
+              savedEyes.left;
+          }
+
+          if (savedEyes.right) {
+            VortexUI.state.rightEye =
+              savedEyes.right;
+          }
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "VORTEX preferences could not be loaded.",
+          error
+        );
+      }
+
+      VortexUI.updateEyeLabels();
+    };
+
+    /* =====================================================
+       USER DISPLAY
+    ====================================================== */
+
+    VortexUI.loadUserDisplay = function() {
+
+      let name =
+        localStorage.getItem(
+          "vortex_user_name"
+        );
+
+      if (!name) {
+        name = "Brilliant";
+      }
+
+      VortexUI.state.userName = name;
+
+      const homeName =
+        document.getElementById("home-user-name");
+
+      const profileName =
+        document.getElementById("profile-name");
+
+      if (homeName) {
+        homeName.textContent = name;
+      }
+
+      if (profileName) {
+        profileName.textContent = name;
+      }
+    };
+
+    /* =====================================================
+       INITIALIZATION
+    ====================================================== */
+
+    VortexUI.initialize = function() {
+
+      if (VortexUI.state.initialized) {
+        return;
+      }
+
+      VortexUI.state.initialized = true;
+
+      VortexUI.loadPreferences();
+      VortexUI.loadUserDisplay();
+
+      const loading =
+        document.getElementById("app-loading");
+
+      if (loading) {
+
+        setTimeout(function() {
+
+          loading.style.opacity = "0";
+          loading.style.pointerEvents = "none";
+
+          setTimeout(function() {
+            loading.remove();
+          }, 300);
+
+        }, 600);
+      }
+
+      document.dispatchEvent(
+        new Event("vortex:ready")
+      );
+    };
+
+    /* =====================================================
+       MEDIA INPUT EVENTS
+    ====================================================== */
+
+    document.addEventListener(
+      "change",
+      function(event) {
+
+        if (
+          event.target &&
+          event.target.id === "image-upload"
+        ) {
+
+          const file =
+            event.target.files &&
+            event.target.files[0];
+
+          if (!file) {
+            return;
+          }
+
+          document.dispatchEvent(
+            new CustomEvent("vortex:image-selected", {
+              detail: {
+                file: file
+              }
+            })
+          );
+        }
+
+        if (
+          event.target &&
+          event.target.id === "video-upload"
+        ) {
+
+          const file =
+            event.target.files &&
+            event.target.files[0];
+
+          if (!file) {
+            return;
+          }
+
+          document.dispatchEvent(
+            new CustomEvent("vortex:video-selected", {
+              detail: {
+                file: file
+              }
+            })
+          );
+        }
+
+      }
+    );
+
+    /* =====================================================
+       KEYBOARD SHORTCUTS
+    ====================================================== */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "/" &&
+          document.activeElement.tagName !== "INPUT" &&
+          document.activeElement.tagName !== "TEXTAREA"
+        ) {
+
+          event.preventDefault();
+
+          VortexUI.openPage("discover");
+
+          const search =
+            document.getElementById(
+              "discover-search"
+            );
+
+          if (search) {
+            setTimeout(function() {
+              search.focus();
+            }, 100);
+          }
+        }
+
+        if (event.key === "Escape") {
+          VortexUI.closeDrawer();
+        }
+
+      }
+    );
+
+    /* =====================================================
+       START
+    ====================================================== */
+
+    if (
+      document.readyState === "loading"
+    ) {
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        VortexUI.initialize
+      );
+
+    } else {
+
+      VortexUI.initialize();
+
+    }
+
+  </script>
+
 </body>
   </html>
