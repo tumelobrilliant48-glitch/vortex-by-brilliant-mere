@@ -1,126 +1,626 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VORTEX Facebook — By Brilliant Tumelo Mere</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0e1a;color:#e4e6eb;font-family:system-ui,Segoe UI;overflow-x:hidden}
-.top{height:56px;background:#0e1228;border-bottom:1px solid #222c5a;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:20}
-.top b{color:#00f0ff;font-size:22px;letter-spacing:2px}
-.top input{background:#1a2146;border:none;border-radius:20px;padding:8px 14px;color:#fff;width:38vw}
-.main{display:flex;max-width:1100px;margin:0 auto}
-.left,.right{display:none}
-.center{width:100%;max-width:680px;margin:0 auto;padding:10px 10px 80px}
-@media(min-width:900px){.left,.right{display:block;width:220px;position:sticky;top:56px;height:calc(100vh - 56px);padding:12px}.left div,.right div{padding:10px;border-radius:10px;cursor:pointer}.left div:hover{background:#1a2146}}
-.card{background:#12182f;border:1px solid #1d2752;border-radius:12px;padding:12px;margin-bottom:12px}
-.stories{display:flex;gap:8px;overflow-x:auto;padding:6px 0;scrollbar-width:none}
-.stories::-webkit-scrollbar{display:none}
-.story{flex:0 0 110px;height:190px;border-radius:12px;background:#1a2146;position:relative;overflow:hidden;border:1px solid #263166}
-.story img{width:100%;height:100%;object-fit:cover}
-.story small{position:absolute;bottom:6px;left:6px;font-size:12px;font-weight:700;background:rgba(0,0,0,.6);padding:2px 6px;border-radius:6px}
-.add-story{background:linear-gradient(180deg,#00f0ff,#7a4cff);display:grid;place-items:center;font-size:36px}
-.post-top{display:flex;gap:10px;align-items:center}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(45deg,#00f0ff,#ff00ff);display:grid;place-items:center;font-weight:800;color:#000}
-.post-img{width:100%;border-radius:10px;margin-top:10px;max-height:420px;object-fit:cover}
-.actions{display:flex;justify-content:space-around;margin-top:10px;border-top:1px solid #1e2750;padding-top:8px}
-.actions button{background:none;border:none;color:#aab;flex:1;padding:8px;border-radius:6px}
-.actions button.liked{color:#00f0ff}
-.actions button:hover{background:#1a2146}
-.inp{width:100%;background:#1a2146;border:1px solid #222d5e;border-radius:20px;padding:10px 14px;color:#fff;margin-top:8px}
-.btn{background:#00f0ff;color:#000;border:none;padding:8px 14px;border-radius:20px;font-weight:800}
-.comment{font-size:13px;margin-top:6px;background:#0f1430;padding:6px 10px;border-radius:12px}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#0e1228;border-top:1px solid #222c5a;display:flex;justify-content:space-around;padding:8px 0}
-.bottom button{background:none;border:none;color:#8a94c0;font-size:22px}
-@media(min-width:900px){.bottom{display:none}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SocialBook</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f0f2f5;
+      color: #1c1e21;
+    }
+
+    /* HEADER */
+    header {
+      height: 60px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1877f2;
+    }
+
+    .search {
+      width: 300px;
+      padding: 11px 16px;
+      border: none;
+      border-radius: 25px;
+      background: #f0f2f5;
+      outline: none;
+    }
+
+    .header-icons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: #e4e6eb;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* LAYOUT */
+    .layout {
+      max-width: 1400px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 250px 1fr 280px;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* SIDEBAR */
+    .sidebar,
+    .rightbar {
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu li {
+      padding: 13px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .menu li:hover {
+      background: #e4e6eb;
+    }
+
+    .profile-small {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      margin-bottom: 15px;
+    }
+
+    .avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1877f2, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* STORIES */
+    .stories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .story {
+      min-width: 110px;
+      height: 180px;
+      border-radius: 12px;
+      background: linear-gradient(160deg, #1877f2, #833ab4);
+      color: white;
+      display: flex;
+      align-items: flex-end;
+      padding: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* CREATE POST */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    }
+
+    .create-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .post-input {
+      flex: 1;
+      border: none;
+      background: #f0f2f5;
+      padding: 13px 18px;
+      border-radius: 25px;
+      outline: none;
+    }
+
+    .post-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 15px;
+      border-top: 1px solid #ddd;
+      padding-top: 12px;
+    }
+
+    .post-buttons button {
+      border: none;
+      background: none;
+      padding: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* POSTS */
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .post-name {
+      font-weight: bold;
+    }
+
+    .post-time {
+      font-size: 12px;
+      color: #65676b;
+    }
+
+    .post-text {
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .post-image {
+      width: 100%;
+      height: 320px;
+      border-radius: 8px;
+      background: linear-gradient(
+        135deg,
+        #1877f2,
+        #833ab4,
+        #f77737
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 35px;
+      font-weight: bold;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      color: #65676b;
+      font-size: 14px;
+      margin: 12px 0;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .actions button {
+      border: none;
+      background: white;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .actions button:hover {
+      background: #f0f2f5;
+    }
+
+    /* RIGHT BAR */
+    .right-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .contact {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .contact:hover {
+      background: #e4e6eb;
+    }
+
+    .online {
+      width: 10px;
+      height: 10px;
+      background: #31a24c;
+      border-radius: 50%;
+      margin-left: auto;
+    }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar,
+      .rightbar {
+        display: none;
+      }
+
+      .search {
+        width: 180px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 0 10px;
+      }
+
+      .logo {
+        font-size: 22px;
+      }
+
+      .search {
+        width: 130px;
+      }
+
+      .layout {
+        padding: 10px;
+      }
+
+      .post-image {
+        height: 240px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="top"><b>VORTEX</b><input id="search" placeholder="Search VORTEX"><div>🔔 💬 👤</div></div>
 
-<div class="main">
-<div class="left">
-<div>🏠 Home</div><div>👥 Friends</div><div>📺 Watch</div><div>🏪 Marketplace - 90% earnings</div><div>💾 Vault - 3 passcode</div><div>💎 Premium $5.99</div><div>⚙️ Settings - 100+ themes</div><div style="margin-top:10px;font-size:11px;color:#6a7ab0">By Brilliant Tumelo Mere</div>
-</div>
+  <!-- HEADER -->
+  <header>
 
-<div class="center">
-<div class="stories" id="stories">
-<div class="story add-story" onclick="document.getElementById('file').click()">+</div>
-</div>
+    <div class="logo">SocialBook</div>
 
-<div class="card">
-<div class="post-top"><div class="avatar">you</div><input id="text" class="inp" placeholder="What's on your mind, you?"></div>
-<img id="preview" style="display:none" class="post-img">
-<input type="file" id="file" accept="image/*,video/*" style="display:none">
-<div style="display:flex;gap:8px;margin-top:10px">
-<button class="btn" onclick="document.getElementById('file').click()">📷 Photo</button>
-<button class="btn" style="background:#7a4cff;color:#fff" onclick="createPost()">Post</button>
-</div>
-</div>
+    <input
+      class="search"
+      type="search"
+      placeholder="Search SocialBook"
+    >
 
-<div id="feed"></div>
-</div>
-
-<div class="right">
-<b>Contacts</b>
-<div>🟢 Alex</div><div>🟢 Kai</div><div>🟢 Luna</div><div>🟢 Zed</div><div>🟢 Mira</div>
-<div style="margin-top:20px"><b>Marketplace</b><div class="small">Sell your video - earn 90%</div></div>
-</div>
-</div>
-
-<div class="bottom"><button>🏠</button><button>👥</button><button>📺</button><button>💬</button><button>🔒</button></div>
-
-<script>
-let posts = JSON.parse(localStorage.getItem('vortex_fb_posts')||'[]');
-let imgData = '';
-document.getElementById('file').addEventListener('change', e=>{
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload=()=>{imgData=r.result; document.getElementById('preview').src=imgData; document.getElementById('preview').style.display='block'}; r.readAsDataURL(f);
-});
-
-function createPost(){
-  const text=document.getElementById('text').value.trim();
-  if(!text && !imgData) return alert('Write something or add photo');
-  if(text.toLowerCase().includes('child')||text.toLowerCase().includes('minor')){ alert('Child safety - blocked RED'); return; }
-  posts.unshift({id:Date.now(),text,img:imgData,likes:0,liked:false,comments:[],time:new Date().toLocaleString()});
-  localStorage.setItem('vortex_fb_posts', JSON.stringify(posts));
-  document.getElementById('text').value=''; imgData=''; document.getElementById('preview').style.display='none';
-  render();
-}
-
-function like(id){
-  const p=posts.find(x=>x.id===id); p.liked=!p.liked; p.likes+=p.liked?1:-1;
-  localStorage.setItem('vortex_fb_posts', JSON.stringify(posts)); render();
-}
-function commentPost(id){
-  const txt=prompt('Comment:'); if(!txt) return;
-  const p=posts.find(x=>x.id===id); p.comments.push(txt);
-  localStorage.setItem('vortex_fb_posts', JSON.stringify(posts)); render();
-}
-function sharePost(id){
-  alert('Shared to feed ✓ - You earn 90% if someone buys');
-}
-function render(){
-  document.getElementById('feed').innerHTML = posts.map(p=>`
-    <div class="card">
-      <div class="post-top"><div class="avatar">you</div><div><b>@you</b><br><small style="color:#7a8ab0">${p.time}</small></div></div>
-      <p style="margin-top:10px">${p.text}</p>
-      ${p.img?`<img src="${p.img}" class="post-img">`:''}
-      <div style="color:#7a8ab0;font-size:12px;margin-top:8px">${p.likes} likes • ${p.comments.length} comments</div>
-      <div class="actions">
-        <button class="${p.liked?'liked':''}" onclick="like(${p.id})">👍 Like</button>
-        <button onclick="commentPost(${p.id})">💬 Comment</button>
-        <button onclick="sharePost(${p.id})">↗️ Share</button>
-      </div>
-      ${p.comments.map(c=>`<div class="comment">${c}</div>`).join('')}
+    <div class="header-icons">
+      <button class="icon">⌂</button>
+      <button class="icon">🔔</button>
+      <button class="icon">💬</button>
+      <button class="icon">☰</button>
     </div>
-  `).join('') || '<div class="card" style="text-align:center;color:#7a8ab0">No posts yet — be first to post!</div>';
 
-  document.getElementById('stories').innerHTML = '<div class="story add-story" onclick="document.getElementById(\'file\').click()">+</div>' +
-    ['Alex','Kai','Luna','Zed','Mira'].map(n=>`<div class="story"><img src="https://i.pravatar.cc/150?u=${n}"><small>${n}</small></div>`).join('');
-}
-render();
-</script>
+  </header>
+
+
+  <!-- MAIN -->
+  <main class="layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="profile-small">
+        <div class="avatar">B</div>
+
+        <strong>Brilliant Mere</strong>
+      </div>
+
+      <ul class="menu">
+        <li>🏠 Home</li>
+        <li>👥 Friends</li>
+        <li>👨‍👩‍👧 Groups</li>
+        <li>🎬 Videos</li>
+        <li>🛒 Marketplace</li>
+        <li>🎮 Gaming</li>
+        <li>📅 Events</li>
+        <li>💾 Saved</li>
+        <li>⚙️ Settings</li>
+      </ul>
+
+    </aside>
+
+
+    <!-- FEED -->
+    <section>
+
+      <!-- STORIES -->
+      <div class="stories">
+
+        <div class="story">
+          Create Story
+        </div>
+
+        <div class="story">
+          Brilliant
+        </div>
+
+        <div class="story">
+          Friends
+        </div>
+
+        <div class="story">
+          VORTEX
+        </div>
+
+        <div class="story">
+          World
+        </div>
+
+      </div>
+
+
+      <!-- CREATE POST -->
+      <div class="card">
+
+        <div class="create-row">
+
+          <div class="avatar">B</div>
+
+          <input
+            id="postInput"
+            class="post-input"
+            placeholder="What's on your mind?"
+          >
+
+        </div>
+
+        <div class="post-buttons">
+
+          <button onclick="addPost()">🔴 Live</button>
+
+          <button onclick="addPost()">🖼️ Photo/Video</button>
+
+          <button onclick="addPost()">😊 Feeling</button>
+
+        </div>
+
+      </div>
+
+
+      <!-- POSTS CONTAINER -->
+      <div id="feed">
+
+        <!-- POST -->
+        <article class="card">
+
+          <div class="post-header">
+
+            <div class="avatar">B</div>
+
+            <div>
+              <div class="post-name">
+                Brilliant Mere
+              </div>
+
+              <div class="post-time">
+                Just now · 🌎
+              </div>
+            </div>
+
+          </div>
+
+          <p class="post-text">
+            Welcome to SocialBook. Connect with friends,
+            discover communities and share your world.
+          </p>
+
+          <div class="post-image">
+            SOCIALBOOK
+          </div>
+
+          <div class="stats">
+            <span>👍 125 Likes</span>
+            <span>24 Comments · 8 Shares</span>
+          </div>
+
+          <div class="actions">
+
+            <button onclick="likePost(this)">
+              👍 Like
+            </button>
+
+            <button>
+              💬 Comment
+            </button>
+
+            <button>
+              ↗️ Share
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="rightbar">
+
+      <div class="card">
+
+        <div class="right-title">
+          Contacts
+        </div>
+
+        <div class="contact">
+          <div class="avatar">A</div>
+          <span>Alex</span>
+          <div class="online"></div>
+        </div>
+
+        <div class="contact">
+          <div class="avatar">J</div>
+          <span>James</span>
+          <div class="online"></div>
+        </div>
+
+        <div class="contact">
+          <div class="avatar">M</div>
+          <span>Michael</span>
+          <div class="online"></div>
+        </div>
+
+        <div class="contact">
+          <div class="avatar">S</div>
+          <span>Sarah</span>
+          <div class="online"></div>
+        </div>
+
+      </div>
+
+    </aside>
+
+  </main>
+
+
+  <script>
+
+    function likePost(button) {
+
+      if (button.dataset.liked === "true") {
+
+        button.innerHTML = "👍 Like";
+        button.dataset.liked = "false";
+
+      } else {
+
+        button.innerHTML = "❤️ Liked";
+        button.dataset.liked = "true";
+
+      }
+
+    }
+
+
+    function addPost() {
+
+      const input = document.getElementById("postInput");
+
+      const text = input.value.trim();
+
+      if (!text) {
+
+        alert("Write something first.");
+
+        return;
+
+      }
+
+      const feed = document.getElementById("feed");
+
+      const post = document.createElement("article");
+
+      post.className = "card";
+
+      post.innerHTML = `
+
+        <div class="post-header">
+
+          <div class="avatar">B</div>
+
+          <div>
+
+            <div class="post-name">
+              Brilliant Mere
+            </div>
+
+            <div class="post-time">
+              Just now · 🌎
+            </div>
+
+          </div>
+
+        </div>
+
+        <p class="post-text">
+          ${escapeHTML(text)}
+        </p>
+
+        <div class="stats">
+          <span>0 Likes</span>
+          <span>0 Comments · 0 Shares</span>
+        </div>
+
+        <div class="actions">
+
+          <button onclick="likePost(this)">
+            👍 Like
+          </button>
+
+          <button>
+            💬 Comment
+          </button>
+
+          <button>
+            ↗️ Share
+          </button>
+
+        </div>
+
+      `;
+
+      feed.prepend(post);
+
+      input.value = "";
+
+    }
+
+
+    function escapeHTML(text) {
+
+      const div = document.createElement("div");
+
+      div.textContent = text;
+
+      return div.innerHTML;
+
+    }
+
+  </script>
+
 </body>
 </html>
