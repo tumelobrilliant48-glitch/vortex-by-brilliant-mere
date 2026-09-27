@@ -1,626 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>SocialBook</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f0f2f5;
-      color: #1c1e21;
-    }
-
-    /* HEADER */
-    header {
-      height: 60px;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      border-bottom: 1px solid #ddd;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #1877f2;
-    }
-
-    .search {
-      width: 300px;
-      padding: 11px 16px;
-      border: none;
-      border-radius: 25px;
-      background: #f0f2f5;
-      outline: none;
-    }
-
-    .header-icons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: none;
-      background: #e4e6eb;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    /* LAYOUT */
-    .layout {
-      max-width: 1400px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: 250px 1fr 280px;
-      gap: 20px;
-      padding: 20px;
-    }
-
-    /* SIDEBAR */
-    .sidebar,
-    .rightbar {
-      position: sticky;
-      top: 80px;
-      height: fit-content;
-    }
-
-    .menu {
-      list-style: none;
-    }
-
-    .menu li {
-      padding: 13px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .menu li:hover {
-      background: #e4e6eb;
-    }
-
-    .profile-small {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px;
-      margin-bottom: 15px;
-    }
-
-    .avatar {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #1877f2, #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-    }
-
-    /* STORIES */
-    .stories {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      margin-bottom: 20px;
-    }
-
-    .story {
-      min-width: 110px;
-      height: 180px;
-      border-radius: 12px;
-      background: linear-gradient(160deg, #1877f2, #833ab4);
-      color: white;
-      display: flex;
-      align-items: flex-end;
-      padding: 10px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* CREATE POST */
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    }
-
-    .create-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .post-input {
-      flex: 1;
-      border: none;
-      background: #f0f2f5;
-      padding: 13px 18px;
-      border-radius: 25px;
-      outline: none;
-    }
-
-    .post-buttons {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 15px;
-      border-top: 1px solid #ddd;
-      padding-top: 12px;
-    }
-
-    .post-buttons button {
-      border: none;
-      background: none;
-      padding: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    /* POSTS */
-    .post-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .post-name {
-      font-weight: bold;
-    }
-
-    .post-time {
-      font-size: 12px;
-      color: #65676b;
-    }
-
-    .post-text {
-      line-height: 1.5;
-      margin-bottom: 15px;
-    }
-
-    .post-image {
-      width: 100%;
-      height: 320px;
-      border-radius: 8px;
-      background: linear-gradient(
-        135deg,
-        #1877f2,
-        #833ab4,
-        #f77737
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 35px;
-      font-weight: bold;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      color: #65676b;
-      font-size: 14px;
-      margin: 12px 0;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid #ddd;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .actions button {
-      border: none;
-      background: white;
-      padding: 12px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .actions button:hover {
-      background: #f0f2f5;
-    }
-
-    /* RIGHT BAR */
-    .right-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
-
-    .contact {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      border-radius: 10px;
-    }
-
-    .contact:hover {
-      background: #e4e6eb;
-    }
-
-    .online {
-      width: 10px;
-      height: 10px;
-      background: #31a24c;
-      border-radius: 50%;
-      margin-left: auto;
-    }
-
-    /* MOBILE */
-    @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar,
-      .rightbar {
-        display: none;
-      }
-
-      .search {
-        width: 180px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      header {
-        padding: 0 10px;
-      }
-
-      .logo {
-        font-size: 22px;
-      }
-
-      .search {
-        width: 130px;
-      }
-
-      .layout {
-        padding: 10px;
-      }
-
-      .post-image {
-        height: 240px;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- HEADER -->
-  <header>
-
-    <div class="logo">SocialBook</div>
-
-    <input
-      class="search"
-      type="search"
-      placeholder="Search SocialBook"
-    >
-
-    <div class="header-icons">
-      <button class="icon">⌂</button>
-      <button class="icon">🔔</button>
-      <button class="icon">💬</button>
-      <button class="icon">☰</button>
-    </div>
-
-  </header>
-
-
-  <!-- MAIN -->
-  <main class="layout">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="sidebar">
-
-      <div class="profile-small">
-        <div class="avatar">B</div>
-
-        <strong>Brilliant Mere</strong>
-      </div>
-
-      <ul class="menu">
-        <li>🏠 Home</li>
-        <li>👥 Friends</li>
-        <li>👨‍👩‍👧 Groups</li>
-        <li>🎬 Videos</li>
-        <li>🛒 Marketplace</li>
-        <li>🎮 Gaming</li>
-        <li>📅 Events</li>
-        <li>💾 Saved</li>
-        <li>⚙️ Settings</li>
-      </ul>
-
-    </aside>
-
-
-    <!-- FEED -->
-    <section>
-
-      <!-- STORIES -->
-      <div class="stories">
-
-        <div class="story">
-          Create Story
-        </div>
-
-        <div class="story">
-          Brilliant
-        </div>
-
-        <div class="story">
-          Friends
-        </div>
-
-        <div class="story">
-          VORTEX
-        </div>
-
-        <div class="story">
-          World
-        </div>
-
-      </div>
-
-
-      <!-- CREATE POST -->
-      <div class="card">
-
-        <div class="create-row">
-
-          <div class="avatar">B</div>
-
-          <input
-            id="postInput"
-            class="post-input"
-            placeholder="What's on your mind?"
-          >
-
-        </div>
-
-        <div class="post-buttons">
-
-          <button onclick="addPost()">🔴 Live</button>
-
-          <button onclick="addPost()">🖼️ Photo/Video</button>
-
-          <button onclick="addPost()">😊 Feeling</button>
-
-        </div>
-
-      </div>
-
-
-      <!-- POSTS CONTAINER -->
-      <div id="feed">
-
-        <!-- POST -->
-        <article class="card">
-
-          <div class="post-header">
-
-            <div class="avatar">B</div>
-
-            <div>
-              <div class="post-name">
-                Brilliant Mere
-              </div>
-
-              <div class="post-time">
-                Just now · 🌎
-              </div>
-            </div>
-
-          </div>
-
-          <p class="post-text">
-            Welcome to SocialBook. Connect with friends,
-            discover communities and share your world.
-          </p>
-
-          <div class="post-image">
-            SOCIALBOOK
-          </div>
-
-          <div class="stats">
-            <span>👍 125 Likes</span>
-            <span>24 Comments · 8 Shares</span>
-          </div>
-
-          <div class="actions">
-
-            <button onclick="likePost(this)">
-              👍 Like
-            </button>
-
-            <button>
-              💬 Comment
-            </button>
-
-            <button>
-              ↗️ Share
-            </button>
-
-          </div>
-
-        </article>
-
-      </div>
-
-    </section>
-
-
-    <!-- RIGHT SIDEBAR -->
-    <aside class="rightbar">
-
-      <div class="card">
-
-        <div class="right-title">
-          Contacts
-        </div>
-
-        <div class="contact">
-          <div class="avatar">A</div>
-          <span>Alex</span>
-          <div class="online"></div>
-        </div>
-
-        <div class="contact">
-          <div class="avatar">J</div>
-          <span>James</span>
-          <div class="online"></div>
-        </div>
-
-        <div class="contact">
-          <div class="avatar">M</div>
-          <span>Michael</span>
-          <div class="online"></div>
-        </div>
-
-        <div class="contact">
-          <div class="avatar">S</div>
-          <span>Sarah</span>
-          <div class="online"></div>
-        </div>
-
-      </div>
-
-    </aside>
-
-  </main>
-
-
-  <script>
-
-    function likePost(button) {
-
-      if (button.dataset.liked === "true") {
-
-        button.innerHTML = "👍 Like";
-        button.dataset.liked = "false";
-
-      } else {
-
-        button.innerHTML = "❤️ Liked";
-        button.dataset.liked = "true";
-
-      }
-
-    }
-
-
-    function addPost() {
-
-      const input = document.getElementById("postInput");
-
-      const text = input.value.trim();
-
-      if (!text) {
-
-        alert("Write something first.");
-
-        return;
-
-      }
-
-      const feed = document.getElementById("feed");
-
-      const post = document.createElement("article");
-
-      post.className = "card";
-
-      post.innerHTML = `
-
-        <div class="post-header">
-
-          <div class="avatar">B</div>
-
-          <div>
-
-            <div class="post-name">
-              Brilliant Mere
-            </div>
-
-            <div class="post-time">
-              Just now · 🌎
-            </div>
-
-          </div>
-
-        </div>
-
-        <p class="post-text">
-          ${escapeHTML(text)}
-        </p>
-
-        <div class="stats">
-          <span>0 Likes</span>
-          <span>0 Comments · 0 Shares</span>
-        </div>
-
-        <div class="actions">
-
-          <button onclick="likePost(this)">
-            👍 Like
-          </button>
-
-          <button>
-            💬 Comment
-          </button>
-
-          <button>
-            ↗️ Share
-          </button>
-
-        </div>
-
-      `;
-
-      feed.prepend(post);
-
-      input.value = "";
-
-    }
-
-
-    function escapeHTML(text) {
-
-      const div = document.createElement("div");
-
-      div.textContent = text;
-
-      return div.innerHTML;
-
-    }
-
-  </script>
-
-</body>
-</html>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="theme-color" content="#030611">
+<meta name="mobile-web-app-capable" content="yes">
+
+<title>VORTEX — Connect • Create • Discover</title>
+
+<style>
+/* =========================================================
+   VORTEX SOCIAL MEDIA
+   PREMIUM NEON / GLASS UI
+========================================================= */
+
+:root {
+    --bg: #02050d;
+    --panel: rgba(10, 15, 30, .82);
+    --panel2: rgba(15, 20, 40, .9);
+
+    --cyan: #00eaff;
+    --blue: #238cff;
+    --purple: #8d4dff;
+    --pink: #ff4fd8;
+
+    --text: #f5f7ff;
+    --muted: #8c96b3;
+
+    --border: rgba(0, 225, 255, .32);
+    --shadow:
+        0 0 25px rgba(0, 220, 255, .10),
+        0 0 40px rgba(145, 70, 255, .08);
+
+    --radius: 22px;
+}
+
+/* RESET */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(0, 210, 255, .08), transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(145, 60, 255, .10), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(0, 120, 255, .08), transparent 30%),
+        var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    border: 0;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+    width: 100%;
+    max-width: 650px;
+    min-height: 100vh;
+    margin: auto;
+    padding-bottom: 105px;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 18px 14px;
+
+    background: rgba(2, 5, 13, .78);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: 900;
+    letter-spacing: 2px;
+
+    background: linear-gradient(
+        100deg,
+        var(--cyan),
+        #ffffff,
+        var(--purple),
+        var(--pink)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    text-shadow:
+        0 0 18px rgba(0,225,255,.25);
+}
+
+.vortex-symbol {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            from 20deg,
+            var(--cyan),
+            transparent,
+            var(--purple),
+            transparent,
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 0 15px rgba(0,220,255,.6),
+        0 0 
