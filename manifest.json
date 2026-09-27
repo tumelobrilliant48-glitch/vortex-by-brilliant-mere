@@ -1,117 +1,18 @@
 {
-  "name": "VORTEX - By Brilliant Tumelo Mere",
-  "short_name": "VORTEX",
-  "description": "Cyber social OS - AI Video Maker, Marketplace, Vault, Reels swipe left/right, 100+ themes, Eyes engine Hey VORTEX 2min, Private downloads, 90% earnings",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#080a14",
-  "theme_color": "#00f0ff",
-  "categories": ["social", "entertainment", "productivity"],
-  "lang": "en",
-  "dir": "ltr",
-  "icons": [
-    {
-      "src": "./assets/icons/icon-72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./assets/icons/icon-96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./assets/icons/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./assets/icons/icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./assets/icons/icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./assets/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./assets/icons/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./assets/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "./assets/screenshots/home.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "VORTEX Home - Small eyes + stories tight gap"
-    },
-    {
-      "src": "./assets/screenshots/reels.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "VORTEX Reels - Swipe left/right, description top RED BLUE"
-    },
-    {
-      "src": "./assets/screenshots/vault.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "VORTEX Vault - Private downloads + 3 passcode"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Create - AI Video",
-      "short_name": "Create",
-      "description": "Create AI video with upload + describe",
-      "url": "./index.html#create",
-      "icons": [{ "src": "./assets/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Reels",
-      "short_name": "Reels",
-      "description": "Swipe left/right reels",
-      "url": "./index.html#reels",
-      "icons": [{ "src": "./assets/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Vault",
-      "short_name": "Vault",
-      "description": "Private vault + downloads",
-      "url": "./index.html#vault",
-      "icons": [{ "src": "./assets/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Marketplace",
-      "short_name": "Shop",
-      "description": "Buy/sell marketplace 90% earnings",
-      "url": "./index.html#marketplace",
-      "icons": [{ "src": "./assets/icons/icon-192.png", "sizes": "192x192" }]
-    }
-  ],
-  "prefer_related_applications": false
+  "name": "socialbook-backend",
+  "version": "1.0.0",
+  "description": "Social media backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
 }
