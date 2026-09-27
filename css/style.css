@@ -1,0 +1,96 @@
+/* css/style.css - FIXES for second image layout
+   Makes big eyes small, settings 3 dots, tight gap eyes->stories
+   By Brilliant Tumelo Mere
+*/
+
+/* 3 DOTS SETTINGS - TOP LEFT */
+#top{
+  padding:12px 16px !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+}
+.dots-btn{
+  width:42px !important;
+  height:42px !important;
+  border-radius:12px !important;
+  border:1.5px solid var(--cyan) !important;
+  background:rgba(0,240,255,.08) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:3px !important;
+  box-shadow:0 0 15px var(--cyan) !important;
+}
+.dots-btn i{
+  width:6px !important;
+  height:6px !important;
+  background:var(--cyan) !important;
+  border-radius:50% !important;
+  display:block !important;
+  box-shadow:0 0 8px var(--cyan) !important;
+}
+.top-right{
+  font-size:11px !important;
+  color:var(--cyan) !important;
+  letter-spacing:1px !important;
+}
+
+/* EYES WRAP - TIGHT GAP FIX - WAS HIGH DISTANCE */
+#eyes-wrap{
+  text-align:center !important;
+  padding:4px 0 2px !important; /* FIXED - was high, now 4px tight */
+  background:radial-gradient(ellipse at center,rgba(0,240,255,.08),transparent 70%) !important;
+  margin-bottom:0 !important;
+}
+#vortex-eyes{
+  display:flex !important;
+  justify-content:center !important;
+  gap:28px !important; /* tight gap between eyes */
+  cursor:pointer !important;
+  transform:scale(1) !important; /* ensure not scaled big */
+}
+.eye{
+  width:32px !important; /* SMALL EYES - not big not smaller - perfect 32x24 */
+  height:24px !important;
+  background:linear-gradient(180deg,#eaffff,var(--cyan)) !important;
+  border-radius:50% 50% 45% 45% !important;
+  box-shadow:0 0 12px var(--cyan),inset 0 0 6px rgba(0,0,0,.4) !important;
+  position:relative !important;
+  overflow:hidden !important;
+  animation:blink 4.5s infinite !important;
+}
+.eye .pupil{
+  position:absolute !important;
+  width:12px !important;
+  height:12px !important;
+  background:#000 !important;
+  border-radius:50% !important;
+  top:50% !important;
+  left:50% !important;
+  transform:translate(-50%,-50%) !important;
+  box-shadow:0 0 6px var(--cyan) !important;
+}
+@keyframes blink{
+  0%,92%,100%{transform:scaleY(1)}
+  94%{transform:scaleY(0.08)}
+}
+/* AWAKE + SOUND GLOW - light up when awake */
+#vortex-eyes.awake .eye{
+  background:#fff !important;
+  box-shadow:0 0 30px #fff,0 0 60px var(--cyan) !important;
+}
+#vortex-eyes.sound-glow .eye{
+  box-shadow:0 0 40px var(--cyan),0 0 80px var(--purple) !important;
+  transform:scale(1.08) !important;
+}
+#by{
+  font-size:10px !important;
+  color:#8a8fbb !important;
+  letter-spacing:1.5px !important;
+  margin-top:6px !important;
+  text-transform:uppercase !important;
+}
+#logo{
+  font-weight
