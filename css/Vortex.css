@@ -1,0 +1,105 @@
+/* VORTEX - FIRST THEME - By Brilliant Tumelo Mere
+   This is the dark neon theme from your screenshot:
+   VORTEX Connect Create Discover, Reels cards, Feed cards with glow
+*/
+
+:root{
+  --bg:#080a14;
+  --bg-2:#0a0f24;
+  --card:#12162e;
+  --card-2:#151b3a;
+  --card-3:#1a2048;
+  --line:#222c5a;
+  --line-2:#1e2650;
+  --cyan:#00f0ff;
+  --cyan-dim:rgba(0,240,255,.15);
+  --cyan-glow:0 0 18px rgba(0,240,255,.6);
+  --purple:#8a5cff;
+  --purple-glow:0 0 18px rgba(138,92,255,.6);
+  --txt:#e6e9ff;
+  --txt-2:#c2c8e8;
+  --muted:#8a8fbb;
+  --red:#ff3b3b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  background:radial-gradient(1200px 600px at 20% -10%,rgba(0,240,255,.08),transparent),
+             radial-gradient(1000px 500px at 90% 10%,rgba(138,92,255,.12),transparent),
+             var(--bg);
+  color:var(--txt);
+  padding-bottom:110px;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* TOP BAR - 3 DOTS */
+#top{
+  padding:14px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(8,10,20,.92);
+  backdrop-filter:blur(16px);
+  position:sticky;
+  top:0;
+  z-index:50;
+  border-bottom:1px solid var(--line);
+}
+.dots-btn{
+  width:44px;height:44px;border-radius:12px;
+  border:1.5px solid var(--cyan);
+  background:linear-gradient(180deg,rgba(0,240,255,.12),rgba(0,240,255,.04));
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;
+  box-shadow:var(--cyan-glow);
+  cursor:pointer;
+  transition:.2s;
+}
+.dots-btn:active{transform:scale(.92)}
+.dots-btn i{
+  width:6px;height:6px;background:var(--cyan);border-radius:50%;
+  display:block;box-shadow:0 0 8px var(--cyan),0 0 16px var(--cyan);
+}
+.top-right{
+  font-size:11px;color:var(--cyan);letter-spacing:1px;
+  display:flex;gap:14px;align-items:center;opacity:.9;
+}
+
+/* CARDS - NEON BORDER LIKE SCREENSHOT */
+.card{
+  background:linear-gradient(180deg,var(--card-2),var(--card));
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,
+             0 8px 24px rgba(0,0,0,.4),
+             0 0 20px rgba(138,92,255,.12);
+  transition:.25s;
+}
+.card:active{transform:scale(.99);border-color:var(--cyan)}
+.content{padding:0 12px}
+.head{
+  padding:12px 16px 8px;
+  font-size:11px;letter-spacing:2.2px;color:var(--cyan);
+  display:flex;justify-content:space-between;align-items:center;
+  text-transform:uppercase;opacity:.95;
+}
+
+/* FEED */
+.p-head{display:flex;gap:10px;align-items:flex-start}
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  flex-shrink:0;box-shadow:0 0 12px rgba(0,240,255,.4);
+}
+.p-actions{
+  display:flex;gap:18px;margin-top:12px;
+  color:var(--cyan);font-size:13px;opacity:.9;
+}
+.p-actions span{cursor:pointer}
+.p-actions span:active{color:#fff}
+
+/* RANKINGS TABLE */
+.rank{width:100%;border-collapse:collapse;margin-top:8px
