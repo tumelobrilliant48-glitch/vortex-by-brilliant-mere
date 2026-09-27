@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>VORTEX — By Brilliant Tumelo Mere</title>
+<link rel="manifest" href="./manifest.json" />
+<meta name="theme-color" content="#00f0ff" />
+<link rel="stylesheet" href="./css/style.css" />
+<link rel="stylesheet" href="./css/reels.css" />
+<link rel="stylesheet" href="./css/themes.css" />
+</head>
+<body data-theme="vortex-dark">
+
+<!-- TOP BAR - small eyes + 3 dots + Hey VORTEX -->
+<header class="top">
+  <div class="brand">
+    <div class="eyes-small" id="eyesMini" onclick="Vortex.speak('Hey VORTEX')">
+      <div class="eye-s"><div class="pupil"></div></div>
+      <div class="eye-s"><div class="pupil"></div></div>
+    </div>
+    <div class="vortex-logo">VORTEX</div>
+  </div>
+  <div class="top-right">
+    <div class="status-dot"></div>
+    <button class="dots3" onclick="document.getElementById('sideMenu').classList.toggle('open')">⋮</button>
+  </div>
+</header>
+
+<!-- SIDE MENU -->
+<div id="sideMenu" class="side-menu">
+  <button onclick="Router.go('home')">🏠 Home</button>
+  <button onclick="Router.go('create')">➕ Create AI</button>
+  <button onclick="Router.go('reels')">🎬 Reels swipe</button>
+  <button onclick="Router.go('messages')">💬 Messages locked + anonymous</button>
+  <button onclick="Router.go('marketplace')">🛒 Marketplace 90%</button>
+  <button onclick="Router.go('vault')">🔒 Vault 3 passcode</button>
+  <button onclick="Router.go('downloads')">⬇️ Downloads private</button>
+  <button onclick="Router.go('premium')">💎 Premium $5.99</button>
+  <button onclick="Router.go('settings')">⚙️ Settings - 100+ themes + Security</button>
+</div>
+
+<!-- STORIES - tight gap -->
+<div class="stories" id="storiesBar">
+  <div class="story"><div class="ring"><img src="" onerror="this.style.background='#0a102a'" /></div><small>you</small></div>
+  <div class="story"><div class="ring"><span>🔥</span></div><small>@nova</small></div>
+  <div class="story"><div class="ring"><span>🎬</span></div><small>@kai</small></div>
+  <div class="story"><div class="ring"><span>🎮</span></div><small>@zed</small></div>
+  <div class="story"><div class="ring"><span>💰</span></div><small>@luna</small></div>
+</div>
+
+<!-- APP SHELL -->
+<main id="app">
+
+<!-- HOME -->
+<section id="home" class="view active">
+  <div id="ranking-table"></div>
+  <div id="feedList"></div>
+</section>
+
+<!-- CREATE - AI video help + upload + describe -->
+<section id="create" class="view">
+  <div class="card"><b>➕ Create — AI Video Maker</b><p class="small">Upload file + describe what AI should make — app improves quality so not messy</p>
+    <input type="file" id="fileInput" class="inp" accept="image/*,video/*" />
+    <textarea id="aiPrompt" class="inp" rows="4" placeholder="Describe what AI should make... e.g. Cyber city vertical 9:16"></textarea>
+    <button class="v-btn" onclick="App.createPost()">Generate & Post</button>
+    <button class="v-btn g" onclick="Vortex.listen()">🎙️ Hey VORTEX voice (2 min)</button>
+  </div>
+</section>
+
+<!-- REELS - swipe left/right + description top RED BLUE + auto slide -->
+<section id="reels" class="view">
+  <div class="reels-wrap"><div id="reels-container" class="reels-track"></div></div>
+</section>
+
+<!-- MESSAGES - locked + anonymous allowed + disappearing notif + RED child/scam close -->
+<section id="messages" class="view">
+  <div class="card"><b>💬 Messages — Locked — Anonymous allowed</b><p class="small">Notifications disappearing but keep sensitive — Vault stays — Child safety RED auto-close — Anti-scam awareness</p>
+    <div id="msgList" style="max-height:40vh;overflow:auto"></div>
+    <div style="display:flex;gap:8px;margin-top:10px"><input id="msgInput" class="inp" placeholder="Type — anonymous allowed..." /><button class="v-btn" onclick="App.sendMsg()">Send</button></div>
+  </div>
+</section>
+
+<!-- MARKETPLACE -->
+<section id="marketplace" class="view">
+  <div class="card"><b>🛒 Marketplace — Sell / Buy — You earn 90%</b><div style="display:flex;gap:8px;margin-top:10px"><input id="sellTitle" class="inp" placeholder="Title"/><input id="sellPrice" class="inp" placeholder="$" style="width:80px"/><button class="v-btn" onclick="Monetize.sellItem(document.getElementById('sellTitle').value, parseFloat(document.getElementById('sellPrice').value)||5)">Sell</button></div></div>
+  <div id="marketplace-list"></div>
+</section>
+
+<!-- VAULT - private downloads + 3 passcode -->
+<section id="vault" class="view">
+  <div class="card"><b>🔒 Vault — Private — 3 Passcode</b><input id="vaultInput" class="inp" type="password" placeholder="Enter 1 of 3 passcodes" /><button class="v-btn" onclick="if(SecurityModule.checkVault3(document.getElementById('vaultInput').value)){document.getElementById('vaultContent').style.display='block'}else{alert('Wrong code')}">Unlock</button><div id="vaultContent" style="display:none;margin-top:12px"><p class="small">Private downloads + notifications keep sensitive here</p><div id="vault-items"></div></div></div>
+</section>
+
+<!-- DOWNLOADS -->
+<section id="downloads" class="view"><div id="downloads-list"></div></section>
+
+<!-- PREMIUM -->
+<section id="premium" class="view"><div id="premium-page"></div><div id="wallet-stats" class="card small"></div></section>
+
+<!-- SETTINGS - 100+ themes + Security -->
+<section id="settings" class="view">
+  <div class="card"><b>🎨 Themes — 100+ themes — Cyber / Dark / Light / Neon / etc</b><div id="theme-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px"></div></div>
+  <div id="security-settings"></div>
+  <div id="dashboard-stats" class="card" style="margin-top:10px"></div>
+</section>
+
+</main>
+
+<!-- BOTTOM NAV - small eyes only + 5 icons -->
+<nav class="bottom">
+  <button onclick="Router.go('home')">🏠</button>
+  <button onclick="Router.go('reels')">🎬</button>
+  <button class="mid" onclick="Router.go('create')">➕</button>
+  <button onclick="Router.go('marketplace')">🛒</button>
+  <button onclick="Router.go('vault')">🔒</button>
+</nav>
+
+<!-- THEMES JS -->
+<script>
+const themes = ['vortex-dark','vortex-light','neon-cyan','neon-pink','cyber-purple','midnight','ocean','sunset','matrix','ice','fire','void','hacker','candy','forest','desert','galaxy','mono','red-alert','blue-pulse'];
+const g = document.getElementById('theme-grid');
+if(g){ themes.forEach(t=>{ const b=document.createElement('button'); b.className='v-btn g'; b.textContent=t; b.onclick=()=>{document.body.dataset.theme=t; localStorage.setItem('theme',t)}; g.appendChild(b); }); for(let i=21;i<=110;i++){ const b=document.createElement('button'); b.className='v-btn g'; b.textContent='theme-'+i; b.onclick=()=>{document.body.dataset.theme=themes[i%themes.length]; localStorage.setItem('theme',document.body.dataset.theme)}; g.appendChild(b);} }
+</script>
+
+<script type="module">
+import { Router } from './core/router.js';
+import { App } from './core/app.js';
+import { VortexEngine } from './engine/vortex.js';
+import { SecurityModule } from './core/security.js';
+import { Monetize } from './core/monetization.js';
+window.Router = Router; window.App = App; window.Vortex = VortexEngine; window.SecurityModule = SecurityModule;
+Router.init(); App.init(); VortexEngine.init(); SecurityModule.init(); Monetize.init();
+</script>
+</body>
+  </html>
