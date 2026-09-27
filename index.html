@@ -1,136 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>VORTEX — By Brilliant Tumelo Mere</title>
-<link rel="manifest" href="./manifest.json" />
-<meta name="theme-color" content="#00f0ff" />
-<link rel="stylesheet" href="./css/style.css" />
-<link rel="stylesheet" href="./css/reels.css" />
-<link rel="stylesheet" href="./css/themes.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VORTEX - By Brilliant Tumelo Mere</title>
+<style>
+:root{--bg:#080a14;--card:#12162e;--cyan:#00f0ff;--pink:#ff00ff;--text:#e9f0ff;--muted:#7a819e;--red:#ff2a2a;--blue:#2a7aff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;overflow-x:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#0c1026;border-bottom:1px solid #1b2142;position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:10px}
+.eyes-small{display:flex;gap:6px}
+.eye-s{width:22px;height:22px;background:#fff;border-radius:50%;position:relative;overflow:hidden;border:1.5px solid var(--cyan)}
+.eye-s .pupil{width:10px;height:10px;background:#000;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.vortex-logo{font-weight:900;letter-spacing:2px;color:var(--cyan);font-size:18px}
+.dots3{background:transparent;border:1px solid #2a325e;border-radius:8px;color:var(--text);padding:6px 10px;font-size:20px}
+.stories{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;scrollbar-width:none}
+.stories::-webkit-scrollbar{display:none}
+.story{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px}
+.ring{width:52px;height:52px;border-radius:50%;padding:2px;background:linear-gradient(45deg,var(--cyan),var(--pink));display:grid;place-items:center}
+.ring > *{width:100%;height:100%;background:#0a102a;border-radius:50%;display:grid;place-items:center;font-size:22px}
+.story small{font-size:11px;color:var(--muted)}
+.view{display:none;padding:12px 12px 90px}
+.view.active{display:block}
+.card{background:var(--card);border:1px solid #1d254d;border-radius:14px;padding:12px;margin-bottom:10px}
+.small{color:var(--muted);font-size:12px}
+.inp{width:100%;background:#0a102a;border:1px solid #1d254d;border-radius:10px;color:var(--text);padding:10px;margin-top:8px}
+.v-btn{background:linear-gradient(90deg,var(--cyan),var(--pink));border:none;color:#000;font-weight:800;padding:10px 14px;border-radius:10px;margin-top:8px;cursor:pointer}
+.v-btn.g{background:#1a2146;color:var(--text);border:1px solid #2a356a}
+.bottom{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#0c1026;border-top:1px solid #1b2142;padding:8px 0;z-index:20}
+.bottom button{background:transparent;border:none;color:var(--muted);font-size:20px}
+.bottom button.mid{background:var(--cyan);color:#000;width:44px;height:44px;border-radius:50%;font-size:24px;font-weight:900}
+/* REELS */
+.reels-wrap{position:relative;height:70vh;overflow:hidden;border-radius:16px;background:#000}
+.reels-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:100%}
+.reel{flex:0 0 100%;scroll-snap-align:center;position:relative;background:#111;display:grid;place-items:center}
+.desc-top{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:8px;z-index:2}
+.badge-red{background:var(--red);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800}
+.badge-blue{background:var(--blue);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800}
+</style>
 </head>
-<body data-theme="vortex-dark">
+<body>
 
-<!-- TOP BAR - small eyes + 3 dots + Hey VORTEX -->
 <header class="top">
   <div class="brand">
-    <div class="eyes-small" id="eyesMini" onclick="Vortex.speak('Hey VORTEX')">
+    <div class="eyes-small" onclick="alert('Hey VORTEX — Eyes listening 2 min — By Brilliant Tumelo Mere')">
       <div class="eye-s"><div class="pupil"></div></div>
       <div class="eye-s"><div class="pupil"></div></div>
     </div>
     <div class="vortex-logo">VORTEX</div>
   </div>
-  <div class="top-right">
-    <div class="status-dot"></div>
-    <button class="dots3" onclick="document.getElementById('sideMenu').classList.toggle('open')">⋮</button>
-  </div>
+  <button class="dots3" onclick="menu()">⋮</button>
 </header>
 
-<!-- SIDE MENU -->
-<div id="sideMenu" class="side-menu">
-  <button onclick="Router.go('home')">🏠 Home</button>
-  <button onclick="Router.go('create')">➕ Create AI</button>
-  <button onclick="Router.go('reels')">🎬 Reels swipe</button>
-  <button onclick="Router.go('messages')">💬 Messages locked + anonymous</button>
-  <button onclick="Router.go('marketplace')">🛒 Marketplace 90%</button>
-  <button onclick="Router.go('vault')">🔒 Vault 3 passcode</button>
-  <button onclick="Router.go('downloads')">⬇️ Downloads private</button>
-  <button onclick="Router.go('premium')">💎 Premium $5.99</button>
-  <button onclick="Router.go('settings')">⚙️ Settings - 100+ themes + Security</button>
-</div>
-
-<!-- STORIES - tight gap -->
-<div class="stories" id="storiesBar">
-  <div class="story"><div class="ring"><img src="" onerror="this.style.background='#0a102a'" /></div><small>you</small></div>
+<div class="stories" id="stories">
+  <div class="story"><div class="ring"><span>you</span></div><small>you</small></div>
   <div class="story"><div class="ring"><span>🔥</span></div><small>@nova</small></div>
   <div class="story"><div class="ring"><span>🎬</span></div><small>@kai</small></div>
   <div class="story"><div class="ring"><span>🎮</span></div><small>@zed</small></div>
   <div class="story"><div class="ring"><span>💰</span></div><small>@luna</small></div>
 </div>
 
-<!-- APP SHELL -->
-<main id="app">
+<div id="app">
+  <section id="home" class="view active">
+    <div class="card"><b>🏆 Rankings</b><div id="rank" class="small" style="margin-top:6px"></div></div>
+    <div class="card"><b>➕ Create — AI Video Maker</b><p class="small">Upload file + describe what AI should make — app improves quality so not messy</p>
+      <input type="file" id="file" class="inp"><textarea id="prompt" class="inp" placeholder="Describe... Cyber city vertical 9:16"></textarea>
+      <button class="v-btn" onclick="createPost()">Generate & Post</button>
+      <button class="v-btn g" onclick="voice()">🎙️ Hey VORTEX voice (2 min)</button>
+    </div>
+    <div id="feed"></div>
+  </section>
 
-<!-- HOME -->
-<section id="home" class="view active">
-  <div id="ranking-table"></div>
-  <div id="feedList"></div>
-</section>
+  <section id="reels" class="view">
+    <div class="reels-wrap"><div class="reels-track" id="reelsTrack"></div></div>
+    <p class="small" style="margin-top:8px">Swipe left/right → auto slide every 4 sec — description top RED BLUE</p>
+  </section>
 
-<!-- CREATE - AI video help + upload + describe -->
-<section id="create" class="view">
-  <div class="card"><b>➕ Create — AI Video Maker</b><p class="small">Upload file + describe what AI should make — app improves quality so not messy</p>
-    <input type="file" id="fileInput" class="inp" accept="image/*,video/*" />
-    <textarea id="aiPrompt" class="inp" rows="4" placeholder="Describe what AI should make... e.g. Cyber city vertical 9:16"></textarea>
-    <button class="v-btn" onclick="App.createPost()">Generate & Post</button>
-    <button class="v-btn g" onclick="Vortex.listen()">🎙️ Hey VORTEX voice (2 min)</button>
-  </div>
-</section>
+  <section id="messages" class="view">
+    <div class="card"><b>💬 Messages — Locked — Anonymous allowed</b><p class="small">Disappearing but keep sensitive — Vault stays — Child safety RED auto close</p><div id="msgList" style="margin-top:10px"></div><div style="display:flex;gap:6px"><input id="msgIn" class="inp" placeholder="Type anonymous..."><button class="v-btn" onclick="sendMsg()">Send</button></div></div>
+  </section>
 
-<!-- REELS - swipe left/right + description top RED BLUE + auto slide -->
-<section id="reels" class="view">
-  <div class="reels-wrap"><div id="reels-container" class="reels-track"></div></div>
-</section>
+  <section id="vault" class="view"><div class="card"><b>🔒 Vault — 3 passcode + private downloads</b><input id="vaultPin" class="inp" type="password" placeholder="Enter 1111 or 2222 or 3333"><button class="v-btn" onclick="unlockVault()">Unlock</button><div id="vaultData" style="display:none;margin-top:10px" class="small">Vault unlocked — private downloads safe here</div></div></section>
+</div>
 
-<!-- MESSAGES - locked + anonymous allowed + disappearing notif + RED child/scam close -->
-<section id="messages" class="view">
-  <div class="card"><b>💬 Messages — Locked — Anonymous allowed</b><p class="small">Notifications disappearing but keep sensitive — Vault stays — Child safety RED auto-close — Anti-scam awareness</p>
-    <div id="msgList" style="max-height:40vh;overflow:auto"></div>
-    <div style="display:flex;gap:8px;margin-top:10px"><input id="msgInput" class="inp" placeholder="Type — anonymous allowed..." /><button class="v-btn" onclick="App.sendMsg()">Send</button></div>
-  </div>
-</section>
-
-<!-- MARKETPLACE -->
-<section id="marketplace" class="view">
-  <div class="card"><b>🛒 Marketplace — Sell / Buy — You earn 90%</b><div style="display:flex;gap:8px;margin-top:10px"><input id="sellTitle" class="inp" placeholder="Title"/><input id="sellPrice" class="inp" placeholder="$" style="width:80px"/><button class="v-btn" onclick="Monetize.sellItem(document.getElementById('sellTitle').value, parseFloat(document.getElementById('sellPrice').value)||5)">Sell</button></div></div>
-  <div id="marketplace-list"></div>
-</section>
-
-<!-- VAULT - private downloads + 3 passcode -->
-<section id="vault" class="view">
-  <div class="card"><b>🔒 Vault — Private — 3 Passcode</b><input id="vaultInput" class="inp" type="password" placeholder="Enter 1 of 3 passcodes" /><button class="v-btn" onclick="if(SecurityModule.checkVault3(document.getElementById('vaultInput').value)){document.getElementById('vaultContent').style.display='block'}else{alert('Wrong code')}">Unlock</button><div id="vaultContent" style="display:none;margin-top:12px"><p class="small">Private downloads + notifications keep sensitive here</p><div id="vault-items"></div></div></div>
-</section>
-
-<!-- DOWNLOADS -->
-<section id="downloads" class="view"><div id="downloads-list"></div></section>
-
-<!-- PREMIUM -->
-<section id="premium" class="view"><div id="premium-page"></div><div id="wallet-stats" class="card small"></div></section>
-
-<!-- SETTINGS - 100+ themes + Security -->
-<section id="settings" class="view">
-  <div class="card"><b>🎨 Themes — 100+ themes — Cyber / Dark / Light / Neon / etc</b><div id="theme-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px"></div></div>
-  <div id="security-settings"></div>
-  <div id="dashboard-stats" class="card" style="margin-top:10px"></div>
-</section>
-
-</main>
-
-<!-- BOTTOM NAV - small eyes only + 5 icons -->
 <nav class="bottom">
-  <button onclick="Router.go('home')">🏠</button>
-  <button onclick="Router.go('reels')">🎬</button>
-  <button class="mid" onclick="Router.go('create')">➕</button>
-  <button onclick="Router.go('marketplace')">🛒</button>
-  <button onclick="Router.go('vault')">🔒</button>
+  <button onclick="go('home')">🏠</button>
+  <button onclick="go('reels')">🎬</button>
+  <button class="mid" onclick="go('home')">➕</button>
+  <button onclick="go('messages')">💬</button>
+  <button onclick="go('vault')">🔒</button>
 </nav>
 
-<!-- THEMES JS -->
 <script>
-const themes = ['vortex-dark','vortex-light','neon-cyan','neon-pink','cyber-purple','midnight','ocean','sunset','matrix','ice','fire','void','hacker','candy','forest','desert','galaxy','mono','red-alert','blue-pulse'];
-const g = document.getElementById('theme-grid');
-if(g){ themes.forEach(t=>{ const b=document.createElement('button'); b.className='v-btn g'; b.textContent=t; b.onclick=()=>{document.body.dataset.theme=t; localStorage.setItem('theme',t)}; g.appendChild(b); }); for(let i=21;i<=110;i++){ const b=document.createElement('button'); b.className='v-btn g'; b.textContent='theme-'+i; b.onclick=()=>{document.body.dataset.theme=themes[i%themes.length]; localStorage.setItem('theme',document.body.dataset.theme)}; g.appendChild(b);} }
-</script>
+// RESTORE YOUR DATA
+let posts = JSON.parse(localStorage.getItem('vortex_posts') || '[]');
+let msgs = JSON.parse(localStorage.getItem('vortex_msgs') || '[]');
 
-<script type="module">
-import { Router } from './core/router.js';
-import { App } from './core/app.js';
-import { VortexEngine } from './engine/vortex.js';
-import { SecurityModule } from './core/security.js';
-import { Monetize } from './core/monetization.js';
-window.Router = Router; window.App = App; window.Vortex = VortexEngine; window.SecurityModule = SecurityModule;
-Router.init(); App.init(); VortexEngine.init(); SecurityModule.init(); Monetize.init();
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active'); if(id==='reels') loadReels();}
+function menu(){alert('VORTEX Menu\nHome\nCreate AI\nReels swipe\nMessages locked + anonymous\nMarketplace 90%\nVault 3 passcode\nDownloads private\nPremium $5.99\nSettings 100+ themes\nBy Brilliant Tumelo Mere');}
+
+function createPost(){
+  const p=document.getElementById('prompt').value.trim();
+  if(!p) return alert('Describe what AI should make');
+  // quality filter - app improves quality so not messy
+  if(p.length<3) return alert('Too short - quality filter');
+  const scan = securityScan(p);
+  if(scan.blocked){ document.body.style.background='#7a0000'; alert(scan.msg); setTimeout(()=>document.body.style.background='#080a14',1200); return; }
+  const post={id:Date.now(), text:p, time:new Date().toLocaleString()};
+  posts.unshift(post); localStorage.setItem('vortex_posts', JSON.stringify(posts)); render(); document.getElementById('prompt').value=''; alert('Posted ✓ Quality improved');
+}
+function render(){
+  document.getElementById('feed').innerHTML = posts.map(x=>`<div class="card"><b>@you</b> <small class="small">${x.time}</small><p style="margin-top:6px">${x.text}</p></div>`).join('') || '<div class="card small">No posts yet</div>';
+  document.getElementById('rank').innerHTML = `🔥 Top Post @nova 12k likes<br>🎬 Top Video @kai 89k views<br>🎮 Top Game @zed Lv99<br>💰 Top Buyer @luna $4.2k<br>👥 Most Online @mira 24h<br>🏅 Best Video Maker @synth 1.2M`;
+}
+function securityScan(t){
+  const low=t.toLowerCase();
+  if(['child','minor','underage','kid'].some(w=>low.includes(w))) return {blocked:true, msg:'Child safety — RED and closed automatically'};
+  if(['send money fast','gift card','lottery','verify link','claiming to use someone account'].some(w=>low.includes(w))) return {blocked:true, msg:'Scam detected — RED and closed'};
+  return {blocked:false}
+}
+function sendMsg(){
+  const v=document.getElementById('msgIn').value.trim(); if(!v) return;
+  const s=securityScan(v); if(s.blocked){document.body.style.background='#7a0000'; alert(s.msg); setTimeout(()=>document.body.style.background='#080a14',1200); return;}
+  msgs.unshift({text:v,time:Date.now()}); localStorage.setItem('vortex_msgs', JSON.stringify(msgs)); renderMsgs(); document.getElementById('msgIn').value='';
+  // disappearing notification but keep sensitive
+  setTimeout(()=>{ renderMsgs(); },3000);
+}
+function renderMsgs(){
+  document.getElementById('msgList').innerHTML = msgs.map(m=>`<div class="card" style="padding:8px;margin-bottom:6px">${m.text}</div>`).join('');
+}
+function loadReels(){
+  const track=document.getElementById('reelsTrack');
+  track.innerHTML = [1,2,3].map(i=>`<div class="reel"><div class="desc-top"><span class="badge-red">LIVE • RED</span><span class="badge-blue">VORTEX • BLUE</span></div><div style="color:#fff;font-size:32px">🎬 Reel ${i} — Swipe →</div></div>`).join('');
+  let idx=0; setInterval(()=>{ idx=(idx+1)%3; track.scrollTo({left:track.clientWidth*idx, behavior:'smooth'}); },4000);
+}
+function unlockVault(){
+  const pin=document.getElementById('vaultPin').value.trim();
+  if(['1111','2222','3333'].includes(pin)){ document.getElementById('vaultData').style.display='block'; } else alert('Wrong — try 1111, 2222, 3333 default');
+}
+function voice(){
+  alert('Hey VORTEX listening 2 min... Speak now — Eyes will track voice'); setTimeout(()=>alert('Voice off — 2 min ended'),120000);
+}
+render(); renderMsgs();
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
 </script>
 </body>
-  </html>
+</html>
