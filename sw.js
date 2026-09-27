@@ -1,114 +1,116 @@
-// sw.js - VORTEX PWA Service Worker
-// By Brilliant Tumelo Mere
-// Offline + Install + Vault cache private + disappearing notifications
+"use strict";
 
-const CACHE_NAME = 'vortex-v5-by-brilliant-tumelo-mere';
-const ASSETS = [
-  './',
-  './index.html',
-  './css/style.css',
-  './css/reels.css',
-  './css/themes.css',
-  './core/app.js',
-  './core/router.js',
-  './core/security.js',
-  './core/monetization.js',
-  './engine/vortex.js',
-  './manifest.json'
+const CACHE_NAME = "socialbook-v1";
+
+const STATIC_ASSETS = [
+  "/",
+  "/index.html",
+  "/manifest.json"
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting())
+// ================================
+// INSTALL
+// ================================
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(STATIC_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => k !== CACHE_NAME && caches.delete(k)))
-    ).then(() => self.clients.claim())
+// ================================
+// ACTIVATE
+// ================================
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
-  
-  // Vault - private, no cache network only
-  if (url.pathname.includes('/vault') || url.pathname.includes('/api/vault')) {
-    e.respondWith(fetch(e.request).catch(() => new Response('Vault offline - private items require online', { status: 503 })));
-    return;
-  }
+// ================================
+// FETCH
+// ================================
 
-  // Network first for API
-  if (url.pathname.includes('/api/')) {
-    e.respondWith(
-      fetch(e.request)
-        .then((r) => {
-          // clone to cache for offline fallback except vault
-          const clone = r.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
-          return r;
-        })
-        .catch(() => caches.match(e.request))
+self.addEventListener("fetch", (event) => {
+
+  const request = event.request;
+
+  // API requests should always use
+  // the live backend.
+  if (request.url.includes("/api/")) {
+    event.respondWith(
+      fetch(request).catch(() => {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            offline: true,
+            message: "You are currently offline."
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        );
+      })
     );
+
     return;
   }
 
-  // Cache first for assets
-  e.respondWith(
-    caches.match(e.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(e.request).then((r) => {
-        const clone = r.clone();
-        caches.open(CACHE_NAME).then((c) => c.put(e.request, clone));
-        return r;
-      }).catch(() => {
-        // Offline fallback
-        if (e.request.destination === 'document') {
-          return caches.match('./index.html');
+  // App files use cache-first strategy.
+  event.respondWith(
+    caches.match(request).then((cachedResponse) => {
+
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(request).then((response) => {
+
+        if (
+          !response ||
+          response.status !== 200 ||
+          response.type === "opaque"
+        ) {
+          return response;
         }
+
+        const responseClone = response.clone();
+
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(request, responseClone);
+        });
+
+        return response;
+
+      }).catch(() => {
+
+        return caches.match("/index.html");
+
       });
+
     })
   );
 });
 
-// PUSH NOTIFICATIONS - disappearing but keep sensitive
-self.addEventListener('push', (e) => {
-  let data = {};
-  try { data = e.data.json(); } catch { data = { title: 'VORTEX', body: e.data.text() }; }
-  
-  const isVault = data.is_vault || false;
-  
-  const options = {
-    body: data.body || 'New message',
-    icon: './assets/icons/icon-192.png',
-    badge: './assets/icons/icon-192.png',
-    tag: isVault ? 'vault-keep' : 'vortex-temp',
-    requireInteraction: isVault, // vault stays until interact
-    data: { url: data.url || './#messages', is_vault: isVault }
-  };
+// ================================
+// SKIP WAITING
+// ================================
 
-  e.waitUntil(self.registration.showNotification(data.title || 'VORTEX', options));
+self.addEventListener("message", (event) => {
 
-  // Disappearing but keep sensitive - auto close if not vault after 3 sec
-  if (!isVault) {
-    setTimeout(() => {
-      self.registration.getNotifications({ tag: 'vortex-temp' }).then(notifs => {
-        notifs.forEach(n => n.close());
-      });
-    }, 3000);
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
   }
-});
 
-self.addEventListener('notificationclick', (e) => {
-  e.notification.close();
-  const url = e.notification.data.url || './';
-  e.waitUntil(
-    clients.matchAll({ type: 'window' }).then((clis) => {
-      const c = clis.find((cli) => cli.url.includes(self.location.origin));
-      if (c) return c.focus().then(() => c.navigate(url));
-      return clients.openWindow(url);
-    })
-  );
 });
