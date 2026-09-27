@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VORTEX</title>
+<style>
+:root{--bg:#070a12;--card:#11162a;--line:#1e2650;--cyan:#00f0ff;--purple:#8a5cff}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter}
+body{background:var(--bg);color:#e8eaff;overflow-x:hidden}
+#top{padding:10px 12px;display:flex;align-items:center;position:relative}
+.gear-dots{width:44px;height:44px;border-radius:14px;border:1px solid var(--cyan);background:rgba(0,240,255,.08);display:grid;place-items:center;box-shadow:0 0 12px var(--cyan)}
+.gear-dots i{width:6px;height:6px;background:var(--cyan);border-radius:50%;display:block;margin:2px auto}
+#eyes-wrap{text-align:center;padding:6px 0 2px} /* TIGHT GAP FIX - was high, now 6px */
+#vortex-eyes{display:flex;justify-content:center;gap:24px;cursor:pointer;transform:scale(0.6)} /* SMALL EYES FIX - scale down big eyes */
+.eye{width:120px;height:80px;background:radial-gradient(circle,var(--cyan),var(--purple));border-radius:50%;box-shadow:0 0 30px var(--cyan),0 0 60px var(--purple);position:relative}
+.eye::after{content:'';position:absolute;inset:20%;background:#000;border-radius:50%;box-shadow:inset 0 0 20px var(--cyan)}
+#by{font-size:12px;color:#8a5cff;margin:4px 0;letter-spacing:.5px}
+#vortex-logo{font-weight:900;letter-spacing:5px;font-size:28px;background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 15px var(--cyan));margin:2px 0}
+.stories-section{padding:8px 12px 6px} /* TIGHT */
+.stories-title{font-size:11px;letter-spacing:2px;color:var(--cyan);margin-bottom:8px;opacity:.8}
+.stories{display:flex;gap:12px;overflow:auto}
+.story-item{text-align:center;min-width:64px}
+.story-ring{width:58px;height:58px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(--cyan),var(--purple));}
+.story-ring img{width:100%;height:100%;border-radius:50%;border:2px solid var(--bg);object-fit:cover}
+.story-name{font-size:10px;margin-top:4px;color:var(--cyan)}
+#feed{padding:8px 12px 80px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px}
+#nav{position:fixed;bottom:0;left:0;right:0;background:rgba(17,22,42,.97);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 0}
+#nav button{background:0;border:0;color:#e8eaff;font-size:11px}
+</style>
+</head>
+<body>
+<div id="top">
+  <!-- 3 DOTS SETTINGS LIKE SECOND IMAGE, NOT GEAR -->
+  <button class="gear-dots" onclick="show('settings')"><i></i><i></i><i></i></button>
+  <div style="position:absolute;right:12px;top:10px;font-size:11px;color:var(--cyan)">9:41 • 87%</div>
+</div>
+
+<div id="eyes-wrap">
+  <div id="vortex-eyes">
+    <div class="eye"></div><div class="eye"></div>
+  </div>
+  <div id="by">By Brilliant Tumelo Mere</div>
+  <div id="vortex-logo">VORTEX</div>
+</div>
+
+<div class="stories-section">
+  <div class="stories-title">STORIES</div>
+  <div class="stories">
+    <div class="story-item"><div class="story-ring" style="border-style:dashed;background:transparent;border:1px dashed var(--cyan);display:grid;place-items:center">+</div><div class="story-name">Your Story</div></div>
+    <div class="story-item"><div class="story-ring"></div><div class="story-name">Alex</div></div>
+    <div class="story-item"><div class="story-ring"></div><div class="story-name">Kai</div></div>
+    <div class="story-item"><div class="story-ring"></div><div class="story-name">Luna</div></div>
+    <div class="story-item"><div class="story-ring"></div><div class="story-name">Zed</div></div>
+    <div class="story-item"><div class="story-ring"></div><div class="story-name">Mira</div></div>
+  </div>
+</div>
+
+<div id="feed">
+  <div class="stories-title">Today's Feed</div>
+  <div class="card">For You feed — now visible right after stories, no high distance</div>
+  <div class="card"><button style="padding:8px 12px;border-radius:12px;background:linear-gradient(90deg,var(--cyan),var(--purple));border:0">Marketplace</button> <button style="padding:8px 12px;border-radius:12px;border:1px solid var(--cyan);background:transparent;color:var(--cyan)">Premium</button> <button style="padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:transparent;color:#fff">Dashboard</button></div>
+</div>
+
+<div id="nav"><button>Home</button><button>Explore</button><button>Create</button><button>Reels</button><button>Messages</button></div>
+<script>window.show=(p)=>{}</script>
+</body>
+</html>
