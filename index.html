@@ -3,147 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VORTEX - By Brilliant Tumelo Mere</title>
+<title>VORTEX Facebook — By Brilliant Tumelo Mere</title>
 <style>
-:root{--bg:#080a14;--card:#12162e;--cyan:#00f0ff;--pink:#ff00ff;--text:#e9f0ff;--muted:#7a819e;--red:#ff2a2a;--blue:#2a7aff}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;overflow-x:hidden}
-.top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#0c1026;border-bottom:1px solid #1b2142;position:sticky;top:0;z-index:10}
-.brand{display:flex;align-items:center;gap:10px}
-.eyes-small{display:flex;gap:6px}
-.eye-s{width:22px;height:22px;background:#fff;border-radius:50%;position:relative;overflow:hidden;border:1.5px solid var(--cyan)}
-.eye-s .pupil{width:10px;height:10px;background:#000;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
-.vortex-logo{font-weight:900;letter-spacing:2px;color:var(--cyan);font-size:18px}
-.dots3{background:transparent;border:1px solid #2a325e;border-radius:8px;color:var(--text);padding:6px 10px;font-size:20px}
-.stories{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;scrollbar-width:none}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;color:#e4e6eb;font-family:system-ui,Segoe UI;overflow-x:hidden}
+.top{height:56px;background:#0e1228;border-bottom:1px solid #222c5a;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:20}
+.top b{color:#00f0ff;font-size:22px;letter-spacing:2px}
+.top input{background:#1a2146;border:none;border-radius:20px;padding:8px 14px;color:#fff;width:38vw}
+.main{display:flex;max-width:1100px;margin:0 auto}
+.left,.right{display:none}
+.center{width:100%;max-width:680px;margin:0 auto;padding:10px 10px 80px}
+@media(min-width:900px){.left,.right{display:block;width:220px;position:sticky;top:56px;height:calc(100vh - 56px);padding:12px}.left div,.right div{padding:10px;border-radius:10px;cursor:pointer}.left div:hover{background:#1a2146}}
+.card{background:#12182f;border:1px solid #1d2752;border-radius:12px;padding:12px;margin-bottom:12px}
+.stories{display:flex;gap:8px;overflow-x:auto;padding:6px 0;scrollbar-width:none}
 .stories::-webkit-scrollbar{display:none}
-.story{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:56px}
-.ring{width:52px;height:52px;border-radius:50%;padding:2px;background:linear-gradient(45deg,var(--cyan),var(--pink));display:grid;place-items:center}
-.ring > *{width:100%;height:100%;background:#0a102a;border-radius:50%;display:grid;place-items:center;font-size:22px}
-.story small{font-size:11px;color:var(--muted)}
-.view{display:none;padding:12px 12px 90px}
-.view.active{display:block}
-.card{background:var(--card);border:1px solid #1d254d;border-radius:14px;padding:12px;margin-bottom:10px}
-.small{color:var(--muted);font-size:12px}
-.inp{width:100%;background:#0a102a;border:1px solid #1d254d;border-radius:10px;color:var(--text);padding:10px;margin-top:8px}
-.v-btn{background:linear-gradient(90deg,var(--cyan),var(--pink));border:none;color:#000;font-weight:800;padding:10px 14px;border-radius:10px;margin-top:8px;cursor:pointer}
-.v-btn.g{background:#1a2146;color:var(--text);border:1px solid #2a356a}
-.bottom{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#0c1026;border-top:1px solid #1b2142;padding:8px 0;z-index:20}
-.bottom button{background:transparent;border:none;color:var(--muted);font-size:20px}
-.bottom button.mid{background:var(--cyan);color:#000;width:44px;height:44px;border-radius:50%;font-size:24px;font-weight:900}
-/* REELS */
-.reels-wrap{position:relative;height:70vh;overflow:hidden;border-radius:16px;background:#000}
-.reels-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:100%}
-.reel{flex:0 0 100%;scroll-snap-align:center;position:relative;background:#111;display:grid;place-items:center}
-.desc-top{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:8px;z-index:2}
-.badge-red{background:var(--red);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800}
-.badge-blue{background:var(--blue);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800}
+.story{flex:0 0 110px;height:190px;border-radius:12px;background:#1a2146;position:relative;overflow:hidden;border:1px solid #263166}
+.story img{width:100%;height:100%;object-fit:cover}
+.story small{position:absolute;bottom:6px;left:6px;font-size:12px;font-weight:700;background:rgba(0,0,0,.6);padding:2px 6px;border-radius:6px}
+.add-story{background:linear-gradient(180deg,#00f0ff,#7a4cff);display:grid;place-items:center;font-size:36px}
+.post-top{display:flex;gap:10px;align-items:center}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(45deg,#00f0ff,#ff00ff);display:grid;place-items:center;font-weight:800;color:#000}
+.post-img{width:100%;border-radius:10px;margin-top:10px;max-height:420px;object-fit:cover}
+.actions{display:flex;justify-content:space-around;margin-top:10px;border-top:1px solid #1e2750;padding-top:8px}
+.actions button{background:none;border:none;color:#aab;flex:1;padding:8px;border-radius:6px}
+.actions button.liked{color:#00f0ff}
+.actions button:hover{background:#1a2146}
+.inp{width:100%;background:#1a2146;border:1px solid #222d5e;border-radius:20px;padding:10px 14px;color:#fff;margin-top:8px}
+.btn{background:#00f0ff;color:#000;border:none;padding:8px 14px;border-radius:20px;font-weight:800}
+.comment{font-size:13px;margin-top:6px;background:#0f1430;padding:6px 10px;border-radius:12px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#0e1228;border-top:1px solid #222c5a;display:flex;justify-content:space-around;padding:8px 0}
+.bottom button{background:none;border:none;color:#8a94c0;font-size:22px}
+@media(min-width:900px){.bottom{display:none}}
 </style>
 </head>
 <body>
+<div class="top"><b>VORTEX</b><input id="search" placeholder="Search VORTEX"><div>🔔 💬 👤</div></div>
 
-<header class="top">
-  <div class="brand">
-    <div class="eyes-small" onclick="alert('Hey VORTEX — Eyes listening 2 min — By Brilliant Tumelo Mere')">
-      <div class="eye-s"><div class="pupil"></div></div>
-      <div class="eye-s"><div class="pupil"></div></div>
-    </div>
-    <div class="vortex-logo">VORTEX</div>
-  </div>
-  <button class="dots3" onclick="menu()">⋮</button>
-</header>
+<div class="main">
+<div class="left">
+<div>🏠 Home</div><div>👥 Friends</div><div>📺 Watch</div><div>🏪 Marketplace - 90% earnings</div><div>💾 Vault - 3 passcode</div><div>💎 Premium $5.99</div><div>⚙️ Settings - 100+ themes</div><div style="margin-top:10px;font-size:11px;color:#6a7ab0">By Brilliant Tumelo Mere</div>
+</div>
 
+<div class="center">
 <div class="stories" id="stories">
-  <div class="story"><div class="ring"><span>you</span></div><small>you</small></div>
-  <div class="story"><div class="ring"><span>🔥</span></div><small>@nova</small></div>
-  <div class="story"><div class="ring"><span>🎬</span></div><small>@kai</small></div>
-  <div class="story"><div class="ring"><span>🎮</span></div><small>@zed</small></div>
-  <div class="story"><div class="ring"><span>💰</span></div><small>@luna</small></div>
+<div class="story add-story" onclick="document.getElementById('file').click()">+</div>
 </div>
 
-<div id="app">
-  <section id="home" class="view active">
-    <div class="card"><b>🏆 Rankings</b><div id="rank" class="small" style="margin-top:6px"></div></div>
-    <div class="card"><b>➕ Create — AI Video Maker</b><p class="small">Upload file + describe what AI should make — app improves quality so not messy</p>
-      <input type="file" id="file" class="inp"><textarea id="prompt" class="inp" placeholder="Describe... Cyber city vertical 9:16"></textarea>
-      <button class="v-btn" onclick="createPost()">Generate & Post</button>
-      <button class="v-btn g" onclick="voice()">🎙️ Hey VORTEX voice (2 min)</button>
-    </div>
-    <div id="feed"></div>
-  </section>
-
-  <section id="reels" class="view">
-    <div class="reels-wrap"><div class="reels-track" id="reelsTrack"></div></div>
-    <p class="small" style="margin-top:8px">Swipe left/right → auto slide every 4 sec — description top RED BLUE</p>
-  </section>
-
-  <section id="messages" class="view">
-    <div class="card"><b>💬 Messages — Locked — Anonymous allowed</b><p class="small">Disappearing but keep sensitive — Vault stays — Child safety RED auto close</p><div id="msgList" style="margin-top:10px"></div><div style="display:flex;gap:6px"><input id="msgIn" class="inp" placeholder="Type anonymous..."><button class="v-btn" onclick="sendMsg()">Send</button></div></div>
-  </section>
-
-  <section id="vault" class="view"><div class="card"><b>🔒 Vault — 3 passcode + private downloads</b><input id="vaultPin" class="inp" type="password" placeholder="Enter 1111 or 2222 or 3333"><button class="v-btn" onclick="unlockVault()">Unlock</button><div id="vaultData" style="display:none;margin-top:10px" class="small">Vault unlocked — private downloads safe here</div></div></section>
+<div class="card">
+<div class="post-top"><div class="avatar">you</div><input id="text" class="inp" placeholder="What's on your mind, you?"></div>
+<img id="preview" style="display:none" class="post-img">
+<input type="file" id="file" accept="image/*,video/*" style="display:none">
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn" onclick="document.getElementById('file').click()">📷 Photo</button>
+<button class="btn" style="background:#7a4cff;color:#fff" onclick="createPost()">Post</button>
+</div>
 </div>
 
-<nav class="bottom">
-  <button onclick="go('home')">🏠</button>
-  <button onclick="go('reels')">🎬</button>
-  <button class="mid" onclick="go('home')">➕</button>
-  <button onclick="go('messages')">💬</button>
-  <button onclick="go('vault')">🔒</button>
-</nav>
+<div id="feed"></div>
+</div>
+
+<div class="right">
+<b>Contacts</b>
+<div>🟢 Alex</div><div>🟢 Kai</div><div>🟢 Luna</div><div>🟢 Zed</div><div>🟢 Mira</div>
+<div style="margin-top:20px"><b>Marketplace</b><div class="small">Sell your video - earn 90%</div></div>
+</div>
+</div>
+
+<div class="bottom"><button>🏠</button><button>👥</button><button>📺</button><button>💬</button><button>🔒</button></div>
 
 <script>
-// RESTORE YOUR DATA
-let posts = JSON.parse(localStorage.getItem('vortex_posts') || '[]');
-let msgs = JSON.parse(localStorage.getItem('vortex_msgs') || '[]');
-
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active'); if(id==='reels') loadReels();}
-function menu(){alert('VORTEX Menu\nHome\nCreate AI\nReels swipe\nMessages locked + anonymous\nMarketplace 90%\nVault 3 passcode\nDownloads private\nPremium $5.99\nSettings 100+ themes\nBy Brilliant Tumelo Mere');}
+let posts = JSON.parse(localStorage.getItem('vortex_fb_posts')||'[]');
+let imgData = '';
+document.getElementById('file').addEventListener('change', e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=()=>{imgData=r.result; document.getElementById('preview').src=imgData; document.getElementById('preview').style.display='block'}; r.readAsDataURL(f);
+});
 
 function createPost(){
-  const p=document.getElementById('prompt').value.trim();
-  if(!p) return alert('Describe what AI should make');
-  // quality filter - app improves quality so not messy
-  if(p.length<3) return alert('Too short - quality filter');
-  const scan = securityScan(p);
-  if(scan.blocked){ document.body.style.background='#7a0000'; alert(scan.msg); setTimeout(()=>document.body.style.background='#080a14',1200); return; }
-  const post={id:Date.now(), text:p, time:new Date().toLocaleString()};
-  posts.unshift(post); localStorage.setItem('vortex_posts', JSON.stringify(posts)); render(); document.getElementById('prompt').value=''; alert('Posted ✓ Quality improved');
+  const text=document.getElementById('text').value.trim();
+  if(!text && !imgData) return alert('Write something or add photo');
+  if(text.toLowerCase().includes('child')||text.toLowerCase().includes('minor')){ alert('Child safety - blocked RED'); return; }
+  posts.unshift({id:Date.now(),text,img:imgData,likes:0,liked:false,comments:[],time:new Date().toLocaleString()});
+  localStorage.setItem('vortex_fb_posts', JSON.stringify(posts));
+  document.getElementById('text').value=''; imgData=''; document.getElementById('preview').style.display='none';
+  render();
+}
+
+function like(id){
+  const p=posts.find(x=>x.id===id); p.liked=!p.liked; p.likes+=p.liked?1:-1;
+  localStorage.setItem('vortex_fb_posts', JSON.stringify(posts)); render();
+}
+function commentPost(id){
+  const txt=prompt('Comment:'); if(!txt) return;
+  const p=posts.find(x=>x.id===id); p.comments.push(txt);
+  localStorage.setItem('vortex_fb_posts', JSON.stringify(posts)); render();
+}
+function sharePost(id){
+  alert('Shared to feed ✓ - You earn 90% if someone buys');
 }
 function render(){
-  document.getElementById('feed').innerHTML = posts.map(x=>`<div class="card"><b>@you</b> <small class="small">${x.time}</small><p style="margin-top:6px">${x.text}</p></div>`).join('') || '<div class="card small">No posts yet</div>';
-  document.getElementById('rank').innerHTML = `🔥 Top Post @nova 12k likes<br>🎬 Top Video @kai 89k views<br>🎮 Top Game @zed Lv99<br>💰 Top Buyer @luna $4.2k<br>👥 Most Online @mira 24h<br>🏅 Best Video Maker @synth 1.2M`;
+  document.getElementById('feed').innerHTML = posts.map(p=>`
+    <div class="card">
+      <div class="post-top"><div class="avatar">you</div><div><b>@you</b><br><small style="color:#7a8ab0">${p.time}</small></div></div>
+      <p style="margin-top:10px">${p.text}</p>
+      ${p.img?`<img src="${p.img}" class="post-img">`:''}
+      <div style="color:#7a8ab0;font-size:12px;margin-top:8px">${p.likes} likes • ${p.comments.length} comments</div>
+      <div class="actions">
+        <button class="${p.liked?'liked':''}" onclick="like(${p.id})">👍 Like</button>
+        <button onclick="commentPost(${p.id})">💬 Comment</button>
+        <button onclick="sharePost(${p.id})">↗️ Share</button>
+      </div>
+      ${p.comments.map(c=>`<div class="comment">${c}</div>`).join('')}
+    </div>
+  `).join('') || '<div class="card" style="text-align:center;color:#7a8ab0">No posts yet — be first to post!</div>';
+
+  document.getElementById('stories').innerHTML = '<div class="story add-story" onclick="document.getElementById(\'file\').click()">+</div>' +
+    ['Alex','Kai','Luna','Zed','Mira'].map(n=>`<div class="story"><img src="https://i.pravatar.cc/150?u=${n}"><small>${n}</small></div>`).join('');
 }
-function securityScan(t){
-  const low=t.toLowerCase();
-  if(['child','minor','underage','kid'].some(w=>low.includes(w))) return {blocked:true, msg:'Child safety — RED and closed automatically'};
-  if(['send money fast','gift card','lottery','verify link','claiming to use someone account'].some(w=>low.includes(w))) return {blocked:true, msg:'Scam detected — RED and closed'};
-  return {blocked:false}
-}
-function sendMsg(){
-  const v=document.getElementById('msgIn').value.trim(); if(!v) return;
-  const s=securityScan(v); if(s.blocked){document.body.style.background='#7a0000'; alert(s.msg); setTimeout(()=>document.body.style.background='#080a14',1200); return;}
-  msgs.unshift({text:v,time:Date.now()}); localStorage.setItem('vortex_msgs', JSON.stringify(msgs)); renderMsgs(); document.getElementById('msgIn').value='';
-  // disappearing notification but keep sensitive
-  setTimeout(()=>{ renderMsgs(); },3000);
-}
-function renderMsgs(){
-  document.getElementById('msgList').innerHTML = msgs.map(m=>`<div class="card" style="padding:8px;margin-bottom:6px">${m.text}</div>`).join('');
-}
-function loadReels(){
-  const track=document.getElementById('reelsTrack');
-  track.innerHTML = [1,2,3].map(i=>`<div class="reel"><div class="desc-top"><span class="badge-red">LIVE • RED</span><span class="badge-blue">VORTEX • BLUE</span></div><div style="color:#fff;font-size:32px">🎬 Reel ${i} — Swipe →</div></div>`).join('');
-  let idx=0; setInterval(()=>{ idx=(idx+1)%3; track.scrollTo({left:track.clientWidth*idx, behavior:'smooth'}); },4000);
-}
-function unlockVault(){
-  const pin=document.getElementById('vaultPin').value.trim();
-  if(['1111','2222','3333'].includes(pin)){ document.getElementById('vaultData').style.display='block'; } else alert('Wrong — try 1111, 2222, 3333 default');
-}
-function voice(){
-  alert('Hey VORTEX listening 2 min... Speak now — Eyes will track voice'); setTimeout(()=>alert('Voice off — 2 min ended'),120000);
-}
-render(); renderMsgs();
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+render();
 </script>
 </body>
 </html>
