@@ -1,0 +1,56 @@
+{
+  "name": "VORTEX — Connect • Create • Discover",
+  "short_name": "VORTEX",
+  "description": "A modern, luxurious social universe built by Brilliant Tumelo Mere.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02050d",
+  "theme_color": "#02050d",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "social",
+    "entertainment",
+    "communication",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Create Post",
+      "short_name": "Create",
+      "url": "./index.html#create"
+    },
+    {
+      "name": "Messages",
+      "short_name": "Messages",
+      "url": "./index.html#messages"
+    },
+    {
+      "name": "Vault",
+      "short_name": "Vault",
+      "url": "./index.html#vault"
+    },
+    {
+      "name": "Settings",
+      "short_name": "Settings",
+      "url": "./index.html#settings"
+    }
+  ],
+  "prefer_related_applications": false
+}
