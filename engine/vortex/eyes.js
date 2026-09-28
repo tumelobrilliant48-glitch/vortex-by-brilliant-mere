@@ -1,6 +1,14 @@
 /* =========================================================
    VORTEX SOCIAL MEDIA
    ENGINE / VORTEX / EYES.JS
+
+   VORTEX EYES:
+   - Touchable eyes
+   - Quick-app actions
+   - Wake/sleep state
+   - Voice-command lifecycle
+   - Sound activity visualization
+   - Custom eye appearance
 ========================================================= */
 
 "use strict";
@@ -13,32 +21,42 @@ const VortexEyes = {
 
     listening: false,
 
+    soundActive: false,
+
     initialized: false,
 
-    listeningTimer: null,
+    commandStartedAt: null,
 
-    recognition: null,
+    lastCommand: null,
 
-    audioContext: null,
-
-    analyser: null,
-
-    microphone: null,
-
-    stream: null
+    currentApp: null
 
   },
 
 
   settings: {
 
-    wakeWord: "hey vortex",
+    enabled: true,
 
-    listeningDuration: 120000,
+    wakePhrase: "hey vortex",
+
+    listenDuration: 120000,
 
     soundReactive: true,
 
-    requireUserGesture: true
+    touchEnabled: true,
+
+    doubleTapEnabled: true,
+
+    theme: "cosmic",
+
+    eyeStyle: "classic",
+
+    leftEye: "blue",
+
+    rightEye: "purple",
+
+    quickApps: []
 
   },
 
@@ -49,17 +67,57 @@ const VortexEyes = {
 
   initialize() {
 
-    if (this.state.initialized) {
-      return true;
+    if (
+      this.state.initialized
+    ) {
+
+      return;
+
     }
+
+
+    this.load();
 
     this.state.initialized = true;
 
-    this.setupSpeechRecognition();
+    this.bindEyeControls();
 
     this.emit(
-      "initialized"
+      "ready"
     );
+
+  },
+
+
+  /* =======================================================
+     WAKE
+  ======================================================= */
+
+  wake() {
+
+    if (
+      !this.settings.enabled
+    ) {
+
+      return false;
+
+    }
+
+
+    this.state.awake = true;
+
+    this.state.listening = true;
+
+    this.state.commandStartedAt =
+      Date.now();
+
+
+    this.emit(
+      "wake"
+    );
+
+
+    this.startListeningTimer();
 
     return true;
 
@@ -67,37 +125,19 @@ const VortexEyes = {
 
 
   /* =======================================================
-     WAKE / SLEEP
+     SLEEP
   ======================================================= */
-
-  wake() {
-
-    if (this.state.awake) {
-      return;
-    }
-
-    this.state.awake = true;
-
-    this.setVisualState(true);
-
-    this.startListening();
-
-    this.emit(
-      "awake"
-    );
-
-  },
-
 
   sleep() {
 
     this.state.awake = false;
 
-    this.stopListening();
+    this.state.listening = false;
 
-    this.stopSoundReaction();
+    this.state.soundActive = false;
 
-    this.setVisualState(false);
+    this.state.commandStartedAt =
+      null;
 
     this.emit(
       "sleep"
@@ -106,9 +146,301 @@ const VortexEyes = {
   },
 
 
-  toggle() {
+  /* =======================================================
+     TWO-MINUTE LISTEN WINDOW
+  ======================================================= */
 
-    if (this.state.awake) {
+  startListeningTimer() {
+
+    const started =
+      this.state.commandStartedAt;
+
+
+    setTimeout(
+      () => {
+
+        if (
+          this.state.commandStartedAt !==
+          started
+        ) {
+
+          return;
+
+        }
+
+
+        this.sleep();
+
+      },
+      this.settings.listenDuration
+    );
+
+  },
+
+
+  /* =======================================================
+     VOICE COMMAND
+  ======================================================= */
+
+  receiveCommand(
+    command
+  ) {
+
+    if (
+      !this.state.awake
+    ) {
+
+      return false;
+
+    }
+
+
+    const text =
+      String(command || "")
+        .trim()
+        .toLowerCase();
+
+
+    if (!text) {
+      return false;
+    }
+
+
+    this.state.lastCommand =
+      text;
+
+
+    /*
+      "wake up" can keep the eyes awake.
+    */
+
+    if (
+      text.includes("wake up")
+    ) {
+
+      this.wake();
+
+      return true;
+
+    }
+
+
+    /*
+      "go to..." can launch a registered
+      quick application.
+    */
+
+    const app =
+      this.findQuickApp(text);
+
+
+    if (app) {
+
+      this.openQuickApp(
+        app
+      );
+
+      return true;
+
+    }
+
+
+    this.emit(
+      "command",
+      {
+        command: text
+      }
+    );
+
+
+    return true;
+
+  },
+
+
+  /* =======================================================
+     QUICK APPS
+  ======================================================= */
+
+  addQuickApp(
+    app
+  ) {
+
+    if (!app?.id) {
+      return false;
+    }
+
+
+    const existing =
+      this.settings.quickApps
+        .find(
+          item =>
+            item.id === app.id
+        );
+
+
+    if (existing) {
+      return false;
+    }
+
+
+    this.settings.quickApps.push({
+
+      id: app.id,
+
+      name:
+        app.name ||
+        app.id,
+
+      trigger:
+        app.trigger ||
+        app.name ||
+        app.id,
+
+      action:
+        app.action ||
+        null
+
+    });
+
+
+    this.save();
+
+    this.emit(
+      "quickAppAdded",
+      app
+    );
+
+    return true;
+
+  },
+
+
+  removeQuickApp(
+    appId
+  ) {
+
+    const index =
+      this.settings.quickApps
+        .findIndex(
+          app =>
+            app.id === appId
+        );
+
+
+    if (index === -1) {
+      return false;
+    }
+
+
+    this.settings.quickApps
+      .splice(index, 1);
+
+    this.save();
+
+    return true;
+
+  },
+
+
+  findQuickApp(
+    command
+  ) {
+
+    return this.settings.quickApps
+      .find(app => {
+
+        const trigger =
+          String(
+            app.trigger || ""
+          )
+            .toLowerCase();
+
+
+        return (
+          command.includes(
+            trigger
+          ) ||
+
+          command.includes(
+            String(
+              app.name || ""
+            )
+              .toLowerCase()
+          )
+
+        );
+
+      });
+
+  },
+
+
+  openQuickApp(
+    app
+  ) {
+
+    this.state.currentApp =
+      app.id;
+
+
+    /*
+      The eyes stay awake while
+      a quick app is being opened.
+    */
+
+    this.state.awake = true;
+
+    this.emit(
+      "openApp",
+      {
+        app
+      }
+    );
+
+
+    /*
+      If the main VORTEX router exists,
+      let it handle navigation.
+    */
+
+    if (
+      typeof VortexRouter !==
+      "undefined" &&
+      typeof VortexRouter.navigate ===
+      "function"
+    ) {
+
+      VortexRouter.navigate(
+        app.id
+      );
+
+    }
+
+
+    return true;
+
+  },
+
+
+  /* =======================================================
+     TOUCH
+  ======================================================= */
+
+  touch() {
+
+    if (
+      !this.settings.touchEnabled
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      this.state.awake
+    ) {
 
       this.sleep();
 
@@ -122,542 +454,248 @@ const VortexEyes = {
 
 
   /* =======================================================
-     LISTENING
+     DOUBLE TAP
   ======================================================= */
 
-  startListening() {
+  doubleTap() {
 
-    if (this.state.listening) {
+    if (
+      !this.settings.doubleTapEnabled
+    ) {
+
       return;
-    }
-
-    this.state.listening = true;
-
-    this.emit(
-      "listening"
-    );
-
-
-    /*
-      Browser speech recognition can only
-      be started when the browser/device
-      permits microphone access.
-    */
-
-    if (this.state.recognition) {
-
-      try {
-
-        this.state.recognition.start();
-
-      } catch (error) {
-
-        /*
-          Recognition may already be running.
-        */
-
-      }
 
     }
 
 
-    this.startSoundReaction();
+    const firstApp =
+      this.settings.quickApps[0];
 
 
-    clearTimeout(
-      this.state.listeningTimer
-    );
+    if (firstApp) {
 
+      this.wake();
 
-    this.state.listeningTimer =
-      setTimeout(() => {
-
-        this.sleep();
-
-      }, this.settings.listeningDuration);
-
-  },
-
-
-  stopListening() {
-
-    this.state.listening = false;
-
-    clearTimeout(
-      this.state.listeningTimer
-    );
-
-
-    if (this.state.recognition) {
-
-      try {
-
-        this.state.recognition.stop();
-
-      } catch (error) {}
-
-    }
-
-  },
-
-
-  /* =======================================================
-     SPEECH RECOGNITION
-  ======================================================= */
-
-  setupSpeechRecognition() {
-
-    const Recognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-
-    if (!Recognition) {
-
-      console.warn(
-        "Speech recognition is not supported."
+      this.openQuickApp(
+        firstApp
       );
 
-      return;
+    } else {
+
+      this.wake();
 
     }
-
-
-    const recognition =
-      new Recognition();
-
-
-    recognition.continuous = true;
-
-    recognition.interimResults = true;
-
-    recognition.lang = "en-US";
-
-
-    recognition.onresult =
-      event => {
-
-        let transcript = "";
-
-
-        for (
-          let i = event.resultIndex;
-          i < event.results.length;
-          i++
-        ) {
-
-          transcript +=
-            event.results[i][0].transcript;
-
-        }
-
-
-        transcript =
-          transcript
-            .trim()
-            .toLowerCase();
-
-
-        if (!transcript) {
-          return;
-        }
-
-
-        this.emit(
-          "voice",
-          {
-            transcript
-          }
-        );
-
-
-        this.handleCommand(
-          transcript
-        );
-
-      };
-
-
-    recognition.onerror =
-      event => {
-
-        this.emit(
-          "error",
-          {
-            error: event.error
-          }
-        );
-
-      };
-
-
-    recognition.onend =
-      () => {
-
-        if (
-          this.state.awake &&
-          this.state.listening
-        ) {
-
-          try {
-            recognition.start();
-          } catch (error) {}
-
-        }
-
-      };
-
-
-    this.state.recognition =
-      recognition;
 
   },
 
 
   /* =======================================================
-     COMMAND ENGINE
+     SOUND ACTIVITY
   ======================================================= */
 
-  handleCommand(command) {
-
-    const text =
-      String(command)
-        .toLowerCase()
-        .trim();
-
-
-    if (
-      text.includes("go home")
-    ) {
-
-      this.sleep();
-
-      if (
-        typeof VortexRouter !== "undefined"
-      ) {
-
-        VortexRouter.go("home");
-
-      }
-
-      return;
-
-    }
-
-
-    if (
-      text.includes("open messages")
-    ) {
-
-      if (
-        typeof VortexRouter !== "undefined"
-      ) {
-
-        VortexRouter.go(
-          "messages"
-        );
-
-      }
-
-      return;
-
-    }
-
-
-    if (
-      text.includes("open vault")
-    ) {
-
-      if (
-        typeof VortexRouter !== "undefined"
-      ) {
-
-        VortexRouter.go(
-          "vault"
-        );
-
-      }
-
-      return;
-
-    }
-
-
-    if (
-      text.includes("open settings")
-    ) {
-
-      if (
-        typeof VortexRouter !== "undefined"
-      ) {
-
-        VortexRouter.go(
-          "settings"
-        );
-
-      }
-
-      return;
-
-    }
-
-
-    if (
-      text.includes("sleep vortex")
-    ) {
-
-      this.sleep();
-
-      return;
-
-    }
-
-
-    this.emit(
-      "command",
-      {
-        command: text
-      }
-    );
-
-  },
-
-
-  /* =======================================================
-     SOUND REACTIVE EYES
-  ======================================================= */
-
-  async startSoundReaction() {
+  setSoundActivity(
+    active
+  ) {
 
     if (
       !this.settings.soundReactive
     ) {
+
       return;
+
     }
 
 
     if (
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
+      !this.state.awake
     ) {
+
+      this.state.soundActive =
+        false;
 
       return;
 
     }
 
 
-    try {
-
-      this.state.stream =
-        await navigator.mediaDevices
-          .getUserMedia({
-            audio: true
-          });
+    this.state.soundActive =
+      Boolean(active);
 
 
-      this.state.audioContext =
-        new (
-          window.AudioContext ||
-          window.webkitAudioContext
-        )();
-
-
-      this.state.analyser =
-        this.state.audioContext
-          .createAnalyser();
-
-
-      this.state.analyser.fftSize =
-        256;
-
-
-      this.state.microphone =
-        this.state.audioContext
-          .createMediaStreamSource(
-            this.state.stream
-          );
-
-
-      this.state.microphone.connect(
-        this.state.analyser
-      );
-
-
-      this.monitorSound();
-
-    } catch (error) {
-
-      this.emit(
-        "microphoneDenied",
-        {
-          error
-        }
-      );
-
-    }
-
-  },
-
-
-  monitorSound() {
-
-    if (
-      !this.state.awake ||
-      !this.state.analyser
-    ) {
-
-      return;
-
-    }
-
-
-    const data =
-      new Uint8Array(
-        this.state.analyser.frequencyBinCount
-      );
-
-
-    const check = () => {
-
-      if (
-        !this.state.awake ||
-        !this.state.analyser
-      ) {
-
-        return;
-
+    this.emit(
+      "sound",
+      {
+        active:
+          this.state.soundActive
       }
-
-
-      this.state.analyser
-        .getByteFrequencyData(data);
-
-
-      let total = 0;
-
-
-      for (
-        let i = 0;
-        i < data.length;
-        i++
-      ) {
-
-        total += data[i];
-
-      }
-
-
-      const average =
-        total / data.length;
-
-
-      this.setBrightness(
-        average
-      );
-
-
-      requestAnimationFrame(
-        check
-      );
-
-    };
-
-
-    check();
-
-  },
-
-
-  setBrightness(level) {
-
-    const normalized =
-      Math.min(
-        1,
-        Math.max(
-          0,
-          level / 120
-        )
-      );
-
-
-    document.documentElement
-      .style
-      .setProperty(
-        "--vortex-eye-brightness",
-        String(
-          0.7 + normalized * 1.5
-        )
-      );
-
-  },
-
-
-  stopSoundReaction() {
-
-    if (this.state.stream) {
-
-      this.state.stream
-        .getTracks()
-        .forEach(track =>
-          track.stop()
-        );
-
-    }
-
-
-    if (this.state.audioContext) {
-
-      try {
-        this.state.audioContext.close();
-      } catch (error) {}
-
-    }
-
-
-    this.state.stream = null;
-
-    this.state.audioContext = null;
-
-    this.state.analyser = null;
-
-    this.state.microphone = null;
+    );
 
   },
 
 
   /* =======================================================
-     VISUAL STATE
+     EYE APPEARANCE
   ======================================================= */
 
-  setVisualState(awake) {
+  setAppearance(
+    options = {}
+  ) {
 
-    const left =
-      document.getElementById(
-        "eyeLeft"
-      );
+    const allowedStyles = [
+      "classic",
+      "cyber",
+      "galaxy",
+      "minimal",
+      "crystal",
+      "fire",
+      "ocean"
+    ];
 
-    const right =
-      document.getElementById(
-        "eyeRight"
-      );
 
+    if (
+      options.eyeStyle &&
+      allowedStyles.includes(
+        options.eyeStyle
+      )
+    ) {
 
-    if (left) {
-
-      left.classList.toggle(
-        "awake",
-        awake
-      );
+      this.settings.eyeStyle =
+        options.eyeStyle;
 
     }
 
 
-    if (right) {
+    if (options.leftEye) {
 
-      right.classList.toggle(
-        "awake",
-        awake
+      this.settings.leftEye =
+        String(
+          options.leftEye
+        );
+
+    }
+
+
+    if (options.rightEye) {
+
+      this.settings.rightEye =
+        String(
+          options.rightEye
+        );
+
+    }
+
+
+    if (options.theme) {
+
+      this.settings.theme =
+        String(
+          options.theme
+        );
+
+    }
+
+
+    this.save();
+
+    this.emit(
+      "appearanceChanged",
+      this.settings
+    );
+
+  },
+
+
+  /* =======================================================
+     BIND UI
+  ======================================================= */
+
+  bindEyeControls() {
+
+    const eyes =
+      document.querySelector(
+        "[data-vortex-eyes]"
       );
+
+
+    if (!eyes) {
+      return;
+    }
+
+
+    eyes.addEventListener(
+      "click",
+      () => {
+
+        this.touch();
+
+      }
+    );
+
+
+    eyes.addEventListener(
+      "dblclick",
+      () => {
+
+        this.doubleTap();
+
+      }
+    );
+
+  },
+
+
+  /* =======================================================
+     STORAGE
+  ======================================================= */
+
+  save() {
+
+    if (
+      typeof VortexStorage ===
+      "undefined"
+    ) {
+
+      return;
+
+    }
+
+
+    VortexStorage.save(
+      "eyes_settings",
+      this.settings
+    );
+
+  },
+
+
+  load() {
+
+    if (
+      typeof VortexStorage ===
+      "undefined"
+    ) {
+
+      return;
+
+    }
+
+
+    const saved =
+      VortexStorage.load(
+        "eyes_settings",
+        null
+      );
+
+
+    if (saved) {
+
+      this.settings = {
+
+        ...this.settings,
+
+        ...saved
+
+      };
 
     }
 
@@ -668,7 +706,10 @@ const VortexEyes = {
      EVENTS
   ======================================================= */
 
-  emit(name, detail = {}) {
+  emit(
+    name,
+    detail = {}
+  ) {
 
     window.dispatchEvent(
 
@@ -685,10 +726,6 @@ const VortexEyes = {
 
 };
 
-
-/* =========================================================
-   START ENGINE
-========================================================= */
 
 window.VortexEyes =
   VortexEyes;
