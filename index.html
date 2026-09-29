@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VORTEX 🌌 - Connect · Create · Discover</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="vortex-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="vortex-logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="#00d4ff" stroke-width="2"/>
+                        <circle cx="20" cy="20" r="12" stroke="#9d4edd" stroke-width="1.5" opacity="0.6"/>
+                        <circle cx="20" cy="20" r="6" fill="#00d4ff" opacity="0.8"/>
+                        <circle cx="20" cy="20" r="3" fill="#ffffff"/>
+                    </svg>
+                    <span>VORTEX</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#home" class="nav-item active" data-page="home">
+                    <span class="icon">🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="#explore" class="nav-item" data-page="explore">
+                    <span class="icon">🔍</span>
+                    <span>Explore</span>
+                </a>
+                <a href="#reels" class="nav-item" data-page="reels">
+                    <span class="icon">🎬</span>
+                    <span>Reels</span>
+                </a>
+                <a href="#messages" class="nav-item" data-page="messages">
+                    <span class="icon">💬</span>
+                    <span>Messages</span>
+                </a>
+                <a href="#communities" class="nav-item" data-page="communities">
+                    <span class="icon">👥</span>
+                    <span>Communities</span>
+                </a>
+                <a href="#vault" class="nav-item" data-page="vault">
+                    <span class="icon">🔒</span>
+                    <span>Vault</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="create-btn">✨ Create</button>
+                <a href="#profile" class="profile-link" data-page="profile">
+                    <div class="profile-avatar">👤</div>
+                    <span>Profile</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- HOME FEED -->
+            <section id="home" class="page active">
+                <div class="feed-header">
+                    <h1>HOME</h1>
+                    <div class="feed-filters">
+                        <button class="filter-btn active">Top</button>
+                        <button class="filter-btn">New</button>
+                        <button class="filter-btn">Best</button>
+                        <button class="filter-btn">Users</button>
+                    </div>
+                </div>
+
+                <!-- STORIES CAROUSEL -->
+                <div class="stories-section">
+                    <div class="story-card add-story">
+                        <div class="story-avatar">➕</div>
+                        <p>Add Story</p>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-avatar">👤</div>
+                        <p>Username</p>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-avatar">👤</div>
+                        <p>Creator</p>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-avatar">👤</div>
+                        <p>User</p>
+                    </div>
+                </div>
+
+                <!-- POSTS FEED -->
+                <div class="feed">
+                    <!-- POST SAMPLE -->
+                    <div class="post">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="avatar">👤</div>
+                                <div>
+                                    <h3>Brilliant Mere</h3>
+                                    <span class="timestamp">2 hours ago</span>
+                                </div>
+                            </div>
+                            <button class="menu-btn">⋯</button>
+                        </div>
+                        <div class="post-content">
+                            <p>Welcome to VORTEX 🌌 — More Than a Social App... It's a Universe! 🚀</p>
+                            <p>Connect · Create · Discover</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn">❤️ Like</button>
+                            <button class="action-btn">💬 Comment</button>
+                            <button class="action-btn">🔄 Repost</button>
+                            <button class="action-btn">📌 Save</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXPLORE PAGE -->
+            <section id="explore" class="page">
+                <div class="page-header">
+                    <h1>Explore</h1>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search people, posts, communities...">
+                </div>
+                <div class="explore-grid">
+                    <div class="explore-card">🎮 Gaming</div>
+                    <div class="explore-card">🎵 Music</div>
+                    <div class="explore-card">🎨 Art</div>
+                    <div class="explore-card">💻 Tech</div>
+                    <div class="explore-card">⚽ Sports</div>
+                    <div class="explore-card">📚 Education</div>
+                </div>
+            </section>
+
+            <!-- REELS PAGE -->
+            <section id="reels" class="page">
+                <div class="page-header">
+                    <h1>VORTEX Reels</h1>
+                </div>
+                <div class="reel-viewer">
+                    <div class="reel-placeholder">
+                        🎬 Short-form video experience coming soon
+                    </div>
+                </div>
+            </section>
+
+            <!-- MESSAGES PAGE -->
+            <section id="messages" class="page">
+                <div class="page-header">
+                    <h1>Messages</h1>
+                </div>
+                <div class="messages-container">
+                    <div class="chat-list">
+                        <div class="chat-item active">
+                            <div class="chat-avatar">👤</div>
+                            <div class="chat-info">
+                                <h4>User Name</h4>
+                                <p>Last message...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMMUNITIES PAGE -->
+            <section id="communities" class="page">
+                <div class="page-header">
+                    <h1>Communities</h1>
+                </div>
+                <div class="communities-grid">
+                    <div class="community-card">
+                        <div class="community-banner">🎮</div>
+                        <h3>Gaming Hub</h3>
+                        <p>12.5K members</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-banner">🎵</div>
+                        <h3>Music Lovers</h3>
+                        <p>8.2K members</p>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-banner">🎨</div>
+                        <h3>Creators</h3>
+                        <p>5.9K members</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VAULT PAGE -->
+            <section id="vault" class="page">
+                <div class="page-header">
+                    <h1>VORTEX Vault</h1>
+                    <p>Your private digital storage</p>
+                </div>
+                <div class="vault-container">
+                    <div class="vault-section">
+                        <h3>📸 Photos</h3>
+                        <div class="vault-grid">Empty</div>
+                    </div>
+                    <div class="vault-section">
+                        <h3>🎬 Videos</h3>
+                        <div class="vault-grid">Empty</div>
+                    </div>
+                    <div class="vault-section">
+                        <h3>📁 Files</h3>
+                        <div class="vault-grid">Empty</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROFILE PAGE -->
+            <section id="profile" class="page">
+                <div class="profile-header">
+                    <div class="profile-cover">🌌</div>
+                    <div class="profile-info">
+                        <div class="profile-avatar-large">👤</div>
+                        <h2>Your Username</h2>
+                        <p>@username</p>
+                        <p>Bio goes here</p>
+                        <div class="profile-stats">
+                            <div class="stat"><strong>1.2K</strong> Posts</div>
+                            <div class="stat"><strong>5.8K</strong> Followers</div>
+                            <div class="stat"><strong>234</strong> Following</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-tabs">
+                    <button class="tab active">Posts</button>
+                    <button class="tab">Reels</button>
+                    <button class="tab">Highlights</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- RIGHT SIDEBAR - RECOMMENDATIONS & TRENDS -->
+        <aside class="right-sidebar">
+            <div class="recommended-section">
+                <h3>Recommended for You</h3>
+                <div class="user-card">
+                    <div class="user-avatar">👤</div>
+                    <h4>Creator Name</h4>
+                    <p>@username</p>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                <div class="user-card">
+                    <div class="user-avatar">👤</div>
+                    <h4>Influencer</h4>
+                    <p>@influencer</p>
+                    <button class="follow-btn">Follow</button>
+                </div>
+            </div>
+
+            <div class="trends-section">
+                <h3>Trending Now</h3>
+                <div class="trend-item">
+                    <p>#VortexUniverse</p>
+                    <span>125K posts</span>
+                </div>
+                <div class="trend-item">
+                    <p>#CreateMore</p>
+                    <span>89K posts</span>
+                </div>
+                <div class="trend-item">
+                    <p>#DiscoverNow</p>
+                    <span>56K posts</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
