@@ -2,7 +2,7 @@
   "name": "vortex-by-brilliant-mere",
   "version": "1.0.0-800",
   "private": true,
-  "description": "Luxury social + AI + wallet Built in BW for the world - 800 features",
+  "description": "Luxury social + AI + Wallet Built in BW for the world - 800 features",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
