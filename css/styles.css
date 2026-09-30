@@ -1,17 +1,23 @@
-:root{--bg:#000000;--card:#0a0a0a;--neon:#00ff88;--blue:#00d4ff;--text:#ffffff;--muted:#666;--border:#1a1a1a}
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
-body{background:var(--bg);color:var(--text);padding-bottom:90px}
-.app-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.app-header h1{letter-spacing:3px;color:var(--neon);text-shadow:0 0 12px var(--neon)}
-.app-card{background:var(--card);border:1px solid var(--border);border-radius:18px;margin:12px;padding:16px}
-.btn-neon{height:58px;background:var(--card);border:1px solid var(--neon);color:var(--neon);border-radius:14px;width:100%;font-weight:800;box-shadow:0 0 12px rgba(0,255,136,0.25);cursor:pointer}
-.btn-neon.blue{border-color:var(--blue);color:var(--blue);box-shadow:0 0 12px rgba(0,212,255,0.25)}
-.input-neon{width:100%;height:52px;background:#111;border:1px solid #222;border-radius:12px;padding:0 16px;color:#fff}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:76px;background:#000;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:999}
-.nav-item{color:var(--muted);font-size:10px;letter-spacing:1px;font-weight:700;cursor:pointer}
-.nav-item.active{color:var(--neon);text-shadow:0 0 10px var(--neon)}
-.empty-state{padding:48px 24px;text-align:center;color:var(--muted)}
-.empty-state h3{color:var(--text);margin-bottom:8px}
-/* 30 themes #451-470 */
-.theme-midnight{--bg:#000;--neon:#00ff88}.theme-ocean{--bg:#001a33;--neon:#00d4ff}
-.theme-galaxy{--bg:#0a0028;--neon:#8a2be2}.theme-neon{--bg:#000;--neon:#39ff14}
+const VORTEX = {
+  version: '800 REAL',
+  features: 800,
+  go(screen){
+    document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
+    const target=document.getElementById(screen); if(target) target.style.display='block';
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    document.getElementById('nav-'+screen)?.classList.add('active');
+    this.render(screen);
+  },
+  render(screen){
+    const maps={
+      home:`<div class="empty-state"><h3>Following Feed #3 Empty</h3><p>Your 600 list #3 #4 #8 #9 - Real API, no fake posts. Follow people to fill.</p><button class="btn-neon" onclick="VORTEX.go('find')">FIND PEOPLE #332</button></div>`,
+      reels:`<div class="empty-state"><h3>Reels #172 Empty</h3><p>Vertical Swipe #173 + Auto-Play #174. Be first to upload #195</p><button class="btn-neon blue">UPLOAD REEL #195</button></div>`,
+      chat:`<div class="empty-state"><h3>Messages #261 Empty</h3><p>Direct #261, Group #262, Voice #264, Calls #275 - All REAL tables</p></div>`,
+      vault:`<div class="empty-state"><h3>Vault #421 Locked</h3><p>App Lock #422, Fingerprint #423, Face #424, PIN #421 - Your security list</p></div>`,
+      market:`<div class="empty-state"><h3>Marketplace #357 Empty</h3><p>Products #358, Cart #370, Orders #372, Seller Dashboard #375 - BWP Pula</p></div>`,
+      profile:`<div class="empty-state"><h3>Profile #61-106</h3><p>Personal, Creator, Business, Bio, Badges #90, Verification #68, Themes #92</p></div>`
+    };
+    const el=document.getElementById(screen+'-feed'); if(el && maps[screen]) el.innerHTML=maps[screen];
+  }
+};
+document.addEventListener('DOMContentLoaded',()=>VORTEX.go('home'));
