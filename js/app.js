@@ -1,4 +1,4 @@
-const stories = [
+const defaultStories = [
   { name: "Nova", tag: "new" },
   { name: "Zuri", tag: "live" },
   { name: "Maya", tag: "travel" },
@@ -6,7 +6,7 @@ const stories = [
   { name: "Kai", tag: "studio" }
 ];
 
-const posts = [
+const defaultPosts = [
   {
     author: "NovaWave",
     handle: "@novawave",
@@ -64,10 +64,13 @@ const postInput = document.getElementById("postInput");
 const publishButton = document.getElementById("publishButton");
 const createPostButton = document.getElementById("createPostButton");
 
+let posts = [...defaultPosts];
+const api = window.vortexApi;
+
 function renderStories() {
-  storiesContainer.innerHTML = stories
+  storiesContainer.innerHTML = defaultStories
     .map(
-      (story, index) => `
+      (story) => `
         <article class="story-card">
           <div class="story-ring">
             <div class="story-avatar">${story.name.slice(0, 2).toUpperCase()}</div>
@@ -80,6 +83,23 @@ function renderStories() {
     .join("");
 }
 
+function normalizePost(post) {
+  const author = post.users?.display_name || post.author || "VORTEX User";
+  const handle = post.users?.username ? `@${post.users.username}` : post.handle || "@vortex";
+  const time = post.created_at ? new Date(post.created_at).toLocaleString() : post.time || "just now";
+
+  return {
+    author,
+    handle,
+    time,
+    content: post.content || "",
+    media: Boolean(post.media_url) || Boolean(post.media),
+    likes: post.likes || post.like_count || 0,
+    comments: post.comments || post.comment_count || 0,
+    shares: post.shares || 0
+  };
+}
+
 function renderFeed() {
   feedContainer.innerHTML = posts
     .map(
@@ -87,7 +107,7 @@ function renderFeed() {
         <article class="post-card">
           <div class="post-header">
             <div class="post-author">
-              <div class="post-author-avatar">${post.author.slice(0, 2).toUpperCase()}</div>
+              <div class="post-author-avatar">${(post.author || "V").slice(0, 2).toUpperCase()}</div>
               <div>
                 <strong>${post.author}</strong>
                 <small>${post.handle} · ${post.time}</small>
@@ -97,11 +117,7 @@ function renderFeed() {
           </div>
 
           <p class="post-content">${post.content}</p>
-          ${
-            post.media
-              ? '<div class="post-media" aria-label="Featured post image"></div>'
-              : ""
-          }
+          ${post.media ? '<div class="post-media" aria-label="Featured post image"></div>' : ""}
 
           <div class="post-actions">
             <button>❤️ ${post.likes}</button>
@@ -147,15 +163,43 @@ function renderCreators() {
 
 function updateTheme(theme) {
   document.body.setAttribute("data-theme", theme);
-
   document.querySelectorAll(".theme-btn").forEach((button) => {
     button.classList.toggle("active", button.dataset.theme === theme);
   });
 }
 
-function handlePublish() {
+async function loadPostsFromBackend() {
+  if (!api) return;
+
+  try {
+    const result = await api.getPosts();
+    if (result && result.success && Array.isArray(result.posts) && result.posts.length) {
+      posts = result.posts.map(normalizePost);
+      renderFeed();
+    }
+  } catch (error) {
+    console.warn("Fallback to mock feed because API unavailable:", error.message);
+  }
+}
+
+async function handlePublish() {
   const content = postInput.value.trim();
   if (!content) return;
+
+  if (api && api.getUser()) {
+    try {
+      const result = await api.createPost(content);
+      if (result && result.success && result.post) {
+        posts.unshift(normalizePost(result.post));
+        renderFeed();
+        postInput.value = "";
+        postInput.focus();
+        return;
+      }
+    } catch (error) {
+      console.error("Post create failed:", error.message);
+    }
+  }
 
   const newPost = {
     author: "Brilliant Mere",
@@ -178,6 +222,7 @@ renderStories();
 renderFeed();
 renderTrending();
 renderCreators();
+loadPostsFromBackend();
 
 document.querySelectorAll(".nav-item").forEach((button) => {
   button.addEventListener("click", () => {
