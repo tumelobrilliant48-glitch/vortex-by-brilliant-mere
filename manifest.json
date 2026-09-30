@@ -1,2 +1,2 @@
-// package.json
-{"name":"vortex-by-brilliant-mere","version":"1.0.0-800","description":"Luxury social + AI + Wallet Built in BW for the world - 800 features"}
+// manifest.json
+{"name":"VORTEX","short_name":"VORTEX","theme_color":"#000000","background_color":"#000000","display":"standalone"}
