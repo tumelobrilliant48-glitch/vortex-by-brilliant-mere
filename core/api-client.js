@@ -1,88 +1,56 @@
-// VORTEX Frontend API Client
-// Handles authentication and communication with the Express backend.
+// VORTEX Core API Client - Expose the frontend API client safely in - Your commit
+// SAFE: No secrets here, only calls to backend. JWT stored in memory.
 
-(function () {
-  const API_BASE = `${window.location.origin}/api`;
-
-  class VortexAPI {
-    constructor() {
-      this.currentUser = JSON.parse(localStorage.getItem("vortex_user") || "null");
-      this.token = localStorage.getItem("vortex_token") || null;
-    }
-
-    setUser(user) {
-      this.currentUser = user;
-      if (user) localStorage.setItem("vortex_user", JSON.stringify(user));
-      else localStorage.removeItem("vortex_user");
-    }
-
-    setToken(token) {
-      this.token = token;
-      if (token) localStorage.setItem("vortex_token", token);
-      else localStorage.removeItem("vortex_token");
-    }
-
-    getUser() {
-      return this.currentUser;
-    }
-
-    async request(endpoint, options = {}) {
-      const headers = {
-        ...(options.body ? { "Content-Type": "application/json" } : {}),
-        ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
-        ...(options.headers || {})
-      };
-      const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.message || `API error: ${response.status}`);
-      return data;
-    }
-
-    async signup(username, email, password, displayName) {
-      const data = await this.request("/auth/signup", {
-        method: "POST",
-        body: JSON.stringify({ username, email, password, display_name: displayName })
-      });
-      if (data.user) this.setUser(data.user);
-      if (data.token) this.setToken(data.token);
-      return data;
-    }
-
-    async login(identity, password) {
-      const field = identity.includes("@") ? "email" : "username";
-      const data = await this.request("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ [field]: identity, password })
-      });
-      if (data.user) this.setUser(data.user);
-      if (data.token) this.setToken(data.token);
-      return data;
-    }
-
-    async logout() {
-      try {
-        return await this.request("/auth/logout", { method: "POST" });
-      } finally {
-        this.setUser(null);
-        this.setToken(null);
-      }
-    }
-
-    async getPosts() {
-      return this.request("/posts");
-    }
-
-    async createPost(content, mediaUrl = "", mediaType = "", visibility = "public") {
-      return this.request("/posts", {
-        method: "POST",
-        body: JSON.stringify({ content, media_url: mediaUrl, media_type: mediaType, visibility })
-      });
-    }
-
-    async likePost(postId) {
-      return this.request(`/posts/${postId}/like`, { method: "POST" });
-    }
+class VortexAPI {
+  constructor() {
+    this.base = window.location.origin.includes('localhost') 
+      ? 'http://localhost:3000/api' 
+      : '/api';
+    this.token = localStorage.getItem('vortex_token') || null;
   }
 
-  window.vortexApi = new VortexAPI();
-})();
+  setToken(token) {
+    this.token = token;
+    localStorage.setItem('vortex_token', token);
+  }
+
+  clearToken() {
+    this.token = null;
+    localStorage.removeItem('vortex_token');
+  }
+
+  async request(path, options = {}) {
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(this.token ? { 'Authorization': `Bearer ${this.token}` } : {}),
+      ...options.headers
+    };
+    const res = await fetch(`${this.base}${path}`, { ...options, headers });
+    if (!res.ok) {
+      const err = await res.json().catch(()=>({error:'Request failed'}));
+      throw new Error(err.error || 'API error');
+    }
+    return res.json();
+  }
+
+  // AUTH # from backend/auth.js
+  async register(username, password) {
+    const data = await this.request('/auth/register', { method: 'POST', body: JSON.stringify({ username, password }) });
+    return data;
+  }
+
+  async login(username, password) {
+    const { token, user } = await this.request('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) });
+    this.setToken(token);
+    return { token, user };
+  }
+
+  // SEARCH #332-356 - People, Post, Video, Reel, Hashtag
+  async searchPeople(q) { return this.request(`/search/people?q=${encodeURIComponent(q)}`); }
+  async searchPosts(q) { return this.request(`/search/posts?q=${encodeURIComponent(q)}`); }
+  async searchReels(q) { return this.request(`/search/reels?q=${encodeURIComponent(q)}`); }
+
+  // FEED #2-10 - Following, Recommended, Latest, Trending
+  async getFeed(type='following') { return this.request(`/feed?type=${type}`); }
+  async getReels() { return this.request('/reels'); }
+  async getStories() { return this
