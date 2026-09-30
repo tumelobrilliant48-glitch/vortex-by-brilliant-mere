@@ -1,12 +1,24 @@
-body{margin:0;background:#02050d;color:#fff;font-family:system-ui;height:100vh;overflow:hidden}
-#app{display:flex;flex-direction:column;height:100vh}
-#topBar{background:#00d4ff;color:#000;padding:8px 12px;font-weight:900}
-#storyBar{display:flex;gap:14px;padding:8px;background:#02050d;border-bottom:1px solid #112240;overflow:auto}
-#screens{flex:1;overflow-y:auto;padding-bottom:70px}
-.screen{display:none}
-.screen.active{display:block}
-.card{background:#0a1228;border:1px solid #1a2a5a;border-radius:14px;padding:12px;margin:10px}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:60px;background:#050a1a;border-top:1px solid #1a2a5a;display:flex;justify-content:space-around;align-items:center;z-index:99}
-.bottom b{opacity:.6;cursor:pointer;font-size:12px;text-align:center}
-.bottom b.on{opacity:1;color:#7dd4ff}
-#feed{min-height:200px}
+/* VORTEX 800 - REAL THEMES #451-480 */
+:root{
+  --bg:#000000;
+  --card:#0a0a0a;
+  --neon:#00ff88;
+  --neon2:#00d4ff;
+  --text:#ffffff;
+  --border:#1a1a1a;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}
+body{background:var(--bg);color:var(--text);padding-bottom:80px}
+.app-card{background:var(--card);border:1px solid var(--border);border-radius:18px;margin:12px;padding:16px}
+.btn-neon{height:58px;background:var(--card);border:1px solid var(--neon);color:var(--neon);border-radius:14px;width:100%;font-weight:700;box-shadow:0 0 12px rgba(0,255,136,0.3)}
+.btn-neon:active{box-shadow:0 0 25px var(--neon);transform:scale(0.98)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;background:#000;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:100}
+.nav-item{color:#666;font-size:10px;text-align:center;cursor:pointer}
+.nav-item.active{color:var(--neon);text-shadow:0 0 10px var(--neon)}
+.empty-state{padding:40px 20px;text-align:center;color:#666}
+.empty-state h3{color:var(--text);margin-bottom:8px}
+/* Your themes #451-470 */
+.theme-midnight{--bg:#000;--neon:#00ff88}
+.theme-ocean{--bg:#001a33;--neon:#00d4ff}
+.theme-galaxy{--bg:#0a0028;--neon:#8a2be2}
+.theme-neon{--bg:#000;--neon:#39ff14}
