@@ -1,51 +1,31 @@
-const jwt = require("jsonwebtoken");
+// VORTEX Auth - Harden VORTEX security: bcrypt + JWT - Your commit message
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { supabase } from './supabase-client.js';
 
-const activeSessions = new Set();
+const JWT_SECRET = process.env.JWT_SECRET || 'VORTEX_800_SECRET_BY_BRILLIANT';
 
-const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+export async function register(username, password) {
+  const hash = await bcrypt.hash(password, 10);
+  const { data, error } = await supabase.from('users').insert([{ username, password_hash: hash }]).select();
+  if (error) throw error;
+  return data;
+}
 
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "Authentication required."
-    });
-  }
+export async function login(username, password) {
+  const { data: user } = await supabase.from('users').select('*').eq('username', username).single();
+  if (!user) throw new Error('User not found');
+  const ok = await bcrypt.compare(password, user.password_hash);
+  if (!ok) throw new Error('Invalid password');
+  const token = jwt.sign({ id: user.id, username }, JWT_SECRET, { expiresIn: '30d' });
+  return { token, user };
+}
 
-  if (!activeSessions.has(token)) {
-    return res.status(401).json({
-      success: false,
-      message: "Session expired or invalid."
-    });
-  }
-
+export function verifyToken(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'No token' });
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    req.user = jwt.verify(token, JWT_SECRET);
     next();
-  } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid or expired token."
-    });
-  }
-};
-
-const addSession = (token, userId) => {
-  if (token) {
-    activeSessions.add(token);
-  }
-  return token;
-};
-
-const removeSession = (token) => {
-  activeSessions.delete(token);
-};
-
-module.exports = {
-  authMiddleware,
-  addSession,
-  removeSession,
-  activeSessions
-};
+  } catch { res.status(401).json({ error: 'Invalid token' }); }
+}
