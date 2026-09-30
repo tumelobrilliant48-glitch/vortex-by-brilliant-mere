@@ -7,6 +7,7 @@ const API_BASE = window.location.origin + '/api';
 class VortexAPI {
   constructor() {
     this.currentUser = JSON.parse(localStorage.getItem('vortex_user') || 'null');
+    this.token = localStorage.getItem('vortex_token') || null;
   }
 
   setUser(user) {
@@ -18,6 +19,15 @@ class VortexAPI {
     }
   }
 
+  setToken(token) {
+    this.token = token;
+    if (token) {
+      localStorage.setItem('vortex_token', token);
+    } else {
+      localStorage.removeItem('vortex_token');
+    }
+  }
+
   getUser() {
     return this.currentUser;
   }
@@ -26,12 +36,13 @@ class VortexAPI {
     const url = `${API_BASE}${endpoint}`;
     const headers = {
       'Content-Type': 'application/json',
+      ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
       ...options.headers,
     };
 
     try {
       const res = await fetch(url, { ...options, headers });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         throw new Error(data.message || `API Error: ${res.status}`);
@@ -52,6 +63,7 @@ class VortexAPI {
     });
     if (data.user) {
       this.setUser(data.user);
+      this.setToken(data.token);
     }
     return data;
   }
@@ -67,16 +79,29 @@ class VortexAPI {
     });
     if (data.user) {
       this.setUser(data.user);
+      this.setToken(data.token);
     }
     return data;
   }
 
-  logout() {
-    this.setUser(null);
+  async logout() {
+    try {
+      const data = await this.request('/auth/logout', { method: 'POST' });
+      this.setUser(null);
+      this.setToken(null);
+      return data;
+    } catch (error) {
+      this.setUser(null);
+      this.setToken(null);
+      throw error;
+    }
   }
 
   async getUser(username) {
-    return this.request(`/users/me?username=${encodeURIComponent(username)}`);
+    if (username) {
+      return this.request(`/users/me?username=${encodeURIComponent(username)}`);
+    }
+    return this.request('/users/me');
   }
 
   // POSTS
@@ -91,7 +116,6 @@ class VortexAPI {
     return this.request('/posts', {
       method: 'POST',
       body: JSON.stringify({
-        user_id: this.currentUser.id,
         content,
         media_url: mediaUrl,
         media_type: mediaType,
@@ -106,7 +130,6 @@ class VortexAPI {
     }
     return this.request(`/posts/${postId}/like`, {
       method: 'POST',
-      body: JSON.stringify({ user_id: this.currentUser.id }),
     });
   }
 
@@ -115,7 +138,7 @@ class VortexAPI {
     if (!this.currentUser) {
       throw new Error('Must be logged in to fetch messages');
     }
-    return this.request(`/messages?user_id=${this.currentUser.id}`);
+    return this.request('/messages');
   }
 
   async sendMessage(receiverId, content) {
@@ -125,7 +148,6 @@ class VortexAPI {
     return this.request('/messages', {
       method: 'POST',
       body: JSON.stringify({
-        sender_id: this.currentUser.id,
         receiver_id: receiverId,
         content,
       }),
@@ -137,7 +159,7 @@ class VortexAPI {
     if (!this.currentUser) {
       throw new Error('Must be logged in to fetch notifications');
     }
-    return this.request(`/notifications?user_id=${this.currentUser.id}`);
+    return this.request('/notifications');
   }
 
   // HEALTH CHECK
