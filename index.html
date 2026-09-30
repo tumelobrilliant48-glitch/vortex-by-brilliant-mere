@@ -1,119 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#02050d">
-<title>VORTEX | Social Media</title>
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#02050d;color:#fff;font-family:system-ui;overflow:hidden}
-#topBar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#050a1a;border-bottom:1px solid #1a2a4a}
-.logo{font-weight:900;letter-spacing:2px;color:#7dd4ff;font-size:20px}
-.topIcons{display:flex;gap:12px}
-.topIcons span{width:34px;height:34px;background:#0e1a33;border:1px solid #1e3a6a;border-radius:10px;display:grid;place-items:center;cursor:pointer}
-#screens{height:calc(100vh - 110px);overflow-y:auto}
-.screen{display:none;padding:14px}
-.screen.active{display:block}
-.card{background:#0a1228;border:1px solid #1a2a5a;border-radius:16px;padding:14px;margin:10px 0}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#050a1a;border-top:1px solid #1a2a4a;display:flex;justify-content:space-around;padding:10px 0}
-.bottom div{padding:8px 14px;border-radius:20px;cursor:pointer;text-align:center;font-size:12px;opacity:.7}
-.bottom div.on{background:#7dd4ff;color:#000;opacity:1;font-weight:800}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{background:#7dd4ff;color:#000;border:0;padding:10px 16px;border-radius:10px;font-weight:800;width:100%;margin-top:8px}
-.storyRow{display:flex;gap:10px;overflow:auto;padding:8px 0}
-.story{width:60px;text-align:center}
-.story div{width:60px;height:60px;border-radius:50%;background:linear-gradient(45deg,#7dd4ff,#9d4edd);padding:2px}
-.story div img{width:100%;height:100%;border-radius:50%;background:#000}
-</style>
-</head>
-<body>
+<html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>VORTEX</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css">
+</head><body>
 <div id="app">
-<div id="topBar">
-<div class="logo">VORTEX</div>
-<div style="font-size:10px;opacity:.6">By Brilliant Tumelo Mere</div>
-<div class="topIcons">
-<span onclick="go('Settings')">⚙️</span>
-<span onclick="go('Search')">🔍</span>
-<span onclick="go('Vault')">🔒</span>
-</div>
+
+<!-- SPLASH -->
+<div id="s-Splash" class="screen active" style="display:grid;place-items:center;height:100vh;background:radial-gradient(#0a0a2a,#02050d)">
+  <div style="text-align:center">
+    <div style="width:180px;height:180px;margin:0 auto;border-radius:50%;background:conic-gradient(#7dd4ff,#9d4edd,#7dd4ff);box-shadow:0 0 40px #7dd4ff"></div>
+    <h1 style="margin-top:20px;letter-spacing:6px">VORTEX</h1><p style="opacity:.6;font-size:12px">Connect • Create • Discover</p>
+    <button class="btn" style="margin-top:30px" onclick="go('Home')">Get Started</button>
+    <button style="width:100%;margin-top:10px;background:transparent;border:1px solid #333;color:#fff;padding:12px;border-radius:14px" onclick="go('Home')">Log In</button>
+    <p style="margin-top:20px;opacity:.4;font-size:10px">Created by Brilliant T Mere</p>
+  </div>
 </div>
 
-<div id="screens">
-<!-- HOME -->
-<div id="s-Home" class="screen active">
-<div class="storyRow">
-<div class="story"><div></div><small>Your Story</small></div>
-<div class="story"><div></div><small>Nova</small></div>
-<div class="story"><div></div><small>Kai</small></div>
-<div class="story"><div></div><small>Luna</small></div>
+<!-- HOME FEED -->
+<div id="s-Home" class="screen">
+  <div style="display:flex;justify-content:space-between"><b>VORTEX</b><span>🔍 🔔</span></div>
+  <div style="display:flex;gap:10px;margin:12px 0;overflow:auto"><span style="min-width:60px;text-align:center">+<br><small>Your Story</small></span><span style="min-width:60px">Alex</span><span>Kai</span><span>Luna</span><span>Zed</span></div>
+  <div style="background:#0a1228;padding:10px;border-radius:14px">What's on your mind? <span style="float:right">📷</span></div>
+  <div id="feed"></div>
 </div>
-<div class="card"><b>nova.create</b> • The future is not something we predict, it's something we create. #VORTEX<br><br><div style="height:120px;background:linear-gradient(45deg,#1a0a3a,#0a1a4a);border-radius:12px"></div></div>
-</div>
-
-<!-- STORIES -->
-<div id="s-Stories" class="screen"><h3>Stories (Top)</h3><div class="card" style="height:300px;background:linear-gradient(180deg,#2a0a5a,#0a0a0a);display:grid;place-items:center">Story Viewer - luna.vortex<br><small>2h ago</small></div></div>
 
 <!-- REELS -->
-<div id="s-Reels" class="screen"><h3>Reels - For You / Following</h3><div class="card" style="height:340px;background:#0a0a1a;border:2px solid #7dd4ff">▶️ @nova.create - Original Audio<br><br>Swipe Right/Left</div></div>
+<div id="s-Reels" class="screen"><h3>Reels <small style="float:right;opacity:.5">For You | Following</small></h3><div class="card" style="height:400px;background:linear-gradient(180deg,#1a0a4a,#02050d);display:grid;place-items:center">▶️ vortex.world<br>Another day in the VORTEX. The world is bigger than you think...<br>#VORTEX #Explore #Reels<br>🎵 Nebula Dreams - VORTEX</div></div>
 
-<!-- CREATE -->
-<div id="s-Create" class="screen"><h3>Create (AI + Media)</h3><div class="card">AI Generator | Photos | Files<br><br><input placeholder="Describe your video..." style="width:100%;padding:10px;background:#02050d;border:1px solid #333;border-radius:10px;color:#fff"><br><button class="btn">Generate Video</button><br><button class="btn" style="background:#9d4edd;color:#fff;margin-top:8px">AI Editor</button></div></div>
+<!-- EXPLORE -->
+<div id="s-Explore" class="screen"><h3>Explore</h3><input placeholder="Search people, posts, topics..." style="width:100%;padding:10px;background:#0a1228;border:1px solid #1a2a5a;border-radius:10px;color:#fff"><div style="display:flex;gap:8px;margin:10px 0"><span class="card" style="padding:6px 12px">Trending</span><span class="card" style="padding:6px 12px">Gaming</span><span class="card" style="padding:6px 12px">Tech</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="card">🎮 Gaming<br><small>12.4k posts</small></div><div class="card">💻 Technology<br><small>8.7k posts</small></div><div class="card">✈️ Travel</div><div class="card">🎵 Music</div></div></div>
 
 <!-- MESSAGES -->
-<div id="s-Messages" class="screen"><h3>Messages (Chat + Groups)</h3><div class="card">💬 Luna: Hey bro...<br>💬 Kai: You there?<br>💬 Group Chat: Vortex Squad</div></div>
+<div id="s-Messages" class="screen"><h3>Messages</h3><input placeholder="Search chats..." style="width:100%;padding:10px;background:#0a1228;border-radius:10px;border:1px solid #1a2a5a;color:#fff"><div id="msgList"></div></div>
+
+<!-- PROFILE - EXACT LIKE YOUR IMAGE -->
+<div id="s-Profile" class="screen">
+  <div style="display:flex;gap:14px;align-items:center"><div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(45deg,#7dd4ff,#9d4edd)"></div><div><b id="pName">Brilliant Mere</b> ✓<br><small id="pHandle">@brilliant.mere • Gaborone</small><br><small>CEO of VORTEX</small></div></div>
+  <div style="display:flex;justify-content:space-around;margin:14px 0"><span><b>248</b><br><small>Posts</small></span><span><b>12.6K</b><br><small>Followers</small></span><span><b>342</b><br><small>Following</small></span></div>
+  <button class="btn" style="background:#0a1228;border:1px solid #1a2a5a">Edit Profile</button>
+  <div style="display:flex;justify-content:space-around;margin:14px 0;opacity:.6"><span>Journey</span><span>Projects</span><span>Lifestyle</span><span>Gaming</span></div>
+  <div style="display:flex;gap:20px;border-bottom:1px solid #1a2a5a;padding-bottom:8px"><b>Posts</b><span>Reels</span><span>Tagged</span></div>
+  <div class="card">Brilliant Mere ✓<br><small>Big dreams. Real plans. VORTEX is just the beginning. 💜</small><br><br><div style="height:120px;background:linear-gradient(45deg,#1a0a5a,#4a0a8a);border-radius:12px"></div></div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div id="s-Notifications" class="screen"><h3>Notifications</h3><div style="display:flex;gap:8px;margin:10px 0"><span class="card" style="padding:5px 10px;background:#7dd4ff;color:#000">All</span><span class="card" style="padding:5px 10px">Likes</span><span class="card" style="padding:5px 10px">Comments</span></div><div id="notifList"><div class="card">💜 Luna liked your post - 2m</div><div class="card">💬 Kai commented "This is next level 🔥" - 12m</div></div></div>
+
+<!-- CREATE POST -->
+<div id="s-Create" class="screen"><h3>Create Post</h3><div class="card"><b>Brilliant Mere</b><br><textarea id="postText" placeholder="What's on your mind?" style="width:100%;background:transparent;border:0;color:#fff;margin:10px 0;min-height:80px"></textarea><div style="display:flex;gap:10px"><span>📷 Photo</span><span>🎥 Video</span><span>📊 Poll</span></div><button class="btn" onclick="createPost()">Post</button></div></div>
 
 <!-- SETTINGS -->
-<div id="s-Settings" class="screen"><h3>Settings (Full Control)</h3><div class="card">👤 Brilliant Mere - CEO of VORTEX<br><br>Account & Security<br>Privacy & Safety<br>Appearance (Themes)<br>App Manager<br>Marketplace<br>Premium • Dashboard • Monetization</div></div>
+<div id="s-Settings" class="screen"><h3>Settings</h3><div class="card">👤 Brilliant Mere<br><small>@brilliant.mere</small></div><div class="card">👤 Account<br>🔒 Privacy & Security<br>🔔 Notifications<br>🎨 Appearance - Dark Mode<br>🌐 Language - English<br>❓ Help & Support<br>ℹ️ About VORTEX</div><div class="card" style="text-align:center"><b>VORTEX</b><br><small>More Than a Social App</small><br><br>✓ Connect with real people<br>✓ Create amazing content<br>✓ Discover new worlds<br>✓ Your identity, your way<br><br><button class="btn" style="background:#0a1228">The Vortex is yours</button></div></div>
 
-<!-- SEARCH -->
-<div id="s-Search" class="screen"><h3>Search (Multiple Options)</h3><input placeholder="Search anything..." style="width:100%;padding:12px;background:#0a1228;border:1px solid #1a2a5a;border-radius:12px;color:#fff"><div class="card">Settings<br>Nova.create<br>Vortex Videos<br>Vortex Group<br>Community<br>Marketplace</div></div>
-
-<!-- RANKINGS -->
-<div id="s-Rankings" class="screen"><h3>Top Rankings</h3><div class="card">🏆 Post Ranking<br>🎬 Video Ranking<br>🎮 Game Ranking<br>⭐ Buyer Ranking<br>📈 Most Ranking<br>🟢 Online Users</div></div>
-
-<!-- MARKETPLACE -->
-<div id="s-Marketplace" class="screen"><h3>Marketplace (Shop & Buy)</h3><div class="grid"><div class="card">iPhone 17 Pro Max<br>$1,299<br><button class="btn">Buy</button></div><div class="card">Gaming Laptop<br>$899<br><button class="btn">Buy</button></div><div class="card">Sneakers $120<br><button class="btn">Buy</button></div><div class="card">Smart Watch $199<br><button class="btn">Buy</button></div></div></div>
-
-<!-- DASHBOARD -->
-<div id="s-Dashboard" class="screen"><h3>Dashboard (Analytics)</h3><div class="grid"><div class="card">Views<br><b>125.4K</b></div><div class="card">Followers<br><b>32.8K</b></div><div class="card">Earnings<br><b>$482.50</b></div><div class="card">Content<br><b>24</b></div></div></div>
-
-<!-- VAULT -->
-<div id="s-Vault" class="screen"><h3>Vault (Hide Everything)</h3><div class="grid"><div class="card">🔒 Photos</div><div class="card">🔒 Videos</div><div class="card">🔒 Music</div><div class="card">📄 Documents</div></div><div class="card" style="text-align:center;margin-top:12px">🔒 Your vault is protected<br><small>Use Face ID or password to access</small></div></div>
-
-<!-- PROFILE -->
-<div id="s-Profile" class="screen"><h3>Profile (Account)</h3><div class="card">Brilliant Mere ✓<br>CEO of VORTEX - Gaborone<br><br>248 Posts | 12.6K Followers | 342 Following<br><br><button class="btn">Edit Profile</button></div></div>
 </div>
 
 <div class="bottom">
-<div id="b-Home" class="on" onclick="go('Home')">🏠<br>Home</div>
-<div id="b-Reels" onclick="go('Reels')">🎬<br>Reels</div>
-<div style="background:#7dd4ff;color:#000;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;font-size:24px;font-weight:900" onclick="go('Create')">+</div>
-<div id="b-Messages" onclick="go('Messages')">💬<br>Messages</div>
-<div id="b-Vault" onclick="go('Vault')">🔒<br>Vault</div>
-</div>
+<b id="b-Home" class="on" onclick="go('Home')">🏠 Home</b>
+<b id="b-Reels" onclick="go('Reels')">🎬 Reels</b>
+<b id="b-Explore" onclick="go('Explore')">🔍 Explore</b>
+<div class="plus" onclick="go('Create')">+</div>
+<b id="b-Messages" onclick="go('Messages')">💬 Messages</b>
+<b id="b-Profile" onclick="go('Profile')">👤 Vault</b>
 </div>
 
+</div>
+<script src="../../core/api-client.js"></script>
+<script src="../../backend/config.js"></script>
 <script>
 function go(name){
-  // hide all screens
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  let target = document.getElementById('s-'+name);
-  if(!target) target = document.getElementById('s-Home');
-  target.classList.add('active');
-  // update bottom
-  document.querySelectorAll('.bottom div').forEach(b=>b.classList.remove('on'));
-  let btn = document.getElementById('b-'+name);
-  if(btn) btn.classList.add('on');
-  // if name is Stories/Search etc keep Home active bottom
-  if(['Search','Rankings','Marketplace','Dashboard','Settings','Profile','Stories','Create'].includes(name)){
-    document.getElementById('b-Home').classList.add('on');
-  }
-  localStorage.setItem('vortex_last',name);
+ document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active'); s.style.display='none'});
+ let el=document.getElementById('s-'+name); if(!el) el=document.getElementById('s-Home');
+ el.classList.add('active'); el.style.display='block';
+ document.querySelectorAll('.bottom b').forEach(b=>b.classList.remove('on'));
+ let bb=document.getElementById('b-'+name); if(bb) bb.classList.add('on');
+ if(['Splash','Create','Settings','Notifications','Explore'].includes(name)) document.getElementById('b-Home')?.classList.add('on');
+ localStorage.setItem('vortex_last',name);
+ if(name==='Home') loadFeed();
+ if(name==='Messages') loadMessages();
 }
-go(localStorage.getItem('vortex_last')||'Home');
+async function loadFeed(){
+ let posts=await VORTEX_API.getPosts();
+ document.getElementById('feed').innerHTML=posts.map(p=>`<div class="card"><b>${p.user}</b> • ${p.handle}<br><br>${p.text}<br><br>❤️ ${p.likes} 💬 ${p.comments} 🔄 Share</div>`).join('');
+}
+async function loadMessages(){
+ let msgs=await VORTEX_API.getMessages();
+ document.getElementById('msgList').innerHTML=msgs.map(m=>`<div class="card"><b>${m.name}</b><br><small>${m.text}</small><small style="float:right">${m.time}</small></div>`).join('');
+}
+async function createPost(){
+ let t=document.getElementById('postText').value; if(!t) return alert('Write something');
+ await VORTEX_API.createPost(t); document.getElementById('postText').value=''; go('Home'); loadFeed();
+}
+go(localStorage.getItem('vortex_last')||'Splash');
+loadFeed();
 </script>
-</body>
-</html>
+</body></html>
