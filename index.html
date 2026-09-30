@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VORTEX | Connect · Create · Discover</title>
+    <meta
+      name="description"
+      content="VORTEX social universe — connect, create, discover, and grow in one digital ecosystem."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body data-theme="midnight">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">V</div>
+          <div class="brand-copy">
+            <span class="brand-name">VORTEX</span>
+            <span class="brand-tag">UNIVERSE</span>
+          </div>
+        </div>
+
+        <nav class="navigation" aria-label="Main navigation">
+          <button class="nav-item active"><span>🏠</span> Home</button>
+          <button class="nav-item"><span>🔎</span> Explore</button>
+          <button class="nav-item"><span>📸</span> Reels</button>
+          <button class="nav-item"><span>💬</span> Messages</button>
+          <button class="nav-item"><span>👥</span> Communities</button>
+          <button class="nav-item"><span>🛍️</span> Marketplace</button>
+          <button class="nav-item"><span>📁</span> Vault</button>
+          <button class="nav-item"><span>⚙️</span> Settings</button>
+        </nav>
+
+        <div class="premium-card">
+          <div class="premium-badge">PREMIUM</div>
+          <h3>Enter the VORTEX Premium universe</h3>
+          <p>Unlock premium themes, creator tools, and AI creative boosts.</p>
+          <button class="primary-btn small">Upgrade</button>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="search-box">
+            <span>⌕</span>
+            <input type="text" placeholder="Search the VORTEX universe" />
+          </div>
+
+          <div class="topbar-actions">
+            <button class="icon-btn" aria-label="Notifications">🔔</button>
+            <button class="icon-btn" aria-label="Messages">✉️</button>
+            <div class="user-pill">
+              <div class="user-avatar">BM</div>
+              <div>
+                <strong>Brilliant</strong>
+                <small>@brilliantmere</small>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="hero-banner">
+          <div class="hero-copy">
+            <span class="eyebrow">Connect · Create · Discover</span>
+            <h1>More Than a Social App... It’s a Universe.</h1>
+            <p>
+              Build communities, share ideas, launch creators, and explore the future of social
+              connection inside one digital galaxy.
+            </p>
+            <div class="hero-actions">
+              <button class="primary-btn" id="createPostButton">Create Post</button>
+              <button class="ghost-btn">Explore Reels</button>
+            </div>
+          </div>
+
+          <div class="orbit-card">
+            <div class="orbit-ring ring-one"></div>
+            <div class="orbit-ring ring-two"></div>
+            <div class="orbit-core">
+              <div class="core-eye eye-left"></div>
+              <div class="core-eye eye-right"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="stories-section">
+          <div class="section-head">
+            <h2>Stories</h2>
+            <button class="text-btn">View all</button>
+          </div>
+          <div id="storiesContainer" class="stories-container" aria-live="polite"></div>
+        </section>
+
+        <section class="composer" id="composerSection">
+          <div class="composer-avatar">B</div>
+          <div class="composer-body">
+            <textarea
+              id="postInput"
+              rows="3"
+              placeholder="Share your next moment in the VORTEX universe..."
+            ></textarea>
+            <div class="composer-actions">
+              <div class="media-tools">
+                <button>📷 Photo</button>
+                <button>🎥 Video</button>
+                <button>📎 File</button>
+                <button>✨ AI</button>
+              </div>
+              <button id="publishButton" class="primary-btn">Publish</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="feed-section">
+          <div class="section-head">
+            <h2>Home feed</h2>
+            <div class="feed-tabs">
+              <button class="tab active">Top</button>
+              <button class="tab">New</button>
+              <button class="tab">Best</button>
+              <button class="tab">Users</button>
+            </div>
+          </div>
+
+          <div id="feedContainer" class="feed-container" aria-live="polite"></div>
+        </section>
+      </main>
+
+      <aside class="rightbar">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>VORTEX ranking</h3>
+            <span>Live</span>
+          </div>
+
+          <ul class="ranking-list">
+            <li><span>#1</span> <strong>NovaWave</strong> <em>2.8M</em></li>
+            <li><span>#2</span> <strong>PixelVault</strong> <em>2.1M</em></li>
+            <li><span>#3</span> <strong>Botho Beats</strong> <em>1.9M</em></li>
+            <li><span>#4</span> <strong>FutureMinds</strong> <em>1.6M</em></li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Trending</h3>
+            <span>Today</span>
+          </div>
+
+          <div id="trendingContainer" class="trending-list"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Suggested creators</h3>
+            <span>For you</span>
+          </div>
+
+          <div id="creatorsContainer" class="creator-list"></div>
+        </div>
+
+        <div class="panel themes-panel">
+          <div class="panel-head">
+            <h3>World themes</h3>
+            <span>Customize</span>
+          </div>
+
+          <div class="theme-picker">
+            <button class="theme-btn active" data-theme="midnight">Midnight</button>
+            <button class="theme-btn" data-theme="aurora">Aurora</button>
+            <button class="theme-btn" data-theme="neon">Neon</button>
+            <button class="theme-btn" data-theme="ocean">Ocean</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
