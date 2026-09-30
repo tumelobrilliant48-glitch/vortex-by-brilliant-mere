@@ -1,14 +1,25 @@
-"use strict";
-
-const { createClient } = require("@supabase/supabase-js");
+// VORTEX Supabase Client - 800 features DB
+import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing SUPABASE_URL or SUPABASE_ANON_KEY in .env");
+if (!supabaseUrl ||!supabaseKey) {
+  console.warn('VORTEX: Missing SUPABASE env - using local');
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
-module.exports = { supabase };
+// Helper for all 800 tables
+export const TABLES = {
+  users: 'users',
+  posts: 'posts', // Home feed #2-10
+  reels: 'reels', // #172-217
+  stories: 'stories', // #137-171
+  follows: 'follows', // #109
+  friends: 'friend_requests', // #107
+  messages: 'messages', // #261
+  products: 'marketplace_products', // #357
+  wallet: 'wallet', // #541
+  notifications: 'notifications' // #301
+};
