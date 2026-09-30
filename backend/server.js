@@ -5,11 +5,19 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { createClient } = require("@supabase/supabase-js");
+const { authMiddleware, addSession, removeSession } = require("./auth");
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  console.error("ERROR: JWT_SECRET not set in environment");
+  process.exit(1);
+}
 
 // Initialize Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -26,8 +34,19 @@ app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-const hashPassword = (value) =>
-  crypto.createHash("sha256").update(String(value)).digest("hex");
+const issueToken = (user) =>
+  jwt.sign(
+    {
+      id: user.id,
+      username: user.username,
+      email: user.email
+    },
+    JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+
+const hashPassword = async (value) =>
+  bcrypt.hash(String(value), 10);
 
 const safeUser = (user) => {
   if (!user) return null;
@@ -73,7 +92,6 @@ app.post("/api/auth/signup", async (req, res) => {
       });
     }
 
-    // Check if user already exists
     const { data: existingUser } = await supabase
       .from("users")
       .select("id")
@@ -87,14 +105,15 @@ app.post("/api/auth/signup", async (req, res) => {
       });
     }
 
-    // Create user
+    const passwordHash = await hashPassword(password);
+
     const { data, error } = await supabase
       .from("users")
       .insert([
         {
           username: normalizedUsername,
           email: normalizedEmail,
-          password_hash: hashPassword(password),
+          password_hash: passwordHash,
           display_name: displayName,
           bio: "",
           avatar_url: "",
@@ -116,8 +135,12 @@ app.post("/api/auth/signup", async (req, res) => {
     }
 
     const user = data[0];
+    const token = issueToken(user);
+    addSession(token, user.id);
+
     return res.status(201).json({
       success: true,
+      token,
       user: safeUser(user),
       message: "Account created successfully."
     });
@@ -163,21 +186,33 @@ app.post("/api/auth/login", async (req, res) => {
 
     const { data: user, error } = await query;
 
-    if (error || !user || user.password_hash !== hashPassword(password)) {
+    if (error || !user) {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials."
       });
     }
 
-    // Update online status
+    const isValidPassword = await bcrypt.compare(String(password), user.password_hash);
+
+    if (!isValidPassword) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials."
+      });
+    }
+
     await supabase
       .from("users")
       .update({ online: true })
       .eq("id", user.id);
 
+    const token = issueToken(user);
+    addSession(token, user.id);
+
     return res.json({
       success: true,
+      token,
       user: safeUser(user),
       message: "Logged in successfully."
     });
@@ -190,25 +225,39 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
+app.post("/api/auth/logout", authMiddleware, (req, res) => {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+  if (token) {
+    removeSession(token);
+  }
+
+  return res.json({
+    success: true,
+    message: "Logged out successfully."
+  });
+});
+
 // ========================================
 // USERS
 // ========================================
 
-app.get("/api/users/me", async (req, res) => {
+app.get("/api/users/me", authMiddleware, async (req, res) => {
   try {
-    const username = String(req.query.username || "").trim();
+    const requestedUsername = String(req.query.username || req.user.username || "").trim();
 
-    if (!username) {
-      return res.status(400).json({
+    if (requestedUsername && requestedUsername !== req.user.username) {
+      return res.status(403).json({
         success: false,
-        message: "Username is required."
+        message: "You can only view your own profile."
       });
     }
 
     const { data: user, error } = await supabase
       .from("users")
       .select("*")
-      .eq("username", username)
+      .eq("id", req.user.id)
       .single();
 
     if (error || !user) {
@@ -258,14 +307,15 @@ app.get("/api/posts", async (req, res) => {
   }
 });
 
-app.post("/api/posts", async (req, res) => {
+app.post("/api/posts", authMiddleware, async (req, res) => {
   try {
-    const { user_id, content, media_url, media_type = "", visibility = "public" } = req.body || {};
+    const userId = Number(req.user.id);
+    const { content, media_url, media_type = "", visibility = "public" } = req.body || {};
 
-    if (!Number.isInteger(Number(user_id)) || !content || !String(content).trim()) {
+    if (!content || !String(content).trim()) {
       return res.status(400).json({
         success: false,
-        message: "A numeric user_id and non-empty content are required."
+        message: "Content is required."
       });
     }
 
@@ -273,7 +323,7 @@ app.post("/api/posts", async (req, res) => {
       .from("posts")
       .insert([
         {
-          user_id: Number(user_id),
+          user_id: userId,
           content: String(content).trim(),
           media_url: media_url || "",
           media_type: media_type,
@@ -301,11 +351,10 @@ app.post("/api/posts", async (req, res) => {
   }
 });
 
-app.post("/api/posts/:id/like", async (req, res) => {
+app.post("/api/posts/:id/like", authMiddleware, async (req, res) => {
   try {
-    const { user_id } = req.body || {};
     const postId = Number(req.params.id);
-    const userId = Number(user_id);
+    const userId = Number(req.user.id);
 
     if (!Number.isInteger(postId) || !Number.isInteger(userId)) {
       return res.status(400).json({
@@ -314,10 +363,19 @@ app.post("/api/posts/:id/like", async (req, res) => {
       });
     }
 
-    await supabase
+    const { data: existingLike } = await supabase
       .from("likes")
-      .insert([{ post_id: postId, user_id: userId, reaction: "like" }])
-      .select();
+      .select("id")
+      .eq("post_id", postId)
+      .eq("user_id", userId)
+      .limit(1);
+
+    if (!existingLike || existingLike.length === 0) {
+      await supabase
+        .from("likes")
+        .insert([{ post_id: postId, user_id: userId, reaction: "like" }])
+        .select();
+    }
 
     const { data: likes, error } = await supabase
       .from("likes")
@@ -346,9 +404,9 @@ app.post("/api/posts/:id/like", async (req, res) => {
 // MESSAGES
 // ========================================
 
-app.get("/api/messages", async (req, res) => {
+app.get("/api/messages", authMiddleware, async (req, res) => {
   try {
-    const userId = Number(req.query.user_id);
+    const userId = Number(req.user.id);
 
     if (!Number.isInteger(userId)) {
       return res.status(400).json({
@@ -382,16 +440,16 @@ app.get("/api/messages", async (req, res) => {
   }
 });
 
-app.post("/api/messages", async (req, res) => {
+app.post("/api/messages", authMiddleware, async (req, res) => {
   try {
-    const { sender_id, receiver_id, content } = req.body || {};
-    const senderId = Number(sender_id);
+    const senderId = Number(req.user.id);
+    const { receiver_id, content } = req.body || {};
     const receiverId = Number(receiver_id);
 
     if (!Number.isInteger(senderId) || !Number.isInteger(receiverId) || !String(content || "").trim()) {
       return res.status(400).json({
         success: false,
-        message: "Numeric sender_id, receiver_id, and non-empty content are required."
+        message: "Numeric receiver_id and non-empty content are required."
       });
     }
 
@@ -432,9 +490,9 @@ app.post("/api/messages", async (req, res) => {
 // NOTIFICATIONS
 // ========================================
 
-app.get("/api/notifications", async (req, res) => {
+app.get("/api/notifications", authMiddleware, async (req, res) => {
   try {
-    const userId = Number(req.query.user_id);
+    const userId = Number(req.user.id);
 
     if (!Number.isInteger(userId)) {
       return res.status(400).json({
