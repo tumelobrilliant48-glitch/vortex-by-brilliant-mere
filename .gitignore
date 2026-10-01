@@ -1,3 +1,0 @@
-//.gitignore - never commit secrets
-.env
-node_modules/
