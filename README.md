@@ -1,47 +1,26 @@
 # VORTEX - By Brilliant Mere
-Luxury social + AI + Games + Videos + Wallet
-Built in BW for the world.
 
-## Security and environment setup
+VORTEX is a small, honest social-feed MVP built in Botswana. The current release includes a working profile name, post creation, local feed persistence, search, and likes. Posts are stored in the browser on the current device.
 
-This project must never commit secrets to Git. The repository should only include a `.env.example` template, never a real `.env` file.
-
-If your `.env` was ever pushed, rotate these values immediately in your hosting provider and Supabase dashboard:
-
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `JWT_SECRET`
-
-Supabase-specific reminder:
-
-1. Open your Supabase project.
-2. Go to Project Settings → API.
-3. Rotate the keys and update the deployed environment variables.
-4. Update the local `.env` file after rotation.
-
-Do not commit `.env` files. The project should keep a `.env.example` template instead.
-
-## Local setup
+## Run locally
 
 ```bash
 npm install
-cp .env.example .env
-npm start
+npm run dev
 ```
 
-## Example environment
+Open http://localhost:3000.
 
-```env
-PORT=3000
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your_anon_key_here
-JWT_SECRET=change_this_to_a_long_random_value
-NODE_ENV=development
-```
+## Current scope
 
-## Security notes
+This version intentionally does not show fake wallet balances, fake chat messages, or claim that accounts are connected to a server. Chat, authentication, moderation, and cloud storage still require a backend before a public production launch. Do not collect payment information until a secure payment provider and server-side authorization are implemented.
 
-- Never commit `.env` or generated secrets.
-- Always keep `JWT_SECRET` unique and long.
-- Use server-side validation for all authenticated requests.
-- Do not trust `user_id`, `sender_id`, or `receiver_id` sent by the client; read them from the verified JWT.
+## Before public launch
+
+- Add Supabase Auth and a server-backed `profiles` table.
+- Move posts and likes from localStorage to a protected database API.
+- Add reporting, moderation, privacy policy, terms, account deletion, and age/content controls.
+- Connect a real payment provider only after server-side authorization and compliance review.
+- Build and test the Android AAB and complete Google Play Data safety and store listing declarations.
+
+Never commit `.env` or secrets. Use `.env.example` as a template.
