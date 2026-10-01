@@ -1,26 +1,29 @@
 # VORTEX - By Brilliant Mere
 
-VORTEX is a small, honest social-feed MVP built in Botswana. The current release includes a working profile name, post creation, local feed persistence, search, and likes. Posts are stored in the browser on the current device.
+VORTEX is a real, working social-feed MVP deployed on GitHub Pages.
+
+**Live:** https://tumelobrilliant48-glitch.github.io/vortex-by-brilliant-mere/
+
+## What works RIGHT NOW
+
+✅ **Profile Setup** — Create a display name  
+✅ **Post Creation** — Write and publish posts (max 500 characters)  
+✅ **Likes** — Like and unlike posts  
+✅ **Search** — Find posts and people  
+✅ **Local Persistence** — Posts saved in your browser  
+
+## What's NOT yet implemented
+
+❌ Chat messaging  
+❌ Wallet / payments  
+❌ Cloud accounts (multi-device sync)  
+❌ AI features  
+❌ Video uploads  
+
+Posts are stored only on your device's local storage. Each phone/browser is a separate feed. To build a shared cloud feed, we need a backend database (Supabase, Firebase, etc.) and authentication.
 
 ## Run locally
 
 ```bash
 npm install
 npm run dev
-```
-
-Open http://localhost:3000.
-
-## Current scope
-
-This version intentionally does not show fake wallet balances, fake chat messages, or claim that accounts are connected to a server. Chat, authentication, moderation, and cloud storage still require a backend before a public production launch. Do not collect payment information until a secure payment provider and server-side authorization are implemented.
-
-## Before public launch
-
-- Add Supabase Auth and a server-backed `profiles` table.
-- Move posts and likes from localStorage to a protected database API.
-- Add reporting, moderation, privacy policy, terms, account deletion, and age/content controls.
-- Connect a real payment provider only after server-side authorization and compliance review.
-- Build and test the Android AAB and complete Google Play Data safety and store listing declarations.
-
-Never commit `.env` or secrets. Use `.env.example` as a template.
