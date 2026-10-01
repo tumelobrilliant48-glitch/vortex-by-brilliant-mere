@@ -251,3 +251,7 @@ async function routeRequest(req, res) {
     ) {
         const handled = await handleUserRoute(
             req
+
+            const {
+    handleMediaRoute
+} = require("./routes/media");
