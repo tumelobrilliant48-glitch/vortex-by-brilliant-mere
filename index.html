@@ -2,172 +2,479 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VORTEX | Connect • Create • Discover</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <meta
+        name="description"
+        content="VORTEX — Connect. Create. Discover."
+    >
+
+    <meta name="theme-color" content="#05050a">
+
+    <title>VORTEX — Connect. Create. Discover.</title>
+
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+    <!-- =========================================
+         VORTEX APP
+         Created by Brilliant Tumelo Mere
+         ========================================= -->
 
-        <div class="logo">
-            <div class="eye"></div>
-            <div>
-                <h2>VORTEX</h2>
-                <span>Connect • Create • Discover</span>
+    <div id="app">
+
+        <!-- TOP BAR -->
+        <header class="top-bar">
+
+            <button
+                id="settings-btn"
+                class="icon-btn"
+                aria-label="Open settings"
+            >
+                ☰
+            </button>
+
+            <div class="vortex-brand">
+                <div class="vortex-eye" id="vortex-eye">
+                    ◉
+                </div>
+
+                <span>VORTEX</span>
             </div>
-        </div>
 
-        <nav>
-
-            home.html
-                🏠 Home
-            </a>
-
-            reels.html
-                🎬 Reels
-            </a>
-
-            create.html
-                ➕ Create
-            </a>
-
-            messages.html
-                💬 Messages
-            </a>
-
-            vault.html
-                🗄 Vault
-            </a>
-
-            profile.html
-                👤 Profile
-            </a>
-
-            search.html
-                🔍 Search
-            </a>
-
-            notifications.html
-                🔔 Notifications
-            </a>
-
-            settings.html
-                ⚙ Settings
-            </a>
-
-        </nav>
-
-        <button class="logout-btn">
-            Logout
-        </button>
-
-    </aside>
-
-    <!-- Main -->
-    <main class="main-content">
-
-        <!-- Topbar -->
-        <header class="topbar">
-
-            <h1>Home Feed</h1>
-
-            <input
-                type="text"
-                placeholder="Search VORTEX..."
-                class="search-input">
+            <button
+                id="search-btn"
+                class="icon-btn"
+                aria-label="Search"
+            >
+                ⌕
+            </button>
 
         </header>
 
-        <!-- Stories -->
-        <section class="stories">
 
-            <div class="story">BT</div>
-            <div class="story">A</div>
-            <div class="story">J</div>
-            <div class="story">M</div>
-            <div class="story">K</div>
-            <div class="story">T</div>
+        <!-- MAIN APPLICATION -->
+        <main id="main-content">
 
-        </section>
+            <!-- HOME SCREEN -->
+            <section
+                id="home-screen"
+                class="screen active"
+            >
 
-        <!-- Create Post -->
-        <section class="create-post">
+                <!-- STORIES -->
+                <section class="stories-section">
 
-            <textarea
-                placeholder="What's happening in the VORTEX?"></textarea>
+                    <div class="section-header">
+                        <h2>Stories</h2>
 
-            <div class="post-actions">
+                        <button id="story-more-btn">
+                            See all
+                        </button>
+                    </div>
 
-                <button class="btn">
-                    Upload Photo
+                    <div
+                        id="stories-container"
+                        class="stories-container"
+                    >
+
+                        <button
+                            class="story-card add-story"
+                            id="add-story-btn"
+                        >
+                            <span class="story-avatar">+</span>
+                            <span>Your Story</span>
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- FEED FILTERS -->
+                <nav class="feed-tabs">
+
+                    <button
+                        class="feed-tab active"
+                        data-feed="top"
+                    >
+                        Top
+                    </button>
+
+                    <button
+                        class="feed-tab"
+                        data-feed="new"
+                    >
+                        New
+                    </button>
+
+                    <button
+                        class="feed-tab"
+                        data-feed="best"
+                    >
+                        Best
+                    </button>
+
+                    <button
+                        class="feed-tab"
+                        data-feed="users"
+                    >
+                        Users
+                    </button>
+
+                </nav>
+
+
+                <!-- POSTS -->
+                <section
+                    id="feed-container"
+                    class="feed-container"
+                >
+
+                    <!-- Posts will be rendered by app.js -->
+
+                </section>
+
+            </section>
+
+
+            <!-- REELS SCREEN -->
+            <section
+                id="reels-screen"
+                class="screen"
+            >
+
+                <div class="screen-heading">
+                    <h1>Reels</h1>
+
+                    <button id="reels-camera-btn">
+                        Create
+                    </button>
+                </div>
+
+                <div
+                    id="reels-container"
+                    class="reels-container"
+                >
+                    <!-- Reels loaded by app.js -->
+                </div>
+
+            </section>
+
+
+            <!-- CREATE SCREEN -->
+            <section
+                id="create-screen"
+                class="screen"
+            >
+
+                <div class="create-panel">
+
+                    <h1>Create</h1>
+
+                    <p>
+                        Share something with the VORTEX universe.
+                    </p>
+
+                    <div class="create-options">
+
+                        <button id="create-post-btn">
+                            📝
+                            <span>Create Post</span>
+                        </button>
+
+                        <button id="create-reel-btn">
+                            🎬
+                            <span>Create Reel</span>
+                        </button>
+
+                        <button id="create-story-btn">
+                            ✨
+                            <span>Create Story</span>
+                        </button>
+
+                        <button id="create-live-btn">
+                            🔴
+                            <span>Go Live</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- MESSAGES SCREEN -->
+            <section
+                id="messages-screen"
+                class="screen"
+            >
+
+                <div class="screen-heading">
+                    <h1>Messages</h1>
+
+                    <button id="new-message-btn">
+                        +
+                    </button>
+                </div>
+
+                <div
+                    id="messages-container"
+                    class="messages-container"
+                >
+                    <!-- Messages loaded by app.js -->
+                </div>
+
+            </section>
+
+
+            <!-- VAULT SCREEN -->
+            <section
+                id="vault-screen"
+                class="screen"
+            >
+
+                <div class="screen-heading">
+                    <h1>Vault</h1>
+                </div>
+
+                <div class="vault-grid">
+
+                    <button id="saved-posts-btn">
+                        🔖
+                        <span>Saved</span>
+                    </button>
+
+                    <button id="downloads-btn">
+                        ⬇
+                        <span>Downloads</span>
+                    </button>
+
+                    <button id="private-media-btn">
+                        🔐
+                        <span>Private Media</span>
+                    </button>
+
+                    <button id="collections-btn">
+                        📁
+                        <span>Collections</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- PROFILE SCREEN -->
+            <section
+                id="profile-screen"
+                class="screen"
+            >
+
+                <div
+                    id="profile-container"
+                    class="profile-container"
+                >
+                    <!-- Profile loaded by app.js -->
+                </div>
+
+            </section>
+
+
+            <!-- SEARCH SCREEN -->
+            <section
+                id="search-screen"
+                class="screen"
+            >
+
+                <div class="search-panel">
+
+                    <input
+                        type="search"
+                        id="search-input"
+                        placeholder="Search VORTEX..."
+                        autocomplete="off"
+                    >
+
+                    <button id="search-submit-btn">
+                        Search
+                    </button>
+
+                </div>
+
+                <div
+                    id="search-results"
+                    class="search-results"
+                ></div>
+
+            </section>
+
+
+            <!-- SETTINGS SCREEN -->
+            <section
+                id="settings-screen"
+                class="screen"
+            >
+
+                <div class="screen-heading">
+                    <h1>Settings</h1>
+                    <button id="close-settings-btn">×</button>
+                </div>
+
+                <div class="settings-list">
+
+                    <button data-setting="account">
+                        👤
+                        <span>Account</span>
+                    </button>
+
+                    <button data-setting="security">
+                        🔐
+                        <span>Security</span>
+                    </button>
+
+                    <button data-setting="privacy">
+                        🛡️
+                        <span>Privacy</span>
+                    </button>
+
+                    <button data-setting="themes">
+                        🎨
+                        <span>Themes</span>
+                    </button>
+
+                    <button data-setting="notifications">
+                        🔔
+                        <span>Notifications</span>
+                    </button>
+
+                    <button data-setting="app-manager">
+                        🧩
+                        <span>App Manager</span>
+                    </button>
+
+                    <button data-setting="downloads">
+                        ⬇
+                        <span>Downloads</span>
+                    </button>
+
+                    <button data-setting="premium">
+                        ⭐
+                        <span>VORTEX Premium</span>
+                    </button>
+
+                    <button data-setting="help">
+                        ❔
+                        <span>Help & Support</span>
+                    </button>
+
+                    <button
+                        id="logout-btn"
+                        class="danger-button"
+                    >
+                        🚪
+                        <span>Sign Out</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav
+            id="bottom-nav"
+            class="bottom-nav"
+        >
+
+            <button
+                class="nav-item active"
+                data-screen="home-screen"
+            >
+                <span>⌂</span>
+                <small>Home</small>
+            </button>
+
+            <button
+                class="nav-item"
+                data-screen="reels-screen"
+            >
+                <span>▶</span>
+                <small>Reels</small>
+            </button>
+
+            <button
+                class="nav-item create-nav"
+                data-screen="create-screen"
+            >
+                <span>＋</span>
+                <small>Create</small>
+            </button>
+
+            <button
+                class="nav-item"
+                data-screen="messages-screen"
+            >
+                <span>✉</span>
+                <small>Messages</small>
+            </button>
+
+            <button
+                class="nav-item"
+                data-screen="vault-screen"
+            >
+                <span>◇</span>
+                <small>Vault</small>
+            </button>
+
+        </nav>
+
+
+        <!-- GLOBAL MODAL -->
+        <div
+            id="modal"
+            class="modal hidden"
+            aria-hidden="true"
+        >
+
+            <div class="modal-content">
+
+                <button
+                    id="modal-close"
+                    class="modal-close"
+                >
+                    ×
                 </button>
 
-                <button class="btn">
-                    Upload Video
-                </button>
-
-                <button class="btn primary">
-                    Post
-                </button>
+                <div id="modal-body"></div>
 
             </div>
 
-        </section>
+        </div>
 
-        <!-- Feed -->
-        <section class="feed">
 
-            <article class="post">
+        <!-- TOAST NOTIFICATION -->
+        <div
+            id="toast"
+            class="toast"
+            aria-live="polite"
+        ></div>
 
-                <div class="post-header">
+    </div>
 
-                    <div class="avatar">
-                        BT
-                    </div>
 
-                    <div>
-
-                        <h3>Brilliant Tumelo Mere</h3>
-
-                        <span>
-                            @brilliant • Just now
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <p>
-                    Welcome to VORTEX 🚀
-                </p>
-
-                <div class="post-buttons">
-
-                    <button>❤️ Like</button>
-
-                    <button>💬 Comment</button>
-
-                    <button>🔄 Repost</button>
-
-                    <button>📌 Save</button>
-
-                </div>
-
-            </article>
-
-        </section>
-
-    </main>
+    <!-- APPLICATION JAVASCRIPT -->
+    <script src="app.js"></script>
 
 </body>
-</html>
-
-<textarea id="postInput" placeholder="What's happening?"></textarea>
-
-<button id="publishBtn">Publish</button>
-
-<div id="feed"></div>
-
-script.jsscript>
+    </html>
