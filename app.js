@@ -291,3 +291,34 @@ function initVortex() {
     bindSearch();
 
     render
+
+/* =========================================================
+   SERVICE WORKER
+   ========================================================= */
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker
+            .register("./sw.js")
+            .then(registration => {
+
+                console.log(
+                    "VORTEX Service Worker registered:",
+                    registration.scope
+                );
+
+            })
+            .catch(error => {
+
+                console.error(
+                    "VORTEX Service Worker registration failed:",
+                    error
+                );
+
+            });
+
+    });
+
+}
