@@ -162,3 +162,26 @@ db.exec(`
         post_id TEXT NOT NULL,
 
         user_id TEXT NOT NULL
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS media (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        type TEXT NOT NULL,
+        mime_type TEXT NOT NULL,
+        storage_path TEXT NOT NULL,
+        url TEXT NOT NULL,
+        size INTEGER NOT NULL,
+        created_at TEXT NOT NULL,
+
+        FOREIGN KEY (user_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_media_user
+        ON media(user_id);
+
+    CREATE INDEX IF NOT EXISTS idx_media_created
+        ON media(created_at);
+`);
